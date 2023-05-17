@@ -1,15 +1,11 @@
 import * as React from 'react';
-import { Button, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { Button, View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 
 function HomeButton({ navigation: { navigate }}) {
     return (
       <View>
         <View style={styles.button}>
-        <Button onPress={() => navigate('Profile')}/>
-            <Image
-              style={{ width: 70, height: 70, marginBottom: 0 }}
-              source={require("./assets/FotoVoley.png")}
-            />          
+          <Button onPress={() => navigate('Profile')}/>
         </View>
       </View>
 

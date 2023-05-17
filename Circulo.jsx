@@ -1,14 +1,16 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-
+import { Draggable } from './Draggable.jsx';
 class Circulo extends React.Component {
     render() { 
       return (
-        <View style={styles.container}>
-            <View style={styles.outerCircle}>
-              <View style={styles.innerCircle} />
-            </View>
-        </View>
+        <Draggable>
+          <View style={styles.container}>
+              <View style={styles.outerCircle}>
+                <View style={styles.innerCircle} />
+              </View>
+          </View>
+        </Draggable>
       );
     }
   }

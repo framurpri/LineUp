@@ -1,11 +1,8 @@
-import { StyleSheet, View } from 'react-native';
-import Circulo from './Circulo.jsx';
-import Draggable from './Draggable.jsx';
-import Navegator from './navigator.jsx';
 import Main from './Main.jsx';
-
+import { NativeRouter } from 'react-router-native';
 export default function App() {
-  return <Main/>
+  return <NativeRouter>
+    <Main/>
+  </NativeRouter>
 }
-
 
