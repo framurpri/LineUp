@@ -1,30 +1,23 @@
 import React from 'react';
-import { View, Image, Text, TouchableHighlight, StyleSheet} from 'react-native';
-import { NativeRouter, Routes, Route, Link } from 'react-router-native';
-import  Registro  from './Registro.jsx'
+import { View, Image, Text, StyleSheet} from 'react-native';
+import { Link } from 'react-router-native';
 
-const Log = () => (
+function Log(){
+  return(
   <View style={styles.container}>
-    <Image source={require('./assets/FotoVoley.png')} style={styles.image} />
+    <Image source={require('./Resources/FotoVoley.png')} style={styles.image} />
     <Text style={styles.title}>LineUp</Text>
-    <Link to={{ pathname: '/login', search: '?param1=value1' }} style={styles.button}>
+    <Link to={{ pathname: '/login'}} style={styles.button}>
       <Text>Iniciar sesión</Text>
     </Link>
-    <Link to={{ pathname: '/registro', search: '?param2=value2' }} style={styles.button}>
+    <Link to={{ pathname: '/registro'}} style={styles.button}>
       <Text>Regístrate</Text>
     </Link>
   </View>
-);
+  )
+};
 
 
-
-const Login = () => (
-    <Routes>
-      <Route path="/" element={<Log />} />
-      <Route path="/login" element={<Log />} />
-      <Route path="/registro" element={<Registro />} />
-    </Routes>
-);
 
 
 const styles = StyleSheet.create({
@@ -60,4 +53,4 @@ const styles = StyleSheet.create({
     }
   });
 
-  export default Login;
+  export default Log;

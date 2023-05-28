@@ -1,15 +1,14 @@
 import React from 'react'
 import Constants from 'expo-constants'
-import { View } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import Basic from './BasicStructPage.jsx'
 import Login from './Login.jsx'
+import Escenas from './escenas.jsx'
 
-  const Main = () => {
+  function Main(){
     return (
-        <View style={{ flex: 1 }}>
-            <Login/>
-            <Basic/>
-        </View>
+      <Basic />
+
     )
   }
 
