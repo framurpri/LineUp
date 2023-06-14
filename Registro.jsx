@@ -4,13 +4,14 @@ import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { NativeRouter, Routes, Route, Link } from 'react-router-native';
-import  Basic  from './BasicStructPage'
+import  Main  from './Main';
 
 const Registro = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [registerSuccess, setRegisterSuccess] = useState(false);
 
 
   const app = initializeApp(firebaseConfig);
@@ -23,12 +24,17 @@ const Registro = () => {
       console.log('Account created!')
       const user = userCredential.user;
       console.log(user);
+      setRegisterSuccess(true);
     })
     .catch(error =>   {
       console.log(error)
     })
   
   };
+
+  if (registerSuccess){
+    return <Main></Main>
+  }
 
   return (
         <View style={styles.container}>
@@ -58,15 +64,6 @@ const Registro = () => {
         </View>
   );
 };
-
-function RutasRegistro(){
-  return(
-  <Routes>
-    <Route path="/" element={<Basic />} />
-    <Route path="/home" element={<Basic />} />
-  </Routes>
-  )
-} 
 
 const styles = StyleSheet.create({
   container: {
