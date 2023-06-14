@@ -1,63 +1,84 @@
-import React from 'react';
-import { View, Image, Text, TouchableHighlight, StyleSheet} from 'react-native';
-import { NativeRouter, Routes, Route, Link } from 'react-router-native';
-import  Registro  from './Registro.jsx'
+import React, { useState } from 'react';
+import { View, TextInput, Button, StyleSheet, Text, Alert } from 'react-native';
+import { firebaseConfig } from './firebase-config';
+import { initializeApp } from 'firebase/app';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 
-const Log = () => (
-  <View style={styles.container}>
-    <Image source={require('./assets/FotoVoley.png')} style={styles.image} />
-    <Text style={styles.title}>LineUp</Text>
-    <Link to={{ pathname: '/login', search: '?param1=value1' }} style={styles.button}>
-      <Text>Iniciar sesión</Text>
-    </Link>
-    <Link to={{ pathname: '/registro', search: '?param2=value2' }} style={styles.button}>
-      <Text>Regístrate</Text>
-    </Link>
-  </View>
-);
+const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
 
+  const handleLogin = () => {
 
-const Login = () => (
-    <Routes>
-      <Route path="/" element={<Log />} />
-      <Route path="/login" element={<Log />} />
-      <Route path="/registro" element={<Registro />} />
-    </Routes>
-);
+    signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      console.log('Signed in!');
+      const user = userCredential.user;
+      console.log(user.email);
+    })
+    .catch(error => {
+      console.log(error);
 
+    })
+
+    // Aquí puedes implementar la lógica para el inicio de sesión del usuario
+    console.log('Iniciando sesión...');
+    console.log('Correo electrónico:', email);
+    console.log('Contraseña:', password);
+
+
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>INICIO DE SESIÓN</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Correo electrónico"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Contraseña"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+
+      <Button title="Iniciar sesión" onPress={handleLogin} />
+
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: 20,
-    },
-    button: {
-        backgroundColor: '#99CCFF',
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderRadius: 5,
-        width: 140,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 10,
-        marginTop: 10,
-    },
-    buttonText: {
-        color: 'white',
-        fontSize: 16,
-    },
-    image: {
-        width: 250,
-        height: 250,
-        marginBottom: 10,
-    },
-    title: {
-        marginBottom: 70,
-        fontSize: 30,
-    }
-  });
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+    backgroundColor: 'grey',
+  },
+  text: {
+    fontSize: 30,
+    padding: 20,
+  },
+  input: {
+    width: '100%',
+    height: 40,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    backgroundColor: 'white',
+  },
+});
 
-  export default Login;
+export default Login;
