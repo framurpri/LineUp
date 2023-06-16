@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Image, Text, StyleSheet} from 'react-native';
-import { Link } from 'react-router-native';
+import { Routes, Route, Link } from 'react-router-native'
+import Registro from './Registro';
+import Basic from './BasicStructPage';
 
 function Log(){
   return(
@@ -19,6 +21,13 @@ function Log(){
 
 
 
+function Login(){
+  return(
+    <Routes>
+      <Route path="/" element={<Log />} />
+      <Route path="/registro" element={<Registro />}/>
+    </Routes>
+)};
 
 const styles = StyleSheet.create({
     container: {
@@ -53,4 +62,4 @@ const styles = StyleSheet.create({
     }
   });
 
-  export default Log;
+  export default Login;

@@ -19,7 +19,7 @@ function Escenas(){
   const styles = StyleSheet.create({
   image: {
     width: 395,
-    height: 600,
+    height: 670,
     opacity: 0.7,
     },
     container: {
