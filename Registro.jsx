@@ -1,34 +1,45 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet , Text, CheckBox} from 'react-native';
+import { firebaseConfig } from './firebase-config';
+import { initializeApp } from 'firebase/app';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { NativeRouter, Routes, Route, Link } from 'react-router-native';
+import  Main  from './Main';
 
 function Registro() {
-  const [username, setUsername] = useState('');
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [registerSuccess, setRegisterSuccess] = useState(false);
+
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
   const handleRegistration = () => {
-    // Aquí puedes implementar la lógica para manejar el registro del usuario
-    console.log('Registrando usuario...');
-    console.log('Nombre de usuario:', username);
-    console.log('Correo electrónico:', email);
-    console.log('Contraseña:', password);
-    console.log('Confirmar contraseña:', confirmPassword);
-    console.log('Términos y condiciones aceptados:', termsAccepted);
 
+    createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      console.log('Account created!')
+      const user = userCredential.user;
+      console.log(user);
+      setRegisterSuccess(true);
+    })
+    .catch(error =>   {
+      console.log(error)
+    })
+  
   };
+
+  if (registerSuccess){
+    return <Main></Main>
+  }
 
   return (
         <View style={styles.container}>
             <Text style={styles.text}>REGISTRO</Text>
 
-            <TextInput
-                style={styles.input}
-                placeholder="Nombre de usuario"
-                value={username}
-                onChangeText={setUsername}
-            />
             <TextInput
                 style={styles.input}
                 placeholder="Correo electrónico"
@@ -42,21 +53,14 @@ function Registro() {
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Confirmar contraseña"
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                secureTextEntry
-            />
+            />                      
             <View style={styles.checkboxContainer}>
                 <CheckBox value={termsAccepted} onValueChange={setTermsAccepted} />
                 <Text style={styles.checkboxLabel}>He leído y acepto los términos y condiciones</Text>
             </View>
-            
-            <Button title="Registrar" onPress={handleRegistration} disabled={!termsAccepted} />
-
+              <Link to={{ pathname: '/home' }} style={styles.button}>
+                <Button title="Registrar" onPress={handleRegistration} disabled={!termsAccepted} />
+              </Link>
         </View>
   );
 };
