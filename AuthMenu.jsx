@@ -22,7 +22,7 @@ function AuthMenu() {
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
+      flex: 20,
       alignItems: 'center',
       justifyContent: 'center',
       padding: 20,

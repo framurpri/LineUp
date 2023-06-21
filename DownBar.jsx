@@ -1,9 +1,9 @@
-import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
-const DownBar = ({ children }) => {
+function DownBar({ children }) {
+
   return (
-    <View style={styles.container}>
+    <View style= {styles.container}>
       {children}
     </View>
   );
@@ -11,6 +11,7 @@ const DownBar = ({ children }) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 5,
     position: 'absolute',
     bottom: 0,
     left: 0,
