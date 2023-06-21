@@ -1,17 +1,13 @@
 import React from 'react'
-import Constants from 'expo-constants'
-import { View } from 'react-native'
-import Basic from './BasicStructPage.jsx'
-import AuthRoutes from './AuthMenu.jsx'
+import { View, Text } from 'react-native'
+import { NavMenu } from './NavMenu'
+import  AuthMenu from './AuthMenu'
 
-  const Main = () => {
+export default function Main() {
     return (
         <View style={{ flex: 1 }}>
-            <AuthRoutes/>
-            <Basic/>
+          <AuthMenu></AuthMenu>
         </View>
     )
   }
-
-  export default Main
 

@@ -3,9 +3,9 @@ import { View, TextInput, Button, StyleSheet, Text, Alert } from 'react-native';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import Main from './Main';
+import  Main  from './Main';
 
-const Login = () => {
+export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginSuccess, setLoginSuccess] = useState(false);
@@ -87,5 +87,3 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
 });
-
-export default Login;

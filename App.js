@@ -1,12 +1,24 @@
-import Main from './Main.jsx';
-import { NativeRouter } from 'react-router-native';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@firebase/auth';
-import { initializeApp } from '@firebase/app';
-import { firebaseConfig } from './firebase-config.js';
+import  Main  from './Main';
+import { NativeRouter, Routes, Route, Link } from 'react-router-native';
+import  AuthMenu  from './AuthMenu';
+import  { Login }  from './Login';
+import  { Registro }  from './Registro';
 
-export default function App() {
-  return <NativeRouter>
-    <Main/>
-  </NativeRouter>
+function App() {
+  return ( 
+    <>
+    <NativeRouter>
+    <Routes>
+      <Route path="/" element={<Main/>}/>
+      <Route path="/authentication">
+        <Route path="login" element={<Login />}/>
+        <Route path="registro" element={<Registro />}/>
+      </Route>  
+    </Routes>
+    </NativeRouter>
+    </>
+  )
 }
+
+export default App;
 

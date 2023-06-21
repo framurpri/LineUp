@@ -5,7 +5,7 @@ import Settings from './Settings.jsx';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { NativeRouter, Routes, Route, Link } from 'react-router-native';
 
-const Basic = () => {
+export function NavMenu() {
     return (
         <View>
         <DownBar>
@@ -23,17 +23,8 @@ const Basic = () => {
             </Link>
         </DownBar>
         </View>
-    );
+    )
 };
-
-function PagBasic(){
-    return(
-      <Routes>
-        <Route path="/" element={<Basic />} />
-        <Route path="/home" element={<Basic />} />
-        <Route path="/settings" element={<Settings />} />
-      </Routes>
-  )};
 
 const styles = StyleSheet.create({
     button: {
@@ -53,4 +44,3 @@ const styles = StyleSheet.create({
     },
 });
 
-export default PagBasic;

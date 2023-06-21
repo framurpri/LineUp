@@ -1,30 +1,23 @@
 import React from 'react';
-import { View, Image, Text, TouchableHighlight, StyleSheet} from 'react-native';
-import { NativeRouter, Routes, Route, Link } from 'react-router-native';
-import  Registro  from './Registro.jsx';
-import Login from './Login.jsx';
+import { View, Image, Text, StyleSheet} from 'react-native';
+import { NativeRouter, Link } from 'react-router-native';
 
-const AuthMenu = () => (
-  <View style={styles.container}>
-    <Image source={require('./assets/FotoVoley.png')} style={styles.image} />
-    <Text style={styles.title}>LineUp</Text>
-    <Link to={{ pathname: '/login'}} style={styles.button}>
-      <Text>Iniciar sesión</Text>
-    </Link>
-    <Link to={{ pathname: '/registro' }} style={styles.button}>
-      <Text>Regístrate</Text>
-    </Link>
-  </View>
-);
+function AuthMenu() {
+  return(
+        <View style={styles.container}>     
+       <Image source={require('./assets/FotoVoley.png')} style={styles.image} />
+        <Text style={styles.title}>LineUp</Text>
+        <Link to={{ pathname: '/authentication/login'}} style={styles.button}>
+          <Text>Iniciar sesión</Text>
+        </Link>
+        <Link to={{ pathname: '/authentication/registro' }} style={styles.button}>
+          <Text>Regístrate</Text>
+        </Link>     
+    </View>
 
+  )
 
-const AuthRoutes = () => (
-    <Routes>
-      <Route path="/" element={<AuthMenu />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/registro" element={<Registro />} />
-    </Routes>
-);
+};
 
 
 const styles = StyleSheet.create({
@@ -60,4 +53,4 @@ const styles = StyleSheet.create({
     }
   });
 
-  export default AuthRoutes;
+export default AuthMenu;

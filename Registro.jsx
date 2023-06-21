@@ -6,7 +6,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } f
 import { NativeRouter, Routes, Route, Link } from 'react-router-native';
 import  Main  from './Main';
 
-const Registro = () => {
+export function Registro() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -58,7 +58,7 @@ const Registro = () => {
                 <CheckBox value={termsAccepted} onValueChange={setTermsAccepted} />
                 <Text style={styles.checkboxLabel}>He leído y acepto los términos y condiciones</Text>
             </View>
-              <Link to={{ pathname: '/home' }} style={styles.button}>
+              <Link to={{ pathname: '/' }} style={styles.button}>
                 <Button title="Registrar" onPress={handleRegistration} disabled={!termsAccepted} />
               </Link>
         </View>
@@ -96,4 +96,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Registro
+
