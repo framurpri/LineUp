@@ -11,7 +11,7 @@ function DownBar({ children }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 5,
+    flex: 1,
     position: 'absolute',
     bottom: 0,
     left: 0,
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     height: 100,
-    backgroundColor: '#99CCFF',
+    backgroundColor: 'grey',
   },
 });
 

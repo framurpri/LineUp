@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, TouchableHighlight, Button} from "react-native";
+import { Text, View, StyleSheet, TouchableHighlight, Button, Pressable} from "react-native";
 import Draggable from "./Draggable";
 import Circulo from "./Circulo";
 import UpButton from "./upButton";
 
-function createPlayer(){
+function createPlayer({ updateParentState, dictionary, modalVisible, setModalVisible }){
     
     const [state, setState] = useState('S');
 
@@ -31,6 +31,19 @@ function createPlayer(){
         }
     };
 
+    const handleClick = () => {
+        // Nuevo valor para actualizar el estado del padre (un nuevo diccionario)
+        const keys = Object.keys(dictionary);
+        for (var i=0; i<keys.length; i++ ){
+            if(keys[i] == state){
+                var value = dictionary[keys[i]]
+                value += count;
+                updateParentState({ ...dictionary, [state]: value })
+            }
+        }
+    };
+
+   
     return(
         <View style={styles.modalView}>
             <View style={{bottom:170, right:120}}>
@@ -63,6 +76,17 @@ function createPlayer(){
                     <Text style={{marginTop:15, textAlign: 'center', alignContent:'center', alignSelf: 'center', alignItems: 'center', backgroundColor:'white', height:40, fontSize:30, width:30, fontWeight: 'bold'}} onPress={decrement}>-</Text>
                 </View>
             </View>
+            <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}>
+                <Text style={styles.textStyle}>Back</Text>
+            </Pressable>
+            <Pressable
+                style={[styles.button2, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}
+                onPressIn={handleClick}>
+                <Text style={styles.textStyle}>Create</Text>
+            </Pressable>
         </View>
     )
 }
@@ -87,6 +111,35 @@ const styles = StyleSheet.create({
         height:150, 
         bottom:410, 
         borderRadius:20,
+      },
+      button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+        width: 150,
+        alignItems: 'center',
+        height: 40,
+        bottom: 460,
+        right: 80
+      },
+      button2: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+        width: 150,
+        alignContent: 'center',
+        height: 40,
+        bottom: 500,
+        left: 80
+      },
+      buttonClose: {
+        backgroundColor: '#2196F3',
+      },
+      textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 15,
+        textAlign: 'center',
       },
 })
 

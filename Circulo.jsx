@@ -4,16 +4,17 @@ import Draggable  from './Draggable.jsx';
 
 function Circulo(props){
 
-  const {children, margin, width, marginTop, size, marginT} = props;
+  const {children, margin, width, top, marginTop, size, marginT} = props;
 
   return(
-    <View style={{height: 50,
+    <View style={{
       width: width,
       height: width,
       alignItems: 'center',
       alignContent: 'center', 
       backgroundColor: 'blue',
       borderRadius: 80,
+      top: top,
       marginTop: marginT,
       marginRight: margin}}>
       <Text selectable={false} style={{fontSize: size,

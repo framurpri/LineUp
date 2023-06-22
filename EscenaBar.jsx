@@ -3,9 +3,43 @@ import { StyleSheet, Image, ImageBackground, Text, Modal, Pressable} from 'react
 import DownBar from './DownBar.jsx'
 import { View } from 'react-native-web';
 import CreatePlayer from './createPlayer.jsx';
+import Circulo from './Circulo.jsx';
+import Draggable from './Draggable.jsx';
 
 function EscenaBar(){
     const [modalVisible, setModalVisible] = useState(false);
+
+    const [dictionary, setDictionary] = useState({ L: 1, O: 1, WS: 1, MB: 1, S: 1 });
+    
+    const [coordenadas, setCoordenadas] = useState({ L: [[0,0]], O: [[0,0]], WS: [[0,0]], MB: [[0,0]], S: [[0,0]] })
+
+    const keys = Object.keys(dictionary);
+    const values = []
+
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      const value = dictionary[key];
+      values.push(value)
+    }
+
+    const keys2 = Object.keys(dictionary);
+    const values2 = []
+
+    for (let i = 0; i < keys2.length; i++) {
+      const key = keys2[i];
+      const value = coordenadas[key];
+      values2.push(value[0])
+      values2.push(value[1])
+    }
+
+    const updateParentState = (newDictionary) => {
+      setDictionary(newDictionary);
+    };
+
+    const updateCoordenadas = (newCoordenadas) => {
+      setCoordenadas(newCoordenadas);
+    };
+
     return (
     <View style={modalVisible ? styles.centeredViewNoOp : styles.centeredViewOp}>
         <Modal
@@ -15,31 +49,94 @@ function EscenaBar(){
             onRequestClose={() => {
             setModalVisible(!modalVisible);
             }}>
-            <View style={{flex:1, top:200}}>
-              <CreatePlayer/>
-              <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => setModalVisible(!modalVisible)}>
-                        <Text style={styles.textStyle}>Back</Text>
-              </Pressable>
-              <Pressable
-                        style={[styles.button2, styles.buttonClose]}
-                        onPress={() => setModalVisible(!modalVisible)}>
-                        <Text style={styles.textStyle}>Create</Text>
-              </Pressable>
+            <View style={{top:200}}>
+              <CreatePlayer setModalVisible={setModalVisible} modalVisible={modalVisible} updateParentState={updateParentState} dictionary={dictionary}/>
             </View>
         </Modal>
-        <DownBar style={{backgroundColor:'#99CCFF'}}>
+        <View style={{ bottom: 500, flex: 0, flexDirection: 'row' }}>
+          {values2}
+          {dictionary.S > 0 && (
+            <React.Fragment>
+              {Array(dictionary.S)
+                .fill()
+                .map((_, index) => (
+                  <Draggable key={index} coordenadas={coordenadas} updateCoordenadas={updateCoordenadas}>
+                    <Circulo key={index} margin={0} width={60} marginTop={6} size={30} marginT={0}>
+                      <Text>S</Text>
+                    </Circulo>
+                  </Draggable>
+                ))}
+            </React.Fragment>
+          )}
+
+          {dictionary.O > 0 && (
+            <React.Fragment>
+              {Array(dictionary.O)
+                .fill()
+                .map((_, index) => (
+                  <Draggable key={index} updateCoordenadas={updateCoordenadas} coordenadas={coordenadas}>
+                    <Circulo key={index} margin={0} width={60} marginTop={6} size={30} marginT={0}>
+                      <Text>O</Text>
+                    </Circulo>
+                  </Draggable>
+                ))}
+            </React.Fragment>
+          )}
+          {dictionary.L > 0 && (
+            <React.Fragment>
+              {Array(dictionary.L)
+                .fill()
+                .map((_, index) => (
+                  <Draggable key={index} updateCoordenadas={updateCoordenadas} coordenadas={coordenadas}>
+                    <Circulo key={index} margin={0} width={60} marginTop={6} size={30} marginT={0}>
+                      <Text>L</Text>
+                    </Circulo>
+                  </Draggable>
+                ))}
+            </React.Fragment>
+          )}
+          {dictionary.WS > 0 && (
+            <React.Fragment>
+              {Array(dictionary.WS)
+                .fill()
+                .map((_, index) => (
+                  <Draggable key={index} updateCoordenadas={updateCoordenadas} coordenadas={coordenadas}>
+                    <Circulo key={index} margin={0} width={60} marginTop={9} size={30} marginT={0}>
+                      <Text>WS</Text>
+                    </Circulo>
+                  </Draggable>
+                ))}
+            </React.Fragment>
+          )}
+          {dictionary.MB > 0 && (
+            <React.Fragment>
+              {Array(dictionary.MB)
+                .fill()
+                .map((_, index) => (
+                  <Draggable key={index} updateCoordenadas={updateCoordenadas} coordenadas={coordenadas}>
+                    <Circulo margin={0} width={60} marginTop={9} size={30} marginT={0}>
+                      <Text>MB</Text>
+                    </Circulo>
+                  </Draggable>
+                ))}
+            </React.Fragment>
+          )}
+        </View>
+
+        <View style={{flex:1}}>
+        <DownBar>
             <Pressable
                 onPress={() => setModalVisible(true)}>
                 <ImageBackground source={require('./Resources/buttonAddPlayer.png')} style={{width: 70, height: 70}}>
                     <Text style={styles.text}>Add Player</Text>
                 </ImageBackground>                
-            </Pressable>  
+            </Pressable>
             <Image source={require('./Resources/flechaIzquierda.png')} style={{width: 80, left:20, height: 80}} />
             <Image source={require('./Resources/flechaDerecha.png')} style={{width: 70, left:40, height: 50}} />
             <Text style={{fontSize: 40, paddingLeft: 50}} >Finish</Text>
         </DownBar>
+        </View>
+       
     </View>
     );
 };
@@ -64,7 +161,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 22,
 
-        opacity: 0.3
+        opacity: 0.5
       },
       modalView: {
         backgroundColor: 'white',
@@ -111,7 +208,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
       },
       modalText: {
-        marginBottom: 15,
+        top: 100,
+        width: 40,
         textAlign: 'center',
       },
 });
