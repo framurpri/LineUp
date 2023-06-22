@@ -1,3 +1,7 @@
+import React from 'react';
+import { View, Image, Text, StyleSheet} from 'react-native';
+import { Routes, Route, Link } from 'react-router-native'
+import Registro from './Registro';
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Text, Alert } from 'react-native';
 import { Link } from 'react-router-native';
@@ -36,6 +40,13 @@ export function Login() {
     console.log('Correo electrónico:', email);
     console.log('Contraseña:', password);
 
+function Login(){
+  return(
+    <Routes>
+      <Route path="/" element={<Log />} />
+      <Route path="/registro" element={<Registro />}/>
+    </Routes>
+)};
 
   };
 

@@ -1,41 +1,29 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Draggable } from './Draggable.jsx';
+import { StyleSheet, View, Text } from 'react-native';
+import Draggable  from './Draggable.jsx';
 
-class Circulo extends React.Component {
-    render() { 
-      return (
-        <Draggable>
-          <View style={styles.container}>
-              <View style={styles.outerCircle}>
-                <View style={styles.innerCircle} />
-              </View>
-          </View>
-        </Draggable>
-      );
-    }
-  }
-  
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
+function Circulo(props){
+
+  const {children, margin, width, top, marginTop, size, marginT} = props;
+
+  return(
+    <View style={{
+      width: width,
+      height: width,
       alignItems: 'center',
-      backgroundColor: 'white',
-    },
-    outerCircle: {
-      borderRadius: 40,
-      width: 80,
-      height: 80,
-      backgroundColor: 'white',
-    },
-    innerCircle: {
-      borderRadius: 35,
-      width: 70,
-      height: 70,
-      margin: 5,
-      backgroundColor: 'black'
-    },
-  });
+      alignContent: 'center', 
+      backgroundColor: 'blue',
+      borderRadius: 80,
+      top: top,
+      marginTop: marginT,
+      marginRight: margin}}>
+      <Text selectable={false} style={{fontSize: size,
+        fontWeight: 'bold',
+        marginTop: marginTop,}}>
+          {children}
+      </Text>
+    </View>
+)}
 
-  export default Circulo;
+
+export default Circulo;
