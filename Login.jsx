@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Text, Alert } from 'react-native';
+import { Link } from 'react-router-native';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import  Main  from './Main';
+import Basic from './BasicStructPage';
 
 export function Login() {
   const [email, setEmail] = useState('');
@@ -22,6 +24,7 @@ export function Login() {
       const user = userCredential.user;
       console.log(user.email);
       setLoginSuccess(true);
+
     })
     .catch(error => {
       console.log(error);
@@ -36,8 +39,8 @@ export function Login() {
 
   };
 
-  if(loginSuccess){
-    return <Main></Main>
+  if (loginSuccess){
+    return <Basic></Basic>
   }
 
   return (
@@ -58,8 +61,7 @@ export function Login() {
         onChangeText={setPassword}
         secureTextEntry
       />
-
-      <Button title="Iniciar sesión" onPress={handleLogin} />
+        <Button title="Iniciar sesión" onPress={handleLogin} />
 
     </View>
   );

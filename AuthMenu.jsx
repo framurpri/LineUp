@@ -5,7 +5,7 @@ import { NativeRouter, Link } from 'react-router-native';
 function AuthMenu() {
   return(
         <View style={styles.container}>     
-       <Image source={require('./assets/FotoVoley.png')} style={styles.image} />
+       <Image source={require('./Resources/FotoVoley.png')} style={styles.image} />
         <Text style={styles.title}>LineUp</Text>
         <Link to={{ pathname: '/authentication/login'}} style={styles.button}>
           <Text>Iniciar sesión</Text>
