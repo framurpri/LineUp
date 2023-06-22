@@ -3,20 +3,24 @@ import { View, Image, Text, TouchableHighlight, StyleSheet} from 'react-native';
 import { NativeRouter, Routes, Route, Link } from 'react-router-native';
 
 const Settings = () => {
-
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>LineUp</Text>
-        <Text>Cambiar Contraseña</Text>
-        <Text>Términos y Condiciones</Text>
-        <Text>Salir</Text>
-        <Text style={styles.title}>Eliminar Cuenta</Text>
+            <Text style={styles.title}>LineUp</Text>
+            <Link to={{ pathname: '/'}} style = {styles.button}>
+                <Text >Cambiar Contraseña</Text>
+          </Link>
+          <Link to={{ pathname: '/'}} style = {styles.button}>
+                <Text >Términos y Condiciones</Text>
+          </Link>
+          <Link to={{ pathname: '/'}} style = {styles.button}>
+                <Text >Salir</Text>
+          </Link>
+          <Link to={{ pathname: '/'}} style={styles.buttonDelete}>
+                <Text>Eliminar Cuenta</Text>
+          </Link>
       </View>
     );
 };
-
-
-
 
 const styles = StyleSheet.create({
     container: {
@@ -33,6 +37,19 @@ const styles = StyleSheet.create({
         width: 140,
         justifyContent: 'center',
         alignItems: 'center',
+        textAlign: 'center',
+        marginBottom: 10,
+        marginTop: 10,
+    },
+    buttonDelete: {
+        backgroundColor: '#ff7272',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+        width: 140,
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
         marginBottom: 10,
         marginTop: 10,
     },

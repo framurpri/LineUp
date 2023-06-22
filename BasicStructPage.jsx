@@ -27,15 +27,4 @@ const Basic = () => {
     );
 };
 
-function PagBasic(){
-    return(
-      <Routes>
-        <Route path="/" element={<Basic />} />
-        <Route path="/escenas" element={<Escenas />} />
-        <Route path="/login" element={<Log />} />
-        <Route path="/registro" element={<Registro />}/>
-        <Route path="/settings" element={<Settings />} />
-      </Routes>
-  )};
-
-export default PagBasic;
+export default Basic;
