@@ -1,17 +1,79 @@
-import React, {useState} from 'react';
-import { StyleSheet, Image, ImageBackground, Text, Modal, Pressable} from 'react-native';
+import React, {useState, useRef, useEffect} from 'react';
+import { StyleSheet, Image, ImageBackground, Text, Modal, Pressable } from 'react-native';
+import { Routes, Route, Link } from 'react-router-native'
 import DownBar from './DownBar.jsx'
 import { View } from 'react-native-web';
 import CreatePlayer from './createPlayer.jsx';
 import Circulo from './Circulo.jsx';
 import Draggable from './Draggable.jsx';
+import NuevaEscena from './NuevaEscena.jsx'
 
 function EscenaBar(){
     const [modalVisible, setModalVisible] = useState(false);
 
-    const [dictionary, setDictionary] = useState({ L: 1, O: 1, WS: 1, MB: 1, S: 1 });
+    const [capturar, setCatch] = useState(false);
+
+    const [dictionary, setDictionary] = useState({ S: 0, O: 0, L: 0, WS: 0, MB: 0 });
     
-    const [coordenadas, setCoordenadas] = useState({ L: [[0,0]], O: [[0,0]], WS: [[0,0]], MB: [[0,0]], S: [[0,0]] })
+    const coord =[
+      {
+        S: {
+          Refs: {
+            ref1: useRef(null),
+            ref2: useRef(null),
+            ref3: useRef(null),
+            ref4: useRef(null),
+            ref5: useRef(null),
+            ref6: useRef(null),
+          },
+          coordenadas: []
+        },
+        O:  {
+          Refs: {
+            ref1: useRef(null),
+            ref2: useRef(null),
+            ref3: useRef(null),
+            ref4: useRef(null),
+            ref5: useRef(null),
+            ref6: useRef(null),
+          },
+          coordenadas: []
+        },
+        L: {
+          Refs: {
+            ref1: useRef(null),
+            ref2: useRef(null),
+            ref3: useRef(null),
+            ref4: useRef(null),
+            ref5: useRef(null),
+            ref6: useRef(null),
+          },
+          coordenadas: []
+        },
+        WS: {
+          Refs: {
+            ref1: useRef(null),
+            ref2: useRef(null),
+            ref3: useRef(null),
+            ref4: useRef(null),
+            ref5: useRef(null),
+            ref6: useRef(null),
+          },
+          coordenadas: []
+        },
+        MB: {
+          Refs: {
+            ref1: useRef(null),
+            ref2: useRef(null),
+            ref3: useRef(null),
+            ref4: useRef(null),
+            ref5: useRef(null),
+            ref6: useRef(null),
+          },
+          coordenadas: []
+        },
+      }
+    ]
 
     const keys = Object.keys(dictionary);
     const values = []
@@ -25,19 +87,66 @@ function EscenaBar(){
     const keys2 = Object.keys(dictionary);
     const values2 = []
 
-    for (let i = 0; i < keys2.length; i++) {
-      const key = keys2[i];
-      const value = coordenadas[key];
-      values2.push(value[0])
-      values2.push(value[1])
-    }
+    // for (let i = 0; i < keys2.length; i++) {
+    //   const key = keys2[i];
+    //   const value = coordenadas[key];
+    //   values2.push(value[0])
+    //   values2.push(value[1])
+    // }
+
+    useEffect(() => {
+      coord.forEach((element) => {
+        Object.keys(element).forEach((key) => {
+          const refs = element[key].Refs;
+          const coordenadas = element[key].coordenadas;
+
+          Object.keys(refs).forEach((refKey, index) => {
+            const ref = refs[refKey];
+
+            if (ref.current) {
+              const measureCallback = (index) => (x, y, width, height, pageX, pageY) => {
+                // Guardar las coordenadas en la posición del índice correspondiente
+                coordenadas[index] = [pageX, pageY];
+                console.log('Coordenadas:', coord);
+              };
+    
+              ref.current.measure(
+                measureCallback(index)
+              );
+            }
+          });
+        });
+      });
+    }, [capturar, coord]);
+
+    // useEffect(() => {
+    //   elementsRefs.forEach((ref, index) => {
+    //     if (ref.current) {
+    //       const key = Object.keys(coordenadas)[index]; // Obtener la clave correspondiente al índice
+    //       const measureCallback = (ref) => (x, y, width, height, pageX, pageY) => {
+    //         console.log('Coordenadas X:', pageX);
+    //         console.log('Coordenadas Y:', pageY);
+    //         console.log('======')
+    //         setCoordenadas(prevCoordenadas => {
+    //             return { ...prevCoordenadas, [key]: [pageX, pageY] };
+    //           }
+
+    //         );               
+    //         console.log(coordenadas)
+            
+    //       };
+    
+    //       ref.current.measure(
+    //         measureCallback(ref, index)
+    //       );
+    //     }
+    //   });
+    // }, [capturar, dictionary]);
+    
+  
 
     const updateParentState = (newDictionary) => {
       setDictionary(newDictionary);
-    };
-
-    const updateCoordenadas = (newCoordenadas) => {
-      setCoordenadas(newCoordenadas);
     };
 
     return (
@@ -54,15 +163,14 @@ function EscenaBar(){
             </View>
         </Modal>
         <View style={{ bottom: 500, flex: 0, flexDirection: 'row' }}>
-          {values2}
           {dictionary.S > 0 && (
             <React.Fragment>
               {Array(dictionary.S)
                 .fill()
                 .map((_, index) => (
-                  <Draggable key={index} coordenadas={coordenadas} updateCoordenadas={updateCoordenadas}>
+                  <Draggable key={index}>
                     <Circulo key={index} margin={0} width={60} marginTop={6} size={30} marginT={0}>
-                      <Text>S</Text>
+                      <Text key={index} ref={coord[0].S.Refs[`ref${index + 1}`]}>S</Text>
                     </Circulo>
                   </Draggable>
                 ))}
@@ -74,9 +182,9 @@ function EscenaBar(){
               {Array(dictionary.O)
                 .fill()
                 .map((_, index) => (
-                  <Draggable key={index} updateCoordenadas={updateCoordenadas} coordenadas={coordenadas}>
+                  <Draggable key={index}>
                     <Circulo key={index} margin={0} width={60} marginTop={6} size={30} marginT={0}>
-                      <Text>O</Text>
+                      <Text key={index} ref={coord[0].O.Refs[`ref${index + 1}`]}>O</Text>
                     </Circulo>
                   </Draggable>
                 ))}
@@ -87,9 +195,9 @@ function EscenaBar(){
               {Array(dictionary.L)
                 .fill()
                 .map((_, index) => (
-                  <Draggable key={index} updateCoordenadas={updateCoordenadas} coordenadas={coordenadas}>
+                  <Draggable key={index}>
                     <Circulo key={index} margin={0} width={60} marginTop={6} size={30} marginT={0}>
-                      <Text>L</Text>
+                      <Text key={index} ref={coord[0].L.Refs[`ref${index + 1}`]}>L</Text>
                     </Circulo>
                   </Draggable>
                 ))}
@@ -100,9 +208,9 @@ function EscenaBar(){
               {Array(dictionary.WS)
                 .fill()
                 .map((_, index) => (
-                  <Draggable key={index} updateCoordenadas={updateCoordenadas} coordenadas={coordenadas}>
+                  <Draggable key={index} >
                     <Circulo key={index} margin={0} width={60} marginTop={9} size={30} marginT={0}>
-                      <Text>WS</Text>
+                      <Text key={index} ref={coord[0].WS.Refs[`ref${index + 1}`]}>WS</Text>
                     </Circulo>
                   </Draggable>
                 ))}
@@ -113,9 +221,9 @@ function EscenaBar(){
               {Array(dictionary.MB)
                 .fill()
                 .map((_, index) => (
-                  <Draggable key={index} updateCoordenadas={updateCoordenadas} coordenadas={coordenadas}>
-                    <Circulo margin={0} width={60} marginTop={9} size={30} marginT={0}>
-                      <Text>MB</Text>
+                  <Draggable key={index}>
+                    <Circulo key={index} margin={0} width={60} marginTop={9} size={30} marginT={0}>
+                      <Text ref={coord[0].MB.Refs[`ref${index + 1}`]}>MB</Text>
                     </Circulo>
                   </Draggable>
                 ))}
@@ -132,11 +240,16 @@ function EscenaBar(){
                 </ImageBackground>                
             </Pressable>
             <Image source={require('./Resources/flechaIzquierda.png')} style={{width: 80, left:20, height: 80}} />
-            <Image source={require('./Resources/flechaDerecha.png')} style={{width: 70, left:40, height: 50}} />
+            <Pressable onPress={() => {
+              setCatch(!capturar);
+              }}
+            >
+              <Image source={require('./Resources/flechaDerecha.png')} style={{width: 70, left:40, height: 50}} />
+            </Pressable>
             <Text style={{fontSize: 40, paddingLeft: 50}} >Finish</Text>
         </DownBar>
         </View>
-       
+        
     </View>
     );
 };
@@ -213,5 +326,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
       },
 });
+
+
 
 export default EscenaBar;
