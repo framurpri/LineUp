@@ -1,26 +1,44 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, Pressable, ScrollView } from 'react-native'
-import { Routes, Route, Link } from 'react-router-native'
-import Icon from 'react-native-vector-icons/FontAwesome'
+import { Routes, Route, Link } from 'react-router-native';
+import { firebaseConfig } from './firebase-config';
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore, collection, query, where, getDocs } from "firebase/firestore"; 
+import Icon from 'react-native-vector-icons/FontAwesome';
 import TopBar from './TopBar.jsx'
 import DownBar from './DownBar';
 
+function  Teams(){
 
-function Teams(){
+      const [datos, setDatos] = useState({});
+      const [teamNames, setTeamNames] = useState([]);
+      const [docsIds, setDocsIds] = useState([]);
+      const [isLoading, setIsLoading] = useState(true); // Estado para indicar si se están cargando los datos
 
-    const data = [
-        { id: 1, name: 'Elemento 1' },
-        { id: 2, name: 'Elemento 2' },
-        { id: 3, name: 'Elemento 3' },
-        { id: 4, name: 'Elemento 4' },
-      ];
-      const [datos, setDatos] = useState(data);
     
       const addNewItem = () => {
         const newItem = { id: datos.length + 1, name: `Elemento ${datos.length + 1}` };
         setDatos([...datos, newItem]);
       };
 
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const auth = getAuth(app);
+
+      const q = query(collection(db, "teams"), where("userEmail", "==", auth.currentUser.email));
+      const asyncQuery = async () => {
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots       
+        datos[doc.id] = doc.data();
+        setIsLoading(false); // Se actualiza el estado para indicar que los datos se han cargado
+      });
+        const teams = Object.entries(datos).map(([clave, valor]) => {return `Team id es: ${clave} y el nombre es: ${valor.team}`});
+        console.log(teams);
+      } 
+      asyncQuery()
+      
     return(
         <View style={styles.container}>
             <View>
@@ -28,21 +46,26 @@ function Teams(){
                     <TopBar />
                 </View>
             </View>
-            <View style={{height: 650,
-                justifyContent: 'center',
-                alignItems: 'center',
-                width:'100%'}}>
-                <Pressable style={{backgroundColor: 'grey'}} onPressIn={addNewItem}>
-                    <Text style={{fontSize: 20, color:"#900", fontWeight:'bold', width:'100%'}}>+   Create New team</Text>
-                </Pressable>
-                <ScrollView contentContainerStyle={styles.subview2}>
-                    {datos.map((item) => (
-                        <View key={item.id} style={styles.row}>
-                            <Text style={{fontSize: 20}} key={item.id}>{item.name}</Text>
-                        </View>
-                    ))}
-                </ScrollView>
+            <View style={{ height: 650, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+      <Link to={{ pathname: '/teams/new' }}>
+        <Text style={{ fontSize: 20, color: "#900", fontWeight: 'bold', width: '100%' }}>+   Create New team</Text>
+      </Link>
+      <Text style={{ fontSize: 20, color: "#006775", fontWeight: 'bold', width: '100%' , textAlign: 'center'}}>My Teams</Text>
+      {isLoading ? (
+        <Text>Loading...</Text> // Muestra el mensaje de carga mientras se obtienen los datos
+      ) : (
+        <ScrollView contentContainerStyle={styles.subview2}>
+          {Object.entries(datos).map(([clave, valor]) => (
+            <View key={clave} style={styles.row}>
+              <Link to={{pathname: `/teams/${clave}`}}>
+                <Text style={{ fontSize: 20 }}>{valor.team}</Text>
+              </Link>
             </View>
+          ))}
+        </ScrollView>
+      )}
+    </View>
+
             <View style={styles.staticContainer}>
                     <DownBar>
                         <Link to={{ pathname: '/escenas'}}>

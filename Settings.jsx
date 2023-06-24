@@ -1,12 +1,19 @@
 import React from 'react';
 import { View, Image, Text, TouchableHighlight, StyleSheet} from 'react-native';
 import { NativeRouter, Routes, Route, Link } from 'react-router-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import DownBar from './DownBar';
+import TopBar from './TopBar';
 
 const Settings = () => {
     return (
       <View style={styles.container}>
+        <View>
+        <TopBar/>
+        </View>
+        <View>
             <Text style={styles.title}>LineUp</Text>
-            <Link to={{ pathname: '/'}} style = {styles.button}>
+            <Link to={{ pathname: '/settings/changePassword'}} style = {styles.button}>
                 <Text >Cambiar Contraseña</Text>
           </Link>
           <Link to={{ pathname: '/'}} style = {styles.button}>
@@ -18,7 +25,21 @@ const Settings = () => {
           <Link to={{ pathname: '/'}} style={styles.buttonDelete}>
                 <Text>Eliminar Cuenta</Text>
           </Link>
+        </View>
+            <View style={styles.staticContainer}>
+                <DownBar>
+                    <Link to={{ pathname: '/escenas'}}>
+                        <Icon name="film" size={25} color="#900"/>
+                    </Link>
+                    <Icon name="group" size={25} color="#900" />
+                    <Icon name="user" size={25} color="#900" />
+                    <Link to={{ pathname: '/settings'}}>
+                        <Icon name="cog" size={25} color="#900" />
+                    </Link>
+                </DownBar>
+            </View>
       </View>
+      
     );
 };
 
@@ -65,7 +86,10 @@ const styles = StyleSheet.create({
     title: {
         marginBottom: 70,
         fontSize: 30,
-    }
+    },
+    staticContainer: {
+        height: 100
+      },
   });
 
   export default Settings;

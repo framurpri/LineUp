@@ -6,7 +6,7 @@ import Basic from './BasicStructPage.jsx'
 function Bar(){
     return(
         <View style={styles.view}>
-            <Link to={{ pathname: '/'}}>
+            <Link to={{ pathname: '/home'}}>
                 <Image source={require('./Resources/home.png')} style={styles.image} />
             </Link>
         </View>

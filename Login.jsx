@@ -1,10 +1,7 @@
-import React from 'react';
-import { View, Image, Text, StyleSheet} from 'react-native';
+import React, { useState } from 'react';
 import { Routes, Route, Link } from 'react-router-native'
 import Registro from './Registro';
-import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Text, Alert } from 'react-native';
-import { Link } from 'react-router-native';
+import { View, TextInput, Button, StyleSheet, Text } from 'react-native';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
@@ -34,23 +31,15 @@ export function Login() {
       console.log(error);
 
     })
+  }
 
     // Aquí puedes implementar la lógica para el inicio de sesión del usuario
+   
+
+  if (loginSuccess){
     console.log('Iniciando sesión...');
     console.log('Correo electrónico:', email);
     console.log('Contraseña:', password);
-
-function Login(){
-  return(
-    <Routes>
-      <Route path="/" element={<Log />} />
-      <Route path="/registro" element={<Registro />}/>
-    </Routes>
-)};
-
-  };
-
-  if (loginSuccess){
     return <Basic></Basic>
   }
 

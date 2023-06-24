@@ -3,8 +3,7 @@ import { View, TextInput, Button, StyleSheet , Text, CheckBox} from 'react-nativ
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import { getFirestore } from "firebase/firestore";
-import { collection, addDoc } from "firebase/firestore"; 
+import { getFirestore, collection, addDoc } from "firebase/firestore"; 
 import { NativeRouter, Routes, Route, Link } from 'react-router-native';
 import  Main  from './Main';
 
