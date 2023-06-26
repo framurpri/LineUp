@@ -10,6 +10,8 @@ import Settings from './Settings';
 import Team from './Team';
 import { NewTeam } from './NewTeam';
 import ChangePassword from './ChangePassword';
+import Profile from './Profile';
+import Terms from './Terms';
 
 function App() {
   return ( 
@@ -28,9 +30,11 @@ function App() {
         <Route path="new" element={<NewTeam/>}/>
         <Route path=":id" element={<Team/>}/>
       </Route>
+      <Route path="/profile" element={<Profile/>}/>
       <Route path="/settings">
         <Route path='' element={<Settings/>}/>
         <Route path='changePassword' element={<ChangePassword/>}/>
+        <Route path='terms' element={<Terms/>}/>
       </Route> 
 
     </Routes>

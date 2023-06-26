@@ -55,7 +55,7 @@ function  ChangePassword(){
           <View>
             <TopBar />
           </View>
-        <View>
+        <View style={{ height: 650, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
           <Text style={styles.text}>Cambiar contraseña</Text>
           
           <TextInput

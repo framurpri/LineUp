@@ -9,49 +9,22 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import TopBar from './TopBar.jsx'
 import DownBar from './DownBar';
 
-function Team(){
+function Profile(){
 
-      const [datos, setDatos] = useState({});
-      //const [teamNames, setTeamNames] = useState([]);
-      const [docsIds, setDocsIds] = useState([]);
-      const [isLoading, setIsLoading] = useState(true);
-      const [teamName, setTeamName] = useState('');
-      const [captainEmail, setCaptainEmail] = useState('');
-      const [captainName, setCaptainName] = useState('');
+      const [username, setUsername] = useState('');
 
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
       const auth = getAuth(app);
-      
-      const retrieveDocument = async () => {
-        
-        const params = useParams();
-        const { id } = params;
-        console.log(id)
-      
-        const docRef = doc(db, "teams", id);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          console.log("Document data:", docSnap.data());
-        } else {
-          // docSnap.data() will be undefined in this case
-          console.log("No such document!");
-        }
-        setTeamName(docSnap.data().team);
-        setCaptainEmail(docSnap.data().userEmail);
-        console.log(captainEmail);
-        getCaptainInfo();
-      }
-
-      const getCaptainInfo = async () => {
-        const q = query(collection(db, "users"), where("email", "==", captainEmail));
+   
+      const getUserInfo = async () => {
+        const q = query(collection(db, "users"), where("email", "==", auth.currentUser.email));
         const querySnapshot = await getDocs(q);
         console.log(querySnapshot.docs[0].data().username);
-        setCaptainName(querySnapshot.docs[0].data().username);
+        setUsername(querySnapshot.docs[0].data().username);
       }
 
-      retrieveDocument();
-
+      getUserInfo();
       
     return(
       <View style={styles.container}>
@@ -59,8 +32,7 @@ function Team(){
                     <TopBar />
                 </View>           
             <View style={{ height: 650, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-              <Text>{teamName}</Text>
-              <Text>Capitán: {captainName}</Text>
+              <Text>{username}</Text>
             </View>
 
             <View style={styles.staticContainer}>
@@ -119,4 +91,4 @@ const styles = StyleSheet.create({
     },
   });
 
-export default Team;
+export default Profile;
