@@ -20,7 +20,9 @@ const Basic = () => {
                 <Link to={{pathname: '/teams'}}>
                     <Icon name="group" size={25} color="#900" />
                 </Link>
-                <Icon name="user" size={25} color="#900" />
+                <Link to={{ pathname: '/plays'}}>
+                    <Icon name="user" size={25} color="#900" />
+                </Link>
                 <Link to={{ pathname: '/settings'}}>
                     <Icon name="cog" size={25} color="#900" />
                 </Link>

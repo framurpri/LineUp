@@ -6,25 +6,41 @@ import { View } from 'react-native-web';
 import CreatePlayer from './createPlayer.jsx';
 import Circulo from './Circulo.jsx';
 import Draggable from './Draggable.jsx';
-import NuevaEscena from './NuevaEscena.jsx'
+import { firebaseConfig } from './firebase-config';
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore, collection, addDoc, query, where, getDocs } from "firebase/firestore"; 
 
 function EscenaBar(){
     const [modalVisible, setModalVisible] = useState(false);
+
+    const [username, setUsername] = useState('');
+
+    const [modalVisible1, setModalVisible1] = useState(false);
 
     const [capturar, setCatch] = useState(false);
 
     const [dictionary, setDictionary] = useState({ S: 0, O: 0, L: 0, WS: 0, MB: 0 });
     
+    const [coordenada, setCoordenada] = useState({ S: [], O: [], L: [], WS: [], MB: [] })
+
+    const [numScene, setNumScene] = useState(0)
+
+    const [finish, setFinish] = useState('')
+
+    const [scenes, setScenes] = useState({});
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    
+
     const coord =[
       {
         S: {
           Refs: {
             ref1: useRef(null),
             ref2: useRef(null),
-            ref3: useRef(null),
-            ref4: useRef(null),
-            ref5: useRef(null),
-            ref6: useRef(null),
           },
           coordenadas: []
         },
@@ -32,10 +48,6 @@ function EscenaBar(){
           Refs: {
             ref1: useRef(null),
             ref2: useRef(null),
-            ref3: useRef(null),
-            ref4: useRef(null),
-            ref5: useRef(null),
-            ref6: useRef(null),
           },
           coordenadas: []
         },
@@ -43,10 +55,6 @@ function EscenaBar(){
           Refs: {
             ref1: useRef(null),
             ref2: useRef(null),
-            ref3: useRef(null),
-            ref4: useRef(null),
-            ref5: useRef(null),
-            ref6: useRef(null),
           },
           coordenadas: []
         },
@@ -54,10 +62,6 @@ function EscenaBar(){
           Refs: {
             ref1: useRef(null),
             ref2: useRef(null),
-            ref3: useRef(null),
-            ref4: useRef(null),
-            ref5: useRef(null),
-            ref6: useRef(null),
           },
           coordenadas: []
         },
@@ -65,40 +69,20 @@ function EscenaBar(){
           Refs: {
             ref1: useRef(null),
             ref2: useRef(null),
-            ref3: useRef(null),
-            ref4: useRef(null),
-            ref5: useRef(null),
-            ref6: useRef(null),
+           
           },
           coordenadas: []
         },
       }
     ]
-
-    const keys = Object.keys(dictionary);
-    const values = []
-
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i];
-      const value = dictionary[key];
-      values.push(value)
-    }
-
-    const keys2 = Object.keys(dictionary);
-    const values2 = []
-
-    // for (let i = 0; i < keys2.length; i++) {
-    //   const key = keys2[i];
-    //   const value = coordenadas[key];
-    //   values2.push(value[0])
-    //   values2.push(value[1])
-    // }
+    const updateState = (newState) => {
+      setScenes(newState);
+    };
 
     useEffect(() => {
       coord.forEach((element) => {
         Object.keys(element).forEach((key) => {
           const refs = element[key].Refs;
-          const coordenadas = element[key].coordenadas;
 
           Object.keys(refs).forEach((refKey, index) => {
             const ref = refs[refKey];
@@ -106,10 +90,8 @@ function EscenaBar(){
             if (ref.current) {
               const measureCallback = (index) => (x, y, width, height, pageX, pageY) => {
                 // Guardar las coordenadas en la posición del índice correspondiente
-                coordenadas[index] = [pageX, pageY];
-                console.log('Coordenadas:', coord);
+                coordenada[key][index] = [pageX, pageY];
               };
-    
               ref.current.measure(
                 measureCallback(index)
               );
@@ -117,7 +99,8 @@ function EscenaBar(){
           });
         });
       });
-    }, [capturar, coord]);
+      console.log(coordenada)
+    }, [capturar, dictionary]);
 
     // useEffect(() => {
     //   elementsRefs.forEach((ref, index) => {
@@ -143,11 +126,39 @@ function EscenaBar(){
     //   });
     // }, [capturar, dictionary]);
     
-  
+    const finalizarJugada = () => {
+
+    }
+
+    const getUserInfo = async () => {
+      const q = query(collection(db, "users"), where("email", "==", auth.currentUser.email));
+      const querySnapshot = await getDocs(q);
+      //console.log(querySnapshot.docs[0].data().username);
+      setUsername(querySnapshot.docs[0].data().username);
+    }
+    getUserInfo();
 
     const updateParentState = (newDictionary) => {
       setDictionary(newDictionary);
     };
+    //console.log(currentScene)
+
+
+
+    const addScene = async () => {
+      try {
+        const docRef = await addDoc(collection(db, "plays"), {
+          designer: auth.currentUser.email,
+          name: "nombre de prueba",
+          //scenes: [{ [currentScene]: coordenada }]
+          scenes: scenes
+        });
+        console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+    }
+
 
     return (
     <View style={modalVisible ? styles.centeredViewNoOp : styles.centeredViewOp}>
@@ -157,6 +168,17 @@ function EscenaBar(){
             visible={modalVisible}
             onRequestClose={() => {
             setModalVisible(!modalVisible);
+            }}>
+            <View style={{top:200}}>
+              <CreatePlayer setModalVisible={setModalVisible} modalVisible={modalVisible} updateParentState={updateParentState} dictionary={dictionary}/>
+            </View>
+        </Modal>
+        <Modal
+            animationType="fade"
+            transparent={true}
+            visible={modalVisible1}
+            onRequestClose={() => {
+            setModalVisible1(!modalVisible1);
             }}>
             <View style={{top:200}}>
               <CreatePlayer setModalVisible={setModalVisible} modalVisible={modalVisible} updateParentState={updateParentState} dictionary={dictionary}/>
@@ -239,14 +261,25 @@ function EscenaBar(){
                     <Text style={styles.text}>Add Player</Text>
                 </ImageBackground>                
             </Pressable>
+            
             <Image source={require('./Resources/flechaIzquierda.png')} style={{width: 80, left:20, height: 80}} />
+            
             <Pressable onPress={() => {
               setCatch(!capturar);
+              setNumScene(numScene+1);
+              console.log(scenes)
               }}
             >
               <Image source={require('./Resources/flechaDerecha.png')} style={{width: 70, left:40, height: 50}} />
             </Pressable>
-            <Text style={{fontSize: 40, paddingLeft: 50}} >Finish</Text>
+            
+            <Pressable onPress={() => {
+              setFinish(!finish);
+              addScene();
+            }}>
+              <Text style={{fontSize: 40, paddingLeft: 50}} >Finish</Text>
+            </Pressable>
+
         </DownBar>
         </View>
         
@@ -324,6 +357,18 @@ const styles = StyleSheet.create({
         top: 100,
         width: 40,
         textAlign: 'center',
+      },
+      modalView: {
+        backgroundColor: '#F0F8FF',
+        borderRadius: 20,
+        marginHorizontal: 20,
+        height: 100,
+        width: 100,
+        padding: 180,
+        alignItems: 'center',
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
       },
 });
 

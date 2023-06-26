@@ -10,6 +10,8 @@ import Settings from './Settings';
 import Team from './Team';
 import { NewTeam } from './NewTeam';
 import ChangePassword from './ChangePassword';
+import Plays from './Jugadas'
+import Play from './Play';
 
 function App() {
   return ( 
@@ -27,6 +29,10 @@ function App() {
         <Route path="" element={<Teams/>}/>
         <Route path="new" element={<NewTeam/>}/>
         <Route path=":id" element={<Team/>}/>
+      </Route>
+      <Route path="/plays">
+        <Route path="" element={<Plays/>}/>
+        <Route path=":id" element={<Play/>}/>
       </Route>
       <Route path="/settings">
         <Route path='' element={<Settings/>}/>
