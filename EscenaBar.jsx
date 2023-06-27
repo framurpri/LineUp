@@ -15,6 +15,10 @@ import { getFirestore, collection, addDoc, query, where, getDocs } from "firebas
 function EscenaBar(){
     const [modalVisible, setModalVisible] = useState(false);
 
+    const [username, setUsername] = useState('');
+
+    const [modalVisible1, setModalVisible1] = useState(false);
+
     const [capturar, setCatch] = useState(false);
 
     const [dictionary, setDictionary] = useState({ S: 0, O: 0, L: 0, WS: 0, MB: 0 });
@@ -31,16 +35,25 @@ function EscenaBar(){
     const db = getFirestore(app);
     const auth = getAuth(app);
     
+    const [coordenada, setCoordenada] = useState({ S: [], O: [], L: [], WS: [], MB: [] })
+
+    const [numScene, setNumScene] = useState(0)
+
+    const [finish, setFinish] = useState('')
+
+    const [scenes, setScenes] = useState({});
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    
+
     const coord =[
       {
         S: {
           Refs: {
             ref1: useRef(null),
             ref2: useRef(null),
-            ref3: useRef(null),
-            ref4: useRef(null),
-            ref5: useRef(null),
-            ref6: useRef(null),
           },
           coordenadas: []
         },
@@ -48,10 +61,6 @@ function EscenaBar(){
           Refs: {
             ref1: useRef(null),
             ref2: useRef(null),
-            ref3: useRef(null),
-            ref4: useRef(null),
-            ref5: useRef(null),
-            ref6: useRef(null),
           },
           coordenadas: []
         },
@@ -59,10 +68,6 @@ function EscenaBar(){
           Refs: {
             ref1: useRef(null),
             ref2: useRef(null),
-            ref3: useRef(null),
-            ref4: useRef(null),
-            ref5: useRef(null),
-            ref6: useRef(null),
           },
           coordenadas: []
         },
@@ -70,10 +75,6 @@ function EscenaBar(){
           Refs: {
             ref1: useRef(null),
             ref2: useRef(null),
-            ref3: useRef(null),
-            ref4: useRef(null),
-            ref5: useRef(null),
-            ref6: useRef(null),
           },
           coordenadas: []
         },
@@ -81,15 +82,15 @@ function EscenaBar(){
           Refs: {
             ref1: useRef(null),
             ref2: useRef(null),
-            ref3: useRef(null),
-            ref4: useRef(null),
-            ref5: useRef(null),
-            ref6: useRef(null),
+           
           },
           coordenadas: []
         },
       }
     ]
+    const updateState = (newState) => {
+      setScenes(newState);
+    };
     
     /*const [showImage, setShowImage] = useState(false);
     
@@ -110,7 +111,6 @@ function EscenaBar(){
       coord.forEach((element) => {
         Object.keys(element).forEach((key) => {
           const refs = element[key].Refs;
-          const coordenadas = element[key].coordenadas;
 
           Object.keys(refs).forEach((refKey, index) => {
             const ref = refs[refKey];
@@ -119,6 +119,7 @@ function EscenaBar(){
               const measureCallback = (index) => (x, y, width, height, pageX, pageY) => {
                 debugger;
                 // Guardar las coordenadas en la posición del índice correspondiente
+
                 coordenada[key][`coordenada${index+1}`] = [pageX, pageY];
 
                 
@@ -140,7 +141,7 @@ function EscenaBar(){
             });
           });
         });
-        debugger;
+
         console.log('Coordenadas:', coordenada);
         console.log('Scenes: ',scenes)
         setCurrentScene(currentScene + 1);
@@ -158,6 +159,24 @@ function EscenaBar(){
     const updateParentState = (newDictionary) => {
       setDictionary(newDictionary);
     };
+    //console.log(currentScene)
+
+
+
+    const addScene = async () => {
+      try {
+        const docRef = await addDoc(collection(db, "plays"), {
+          designer: auth.currentUser.email,
+          name: "nombre de prueba",
+          //scenes: [{ [currentScene]: coordenada }]
+          scenes: scenes
+        });
+        console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+    }
+
 
 
 
@@ -183,6 +202,17 @@ function EscenaBar(){
             visible={modalVisible}
             onRequestClose={() => {
             setModalVisible(!modalVisible);
+            }}>
+            <View style={{top:200}}>
+              <CreatePlayer setModalVisible={setModalVisible} modalVisible={modalVisible} updateParentState={updateParentState} dictionary={dictionary}/>
+            </View>
+        </Modal>
+        <Modal
+            animationType="fade"
+            transparent={true}
+            visible={modalVisible1}
+            onRequestClose={() => {
+            setModalVisible1(!modalVisible1);
             }}>
             <View style={{top:200}}>
               <CreatePlayer setModalVisible={setModalVisible} modalVisible={modalVisible} updateParentState={updateParentState} dictionary={dictionary}/>
@@ -363,6 +393,18 @@ const styles = StyleSheet.create({
         top: 100,
         width: 40,
         textAlign: 'center',
+      },
+      modalView: {
+        backgroundColor: '#F0F8FF',
+        borderRadius: 20,
+        marginHorizontal: 20,
+        height: 100,
+        width: 100,
+        padding: 180,
+        alignItems: 'center',
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
       },
 });
 
