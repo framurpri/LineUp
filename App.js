@@ -10,6 +10,8 @@ import Settings from './Settings';
 import Team from './Team';
 import { NewTeam } from './NewTeam';
 import ChangePassword from './ChangePassword';
+import Plays from './Jugadas'
+import Play from './Play';
 import Profile from './Profile';
 import Terms from './Terms';
 
@@ -30,7 +32,11 @@ function App() {
         <Route path="new" element={<NewTeam/>}/>
         <Route path=":id" element={<Team/>}/>
       </Route>
-      <Route path="/profile" element={<Profile/>}/>
+      <Route path="/plays">
+        <Route path="" element={<Plays/>}/>
+        <Route path=":id" element={<Play/>}/>
+      </Route>
+
       <Route path="/settings">
         <Route path='' element={<Settings/>}/>
         <Route path='changePassword' element={<ChangePassword/>}/>
