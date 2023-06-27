@@ -8,10 +8,16 @@ import { getFirestore, collection, doc, getDoc, query, where, getDocs, QuerySnap
 import Icon from 'react-native-vector-icons/FontAwesome'
 import TopBar from './TopBar.jsx'
 import DownBar from './DownBar';
+import MyPlays from './Jugadas';
+import Teams from './Teams';
 
 function Profile(){
 
       const [username, setUsername] = useState('');
+
+      const [showPlays, setToggleShowPlays] = useState(false);
+
+      const [showTeams, setToggleShowTeams] = useState(false);
 
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
@@ -23,8 +29,16 @@ function Profile(){
         setUsername(querySnapshot.docs[0].data().username);
       }
 
+      const handleShowPlays = () => {
+        setToggleShowPlays(!showPlays);
+      }
+
+      const handleShowTeams = () => {
+        setToggleShowTeams(!showTeams);
+      }
+
       getUserInfo();
-      
+
     return(
       <View style={styles.container}>
                 <View>
@@ -37,7 +51,18 @@ function Profile(){
                 <Text style={styles.profileUsername}>{username}</Text>
               </View>
               <View style={styles.hr}></View>
-              <Text style={styles.textMyPlays}>My plays</Text>
+              <Pressable onPress = {handleShowPlays}>
+                <Text style={styles.textMyPlays}>My plays</Text>
+              </Pressable>
+                {showPlays && (                  
+                  <MyPlays></MyPlays>)}
+              
+              <View style={styles.hr}></View>
+              <Pressable onPress = {handleShowTeams}>
+                <Text style={styles.textMyPlays}>My teams</Text>
+              </Pressable>
+                {showTeams && (                  
+                  <Teams></Teams>)}
             </View>
 
             <View style={styles.staticContainer}>
@@ -45,7 +70,7 @@ function Profile(){
                   <Link to={{ pathname: '/escenas'}}>
                       <Icon name="film" size={25} color="#900"/>
                   </Link>
-                  <Link to={{pathname: '/teams'}}>
+                  <Link to={{pathname: '/community'}}>
                       <Icon name="group" size={25} color="#900" />
                   </Link>
                   <Link to={{pathname: '/profile'}}>
@@ -113,7 +138,8 @@ const styles = StyleSheet.create({
     textMyPlays: {
       fontSize: 17,
       paddingTop: 20,
-      fontWeight: 'bold'
+      fontWeight: 'bold',
+      color: "#006775",
     }
 
   });

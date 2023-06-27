@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import TopBar from './TopBar.jsx'
 import DownBar from './DownBar';
 
-function  Plays(){
+function Plays(){
 
       const [datos, setDatos] = useState({});
       const [teamNames, setTeamNames] = useState([]);
@@ -40,48 +40,25 @@ function  Plays(){
       asyncQuery()
       
     return(
-        <View style={styles.container}>
-            <View>
-                <View>
-                    <TopBar />
-                </View>
-            </View>
-            <View style={{ height: 650, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-      <Text style={{ fontSize: 20, color: "#006775", fontWeight: 'bold', width: '100%' , textAlign: 'center'}}>My Plays</Text>
-      {isLoading ? (
-        <Text>Loading...</Text> // Muestra el mensaje de carga mientras se obtienen los datos
-      ) : (
-        <ScrollView contentContainerStyle={styles.subview2}>
-          {Object.entries(datos).map(([clave, valor]) => (
-            <View key={clave} style={styles.row}>
-              <Link to={{pathname: `/plays/${clave}`}}>
-                <React.Fragment>
-                  <Image source={require('./Resources/cancha.png')} style={styles.image} />
-                  <Text style={{ fontSize: 20 }}>{valor.name}</Text>
-                </React.Fragment>
-              </Link>
-            </View>
-          ))}
-        </ScrollView>
-      )}
-    </View>
-
-            <View style={styles.staticContainer}>
-                <DownBar>
-                    <Link to={{ pathname: '/escenas'}}>
-                        <Icon name="film" size={25} color="#900"/>
+      <View style={styles.container}>
+          <View style={{ height: 650, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+            {isLoading ? (
+              <Text>Loading...</Text> // Muestra el mensaje de carga mientras se obtienen los datos
+            ) : (
+              <ScrollView contentContainerStyle={styles.subview2}>
+                {Object.entries(datos).map(([clave, valor]) => (
+                  <View key={clave} style={styles.row}>
+                    <Link to={{pathname: `/profile/plays/${clave}`}}>
+                      <React.Fragment>
+                        <Image source={require('./Resources/cancha.png')} style={styles.image} />
+                        <Text style={{ fontSize: 20 }}>{valor.name}</Text>
+                      </React.Fragment>
                     </Link>
-                    <Link to={{pathname: '/teams'}}>
-                        <Icon name="group" size={25} color="#900" />
-                    </Link>
-                    <Link to={{ pathname: '/plays'}}>
-                        <Icon name="user" size={25} color="#900" />
-                    </Link>
-                    <Link to={{ pathname: '/settings'}}>
-                        <Icon name="cog" size={25} color="#900" />
-                    </Link>
-                </DownBar>
-            </View>
+                  </View>
+                ))}
+              </ScrollView>
+            )}
+          </View>
         </View>
     )
 }

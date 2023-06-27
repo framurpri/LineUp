@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, Pressable, ScrollView } from 'react-native'
+import { View, StyleSheet, Text, Pressable, ScrollView, Image } from 'react-native'
 import { Routes, Route, Link, useParams } from 'react-router-native';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
@@ -58,9 +58,18 @@ function Team(){
                 <View>
                     <TopBar />
                 </View>           
-            <View style={{ height: 650, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-              <Text>{teamName}</Text>
-              <Text>Capitán: {captainName}</Text>
+            <View style={{ height: 650, alignItems: 'center', width: '100%' }}>
+            <View style={styles.hr}></View>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+              <Image source={require('./Resources/voleyballTeam.png')} style={styles.image}/>
+              <Text style={styles.teamAndCaptainText}>{teamName}</Text>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+              <Image source={require('./Resources/voleyballCaptain.png')} style={styles.image2}/>
+              <Text style={styles.teamAndCaptainText}>Capitán: {captainName}</Text>
+            </View>
+            <View style={styles.hr}></View>
+
             </View>
 
             <View style={styles.staticContainer}>
@@ -68,7 +77,7 @@ function Team(){
                   <Link to={{ pathname: '/escenas'}}>
                       <Icon name="film" size={25} color="#900"/>
                   </Link>
-                  <Link to={{pathname: '/teams'}}>
+                  <Link to={{pathname: '/community'}}>
                       <Icon name="group" size={25} color="#900" />
                   </Link>
                   <Link to={{pathname: '/profile'}}>
@@ -117,6 +126,27 @@ const styles = StyleSheet.create({
     subview3: {
       backgroundColor: 'blue',
     },
+    hr: {
+      height: 1,
+      width: '100%',
+      borderBottomWidth: 1,
+      borderBottomColor: 'gray',
+    },
+    teamAndCaptainText: {
+      paddingTop: 20,
+      paddingBottom: 20,
+      fontSize: 20,
+    },
+    image: {
+      width: 40,
+      height: 40,
+      opacity: 1,
+      },
+      image2: {
+        width: 70,
+        height: 70,
+        opacity: 1,
+        },
   });
 
 export default Team;

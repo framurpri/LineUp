@@ -17,10 +17,10 @@ const Basic = () => {
                 <Link to={{ pathname: '/escenas'}}>
                     <Icon name="film" size={25} color="#900"/>
                 </Link>
-                <Link to={{pathname: '/teams'}}>
+                <Link to={{pathname: '/community'}}>
                     <Icon name="group" size={25} color="#900" />
                 </Link>
-                <Link to={{ pathname: '/plays'}}>
+                <Link to={{ pathname: '/profile'}}>
                     <Icon name="user" size={25} color="#900" />
                 </Link>
                 <Link to={{ pathname: '/settings'}}>

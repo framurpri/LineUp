@@ -41,23 +41,14 @@ function Teams(){
       
     return(
         <View style={styles.container}>
-            <View>
-                <View>
-                    <TopBar />
-                </View>
-            </View>
             <View style={{ height: 650, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-      <Link to={{ pathname: '/teams/new' }}>
-        <Text style={{ fontSize: 20, color: "#900", fontWeight: 'bold', width: '100%' }}>+   Create New team</Text>
-      </Link>
-      <Text style={{ fontSize: 20, color: "#006775", fontWeight: 'bold', width: '100%' , textAlign: 'center'}}>My Teams</Text>
       {isLoading ? (
         <Text>Loading...</Text> // Muestra el mensaje de carga mientras se obtienen los datos
       ) : (
         <ScrollView contentContainerStyle={styles.subview2}>
           {Object.entries(datos).map(([clave, valor]) => (
             <View key={clave} style={styles.row}>
-              <Link to={{pathname: `/teams/${clave}`}}>
+              <Link to={{pathname: `/profile/teams/${clave}`}}>
                 <Text style={{ fontSize: 20 }}>{valor.team}</Text>
               </Link>
             </View>
@@ -71,7 +62,7 @@ function Teams(){
                   <Link to={{ pathname: '/escenas'}}>
                       <Icon name="film" size={25} color="#900"/>
                   </Link>
-                  <Link to={{pathname: '/teams'}}>
+                  <Link to={{pathname: '/community'}}>
                       <Icon name="group" size={25} color="#900" />
                   </Link>
                   <Link to={{pathname: '/profile'}}>
