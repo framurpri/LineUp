@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react"
 import EnlaceTransiciones from "./Transiccion";
-import { Animated, View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { Animated, View, StyleSheet, TouchableOpacity, Text, Image } from 'react-native';
 import Circulo from "./Circulo";
+import { ImageBackground } from "react-native-web";
 
 function visualizacion(){
 
@@ -37,77 +38,71 @@ function visualizacion(){
           },
         },
     }
-    
+
 const coord =[
     {
-        primero: {
-            S: {
-                coordenadas: [[10,10]]
-            },
-            O:  {
-                coordenadas: [[20,20]]
-            },
-            L: {
-                coordenadas: [[30,30]]
-            },
-            WS: {
-                coordenadas: [[40,40], [0,0]]
-            },
-            MB: {
-                coordenadas: [[50,50]]
-            },
+      0: {
+        S: {
+            coordenada1: [278,213]
         },
-        segundo: {
-            S: {
-                coordenadas: [[50,50]]
-            },
-            O:  {
-                coordenadas: [[40,40]]
-            },
-            L: {
-                coordenadas: [[30,30]]
-            },
-            WS: {
-                coordenadas: [[20,20], [30,30]]
-            },
-            MB: {
-                coordenadas: [[10,10]]
-            },
+        O:  {
+            coordenada1: [356,396]
         },
-        tercero: {
+        L: {
+            coordenada1: [108,435]
+        },
+        WS: {
+            coordenada1: [216,466],
+            coordenada2: [-2,273]
+        },
+        MB: {
+            coordenada1: [138,268]
+        },
+    },
+        1: {
             S: {
-                coordenadas: [[10,10]]
-            },
-            O:  {
-                coordenadas: [[20,20]]
-            },
-            L: {
-                coordenadas: [[30,30]]
-            },
-            WS: {
-                coordenadas: [[40,40], [10,10]]
-            },
-            MB: {
-                coordenadas: [[50,50]]
-            },
+              coordenada1: [278,213]
+          },
+          O:  {
+              coordenada1: [356,396]
+          },
+          L: {
+              coordenada1: [108,435]
+          },
+          WS: {
+              coordenada1: [216,466],
+              coordenada2: [-20,273]
+          },
+          MB: {
+              coordenada1: [138,268]
+          },
         },
 }
   ]
 
-  const [numJugadores, setNumJugadores] = useState({S: coord[0].primero.S.coordenadas.length, 
-    O: coord[0].primero.O.coordenadas.length, 
-    L: coord[0].primero.L.coordenadas.length, 
-    WS: coord[0].primero.WS.coordenadas.length, 
-    MB: coord[0].primero.MB.coordenadas.length});
+  const [numJugadores, setNumJugadores] = useState({S: Object.keys(coord[0][0].S).length, 
+    O: Object.keys(coord[0][0].O).length, 
+    L: Object.keys(coord[0][0].L).length, 
+    WS: Object.keys(coord[0][0].WS).length, 
+    MB: Object.keys(coord[0][0].MB).length});
+
+  //   MB: {
+  //     coordenada1: [50,50]
+  // },
+  
+  // MB: {
+  //   coordenadas: [[50,50]]
+  // }
 
     const sacarCoordenadas = (indicador, clave) =>{
             const coordenadas = [];
             const scenes = Object.entries(coord[0])
-            const keys = Object.keys(coord[0].primero)
+            const keys = Object.keys(coord[0][0])
             scenes.forEach((scene) =>{
             keys.forEach((key)=>{
                 if(clave===key){
-                    const coordenada = scene[1][clave].coordenadas[indicador];
+                    const c = `coordenada${indicador}`;
+                    const coordenada = scene[1][clave][c];
                     coordenadas.push(coordenada)
                 }
             })
@@ -134,15 +129,16 @@ const coord =[
           }          
     }
   return(
-    <View style={{ flex: 1, flexDirection: 'row' }}>
-
+    <View style={{ flex: 1, justifyContent: 'center',alignItems: 'center',marginTop: 22,}}>
+      <ImageBackground source={require('./Resources/cancha.png')} style={styles.image}/>
+      <View style={{ right: 50, bottom:700,  flex: 0, flexDirection: 'row' }}>
           {numJugadores.S > 0 && (
             <React.Fragment>
               {Array(numJugadores.S)
                 .fill()
                 .map((_, index) => (
-                    <EnlaceTransiciones ref={refs.S.Refs[`ref${index + 1}`]} key={index} numEscenas={Object.keys(coord[0]).length} coordenadas={sacarCoordenadas(index,"S")}>
-                        <Circulo key={index} margin={0} top={coord[0].primero.S.coordenadas[index][1]} left={coord[0].primero.S.coordenadas[index][0]} width={60} marginTop={6} size={30} marginT={0}>
+                    <EnlaceTransiciones ref={refs.S.Refs[`ref${index + 1}`]} key={index} numEscenas={Object.keys(coord[0]).length} coordenadas={sacarCoordenadas(index+1,"S")}>
+                        <Circulo key={index} margin={0} top={coord[0][0].S[`coordenada${index+1}`][1]} left={coord[0][0].S[`coordenada${index+1}`][0]} width={60} marginTop={6} size={30} marginT={0}>
                         <Text key={index}>S</Text>
                         </Circulo>
                     </EnlaceTransiciones>
@@ -155,8 +151,8 @@ const coord =[
               {Array(numJugadores.O)
                 .fill()
                 .map((_, index) => (
-                    <EnlaceTransiciones ref={refs.O.Refs[`ref${index + 1}`]} key={index} numEscenas={Object.keys(coord[0]).length} coordenadas={sacarCoordenadas(index, "O")}>
-                        <Circulo key={index} top={coord[0].primero.O.coordenadas[index][1]} left={coord[0].primero.O.coordenadas[index][0]} margin={0} width={60} marginTop={6} size={30} marginT={0}>
+                    <EnlaceTransiciones ref={refs.O.Refs[`ref${index + 1}`]} key={index} numEscenas={Object.keys(coord[0]).length} coordenadas={sacarCoordenadas(index+1, "O")}>
+                        <Circulo key={index} top={coord[0][0].O[`coordenada${index+1}`][1]} left={coord[0][0].O[`coordenada${index+1}`][0]-60} margin={0} width={60} marginTop={6} size={30} marginT={0}>
                         <Text key={index}>O</Text>
                         </Circulo>
                     </EnlaceTransiciones>
@@ -168,8 +164,8 @@ const coord =[
               {Array(numJugadores.L)
                 .fill()
                 .map((_, index) => (
-                    <EnlaceTransiciones ref={refs.L.Refs[`ref${index + 1}`]} key={index} numEscenas={Object.keys(coord[0]).length} coordenadas={sacarCoordenadas(index, "L")}>
-                        <Circulo key={index} top={coord[0].primero.L.coordenadas[index][1]} left={coord[0].primero.L.coordenadas[index][0]} margin={0} width={60} marginTop={6} size={30} marginT={0}>
+                    <EnlaceTransiciones ref={refs.L.Refs[`ref${index + 1}`]} key={index} numEscenas={Object.keys(coord[0]).length} coordenadas={sacarCoordenadas(index+1, "L")}>
+                        <Circulo key={index} top={coord[0][0].L[`coordenada${index+1}`][1]} left={coord[0][0].L[`coordenada${index+1}`][0]-120} margin={0} width={60} marginTop={6} size={30} marginT={0}>
                             <Text key={index}>L</Text>
                         </Circulo>
                     </EnlaceTransiciones>
@@ -181,8 +177,8 @@ const coord =[
               {Array(numJugadores.WS)
                 .fill()
                 .map((_, index) => (
-                    <EnlaceTransiciones ref={refs.WS.Refs[`ref${index + 1}`]} key={index} numEscenas={Object.keys(coord[0]).length} coordenadas={sacarCoordenadas(index, "WS")}>
-                        <Circulo key={index} top={coord[0].primero.WS.coordenadas[index][1]} left={coord[0].primero.WS.coordenadas[index][0]} margin={0} width={60} marginTop={9} size={30} marginT={0}>
+                    <EnlaceTransiciones ref={refs.WS.Refs[`ref${index + 1}`]} key={index} numEscenas={Object.keys(coord[0]).length} coordenadas={sacarCoordenadas(index+1, "WS")}>
+                        <Circulo key={index} top={coord[0][0].WS[`coordenada${index+1}`][1]} left={coord[0][0].WS[`coordenada${index+1}`][0]-180} margin={0} width={60} marginTop={9} size={30} marginT={0}>
                             <Text key={index}>WS</Text>
                         </Circulo>
                     </EnlaceTransiciones>
@@ -194,18 +190,21 @@ const coord =[
               {Array(numJugadores.MB)
                 .fill()
                 .map((_, index) => (
-                    <EnlaceTransiciones ref={refs.MB.Refs[`ref${index + 1}`]} key={index} numEscenas={Object.keys(coord[0]).length} coordenadas={sacarCoordenadas(index, "MB")}>
-                        <Circulo key={index} top={coord[0].primero.MB.coordenadas[index][1]} left={coord[0].primero.MB.coordenadas[index][0]} margin={0} width={60} marginTop={9} size={30} marginT={0}>
+                    <EnlaceTransiciones ref={refs.MB.Refs[`ref${index + 1}`]} key={index} numEscenas={Object.keys(coord[0]).length} coordenadas={sacarCoordenadas(index+1, "MB")}>
+                        <Circulo key={index} top={coord[0][0].MB[`coordenada${index+1}`][1]} left={coord[0][0].MB[`coordenada${index+1}`][0]-240} margin={0} width={60} marginTop={9} size={30} marginT={0}>
                             <Text>MB</Text>
                         </Circulo>
                     </EnlaceTransiciones>
                 ))}
             </React.Fragment>
           )} 
+          </View>
+          <View style={{flex:1, bottom:750}}>
             <TouchableOpacity onPress={activarAnimacion} style={styles.button}>
                 <Text style={styles.buttonText}>Iniciar Transición</Text>
             </TouchableOpacity>
-        </View>
+          </View>
+      </View>
   )
 }
 
@@ -224,6 +223,11 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     },
+    image: {
+      width: 395,
+      height: 679,
+      opacity: 1,
+      },
 })
 
 export default visualizacion;
