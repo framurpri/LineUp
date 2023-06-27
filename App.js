@@ -12,6 +12,8 @@ import { NewTeam } from './NewTeam';
 import ChangePassword from './ChangePassword';
 import Plays from './Jugadas'
 import Play from './Play';
+import Profile from './Profile';
+import Terms from './Terms';
 
 function App() {
   return ( 
@@ -34,9 +36,11 @@ function App() {
         <Route path="" element={<Plays/>}/>
         <Route path=":id" element={<Play/>}/>
       </Route>
+
       <Route path="/settings">
         <Route path='' element={<Settings/>}/>
         <Route path='changePassword' element={<ChangePassword/>}/>
+        <Route path='terms' element={<Terms/>}/>
       </Route> 
 
     </Routes>

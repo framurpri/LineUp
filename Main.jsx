@@ -15,7 +15,7 @@ import ChangePassword from './ChangePassword.jsx'
 export default function Main() {
     return (
         <View style={{ flex: 1 }}>
-          <AuthMenu></AuthMenu>
+            <AuthMenu></AuthMenu>
         </View>
     )
   }

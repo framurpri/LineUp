@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import TopBar from './TopBar.jsx'
 import DownBar from './DownBar';
 
-function  Teams(){
+function Teams(){
 
       const [datos, setDatos] = useState({});
       const [teamNames, setTeamNames] = useState([]);
@@ -67,16 +67,20 @@ function  Teams(){
     </View>
 
             <View style={styles.staticContainer}>
-                    <DownBar>
-                        <Link to={{ pathname: '/escenas'}}>
-                            <Icon name="film" size={25} color="#900"/>
-                        </Link>
-                        <Icon name="group" size={25} color="#900" />
-                        <Icon name="user" size={25} color="#900" />
-                        <Link to={{ pathname: '/settings'}}>
-                            <Icon name="cog" size={25} color="#900" />
-                        </Link>
-                    </DownBar>
+              <DownBar>
+                  <Link to={{ pathname: '/escenas'}}>
+                      <Icon name="film" size={25} color="#900"/>
+                  </Link>
+                  <Link to={{pathname: '/teams'}}>
+                      <Icon name="group" size={25} color="#900" />
+                  </Link>
+                  <Link to={{pathname: '/profile'}}>
+                      <Icon name="user" size={25} color="#900" />
+                  </Link>
+                  <Link to={{ pathname: '/settings'}}>
+                      <Icon name="cog" size={25} color="#900" />
+                  </Link>
+              </DownBar>
             </View>
         </View>
     )

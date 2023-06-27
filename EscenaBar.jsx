@@ -11,6 +11,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, addDoc, query, where, getDocs } from "firebase/firestore"; 
 
+
 function EscenaBar(){
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -21,6 +22,18 @@ function EscenaBar(){
     const [capturar, setCatch] = useState(false);
 
     const [dictionary, setDictionary] = useState({ S: 0, O: 0, L: 0, WS: 0, MB: 0 });
+
+    const [coordenada, setCoordenada] = useState( {S: {}, O: {}, L: {}, WS: {}, MB: {}});
+
+    const [currentScene, setCurrentScene] = useState(0);
+
+    const [username, setUsername] = useState('');
+
+    const [scenes, setScenes] = useState({})
+    
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
     
     const [coordenada, setCoordenada] = useState({ S: [], O: [], L: [], WS: [], MB: [] })
 
@@ -78,8 +91,23 @@ function EscenaBar(){
     const updateState = (newState) => {
       setScenes(newState);
     };
-
+    
+    /*const [showImage, setShowImage] = useState(false);
+    
     useEffect(() => {
+      const timer = setTimeout(() => {
+        setShowImage(true);
+      }, 3000);
+  
+      return () => clearTimeout(timer);
+    }, [capturar]);
+
+ */
+
+    
+    useEffect(() => {
+      debugger;
+      console.log(currentScene)
       coord.forEach((element) => {
         Object.keys(element).forEach((key) => {
           const refs = element[key].Refs;
@@ -89,47 +117,37 @@ function EscenaBar(){
 
             if (ref.current) {
               const measureCallback = (index) => (x, y, width, height, pageX, pageY) => {
+                debugger;
                 // Guardar las coordenadas en la posición del índice correspondiente
-                coordenada[key][index] = [pageX, pageY];
+
+                coordenada[key][`coordenada${index+1}`] = [pageX, pageY];
+
+                
               };
+              const updatedDictionary = { ...scenes };
+
+              // Actualizar el valor utilizando la clave
+              updatedDictionary[currentScene] = JSON.parse(JSON.stringify(coordenada));
+
+              // Actualizar el estado con el diccionario actualizado
+              setScenes(updatedDictionary, () => {
+                console.log('Scenes actualizado:', scenes);
+              });
+              
               ref.current.measure(
                 measureCallback(index)
-              );
-            }
+                );
+              }
+            });
           });
         });
-      });
-      console.log(coordenada)
-    }, [capturar, dictionary]);
 
-    // useEffect(() => {
-    //   elementsRefs.forEach((ref, index) => {
-    //     if (ref.current) {
-    //       const key = Object.keys(coordenadas)[index]; // Obtener la clave correspondiente al índice
-    //       const measureCallback = (ref) => (x, y, width, height, pageX, pageY) => {
-    //         console.log('Coordenadas X:', pageX);
-    //         console.log('Coordenadas Y:', pageY);
-    //         console.log('======')
-    //         setCoordenadas(prevCoordenadas => {
-    //             return { ...prevCoordenadas, [key]: [pageX, pageY] };
-    //           }
-
-    //         );               
-    //         console.log(coordenadas)
-            
-    //       };
+        console.log('Coordenadas:', coordenada);
+        console.log('Scenes: ',scenes)
+        setCurrentScene(currentScene + 1);
+        console.log(currentScene);
+    }, [capturar]);
     
-    //       ref.current.measure(
-    //         measureCallback(ref, index)
-    //       );
-    //     }
-    //   });
-    // }, [capturar, dictionary]);
-    
-    const finalizarJugada = () => {
-
-    }
-
     const getUserInfo = async () => {
       const q = query(collection(db, "users"), where("email", "==", auth.currentUser.email));
       const querySnapshot = await getDocs(q);
@@ -160,8 +178,24 @@ function EscenaBar(){
     }
 
 
+
+
+    const addScene = async () => {
+      try {
+        const docRef = await addDoc(collection(db, "plays"), {
+          designer: username,
+          name: "nombre de prueba",
+          //scenes: [{ [currentScene]: coordenada }]
+          scenes: scenes
+        });
+        console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+    }
+
     return (
-    <View style={modalVisible ? styles.centeredViewNoOp : styles.centeredViewOp}>
+      <View style={modalVisible ? styles.centeredViewNoOp : styles.centeredViewOp}>
         <Modal
             animationType="fade"
             transparent={true}
@@ -252,47 +286,49 @@ function EscenaBar(){
             </React.Fragment>
           )}
         </View>
-
+                    
         <View style={{flex:1}}>
         <DownBar>
             <Pressable
                 onPress={() => setModalVisible(true)}>
                 <ImageBackground source={require('./Resources/buttonAddPlayer.png')} style={{width: 70, height: 70}}>
-                    <Text style={styles.text}>Add Player</Text>
+                    <Text style={styles.currentScene}>Add Player</Text>
                 </ImageBackground>                
             </Pressable>
             
-            <Image source={require('./Resources/flechaIzquierda.png')} style={{width: 80, left:20, height: 80}} />
-            
+            <Pressable onPress={()=> { 
+              currentScene > 1 ? setCurrentScene(currentScene-1):null;
+              console.log(currentScene)                 
+                }
+              }>
+              <Image source={require('./Resources/flechaIzquierda.png')} style={{width: 80, left:20, height: 80}} />
+            </Pressable>
             <Pressable onPress={() => {
               setCatch(!capturar);
-              setNumScene(numScene+1);
-              console.log(scenes)
-              }}
+              //addScene();
+            }}
             >
               <Image source={require('./Resources/flechaDerecha.png')} style={{width: 70, left:40, height: 50}} />
             </Pressable>
-            
-            <Pressable onPress={() => {
-              setFinish(!finish);
-              addScene();
-            }}>
-              <Text style={{fontSize: 40, paddingLeft: 50}} >Finish</Text>
-            </Pressable>
-
+            <Text style={{fontSize: 40, paddingLeft: 50}} onPress={() => {addScene()}} >Finish</Text>
         </DownBar>
         </View>
-        
     </View>
     );
-};
-
+  };
+  
 const styles = StyleSheet.create({
     text: {
         justifyContent: 'center',
         textAlign: 'center',
         paddingVertical: 8,
         fontSize: 16,
+    },
+    currentScene: {
+      justifyContent: 'center',
+      textAlign: 'center',
+      paddingVertical: 8,
+      fontSize: 16,
     },
     centeredViewOp: {
         flex: 1,
