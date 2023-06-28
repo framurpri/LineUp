@@ -6,6 +6,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, addDoc } from "firebase/firestore"; 
 import Teams from './Teams';
+import Profile from './Profile';
 
 export function NewTeam() {
 
@@ -34,7 +35,7 @@ export function NewTeam() {
   }
   
   if(createTeamSuccess){
-    return <Teams></Teams>
+    return <Profile></Profile>
   }
 
   return (

@@ -32,8 +32,8 @@ function Teams(){
         querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots       
         datos[doc.id] = doc.data();
-        setIsLoading(false); // Se actualiza el estado para indicar que los datos se han cargado
       });
+      setIsLoading(false); // Se actualiza el estado para indicar que los datos se han cargado
         const teams = Object.entries(datos).map(([clave, valor]) => {return `Team id es: ${clave} y el nombre es: ${valor.team}`});
         console.log(teams);
       } 
