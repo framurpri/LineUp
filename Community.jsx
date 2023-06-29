@@ -83,8 +83,8 @@ function Community(){
               <Text style={{fontSize: 17}}>No existen equipos con el nombre que buscas.</Text>
             )}
           </View>
-          <View style={{ height: 650, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-            <Link to={{ pathname: '/community/newTeam' }}>
+          <View style={{ height: 650, alignItems: 'center', width: '100%' }}>
+            <Link style={styles.button} to={{ pathname: '/community/newTeam' }}>
               <Text style={{ fontSize: 20, color: "#900", fontWeight: 'bold', width: '100%' }}>+   Create New team</Text>
             </Link>
           </View>
@@ -175,6 +175,19 @@ const styles = StyleSheet.create({
       borderColor: '#ccc',
       borderRadius: 8,
       backgroundColor: '#fff',
+    },
+    button: {
+      backgroundColor: '#3498db',
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      borderRadius: 5,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    buttonText: {
+      color: '#fff',
+      fontSize: 16,
+      fontWeight: 'bold',
     },
   });
 

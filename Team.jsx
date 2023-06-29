@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import { View, StyleSheet, Text, Pressable, ScrollView, Image } from 'react-native'
 import { Routes, Route, Link, useParams } from 'react-router-native';
 import { firebaseConfig } from './firebase-config';
@@ -14,19 +14,20 @@ function Team(){
       const [datos, setDatos] = useState({});
       //const [teamNames, setTeamNames] = useState([]);
       const [docsIds, setDocsIds] = useState([]);
-      const [isLoading, setIsLoading] = useState(true);
+      const [playersLoaded, setPlayersLoaded] = useState(false);
       const [teamName, setTeamName] = useState('');
       const [captainEmail, setCaptainEmail] = useState('');
       const [captainName, setCaptainName] = useState('');
+      const [teamPlayers, setTeamPlayers] = useState()
 
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
       const auth = getAuth(app);
+      const params = useParams();
+      const { id } = params;
       
       const retrieveDocument = async () => {
         
-        const params = useParams();
-        const { id } = params;
         console.log(id)
       
         const docRef = doc(db, "teams", id);
@@ -39,9 +40,28 @@ function Team(){
         }
         setTeamName(docSnap.data().team);
         setCaptainEmail(docSnap.data().userEmail);
-        console.log(captainEmail);
-        getCaptainInfo();
+        console.log(Object.keys(docSnap.data().players))
+        setTeamPlayers(Object.keys(docSnap.data().players))
+        //getCaptainInfo();
       }
+
+      useEffect(() => {
+        retrieveDocument();
+      }, [])
+
+      useEffect(() => {
+        if(teamPlayers){
+          setPlayersLoaded(true);
+          console.log(teamPlayers)
+        }
+      }, [teamPlayers])
+
+      useEffect(() => {
+
+      if (captainEmail !== '') {
+        getCaptainInfo();
+        }
+      }, [captainEmail])
 
       const getCaptainInfo = async () => {
         const q = query(collection(db, "users"), where("email", "==", captainEmail));
@@ -50,7 +70,7 @@ function Team(){
         setCaptainName(querySnapshot.docs[0].data().username);
       }
 
-      retrieveDocument();
+     // retrieveDocument();
 
       
     return(
@@ -69,7 +89,17 @@ function Team(){
               <Text style={styles.teamAndCaptainText}>Capitán: {captainName}</Text>
             </View>
             <View style={styles.hr}></View>
+            { playersLoaded && (
+              <ScrollView>
+                {teamPlayers.forEach((player) =>{
+                  <View key={player} style={styles.row}>
+                    <Text style={{ fontSize: 20 }}>{player}</Text>
+                  </View>
+                })}
+              </ScrollView>
+            )
 
+            }
             </View>
 
             <View style={styles.staticContainer}>

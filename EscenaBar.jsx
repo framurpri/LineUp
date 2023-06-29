@@ -9,7 +9,8 @@ import Draggable from './Draggable.jsx';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, collection, addDoc, query, where, getDocs } from "firebase/firestore"; 
+import { getFirestore, collection, addDoc, query, where, getDocs } from "firebase/firestore";
+import PopUp from './PopUpGiveName.jsx';
 
 
 function EscenaBar(){
@@ -26,22 +27,16 @@ function EscenaBar(){
     const [coordenada, setCoordenada] = useState( {S: {}, O: {}, L: {}, WS: {}, MB: {}});
 
     const [currentScene, setCurrentScene] = useState(0);
-
-    const [username, setUsername] = useState('');
-
-    const [scenes, setScenes] = useState({})
     
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
-    
-    const [coordenada, setCoordenada] = useState({ S: [], O: [], L: [], WS: [], MB: [] })
-
     const [numScene, setNumScene] = useState(0)
 
     const [finish, setFinish] = useState('')
 
     const [scenes, setScenes] = useState({});
+
+    const [popupVisible, setPopupVisible] = useState(false);
+
+    const [playName, setPlayName] = useState('');
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
@@ -160,31 +155,23 @@ function EscenaBar(){
       setDictionary(newDictionary);
     };
     //console.log(currentScene)
+  
+    const handleFinish = () => {
+      console.log("Au")
+      setPopupVisible(true);
+    };
+  
+    const handleSend = text => {
+      console.log('Texto enviado:', text);
+      addScene(text);
+    };
+    
 
-
-
-    const addScene = async () => {
+    const addScene = async (text) => {
       try {
         const docRef = await addDoc(collection(db, "plays"), {
           designer: auth.currentUser.email,
-          name: "nombre de prueba",
-          //scenes: [{ [currentScene]: coordenada }]
-          scenes: scenes
-        });
-        console.log("Document written with ID: ", docRef.id);
-      } catch (e) {
-        console.error("Error adding document: ", e);
-      }
-    }
-
-
-
-
-    const addScene = async () => {
-      try {
-        const docRef = await addDoc(collection(db, "plays"), {
-          designer: username,
-          name: "nombre de prueba",
+          name: text,
           //scenes: [{ [currentScene]: coordenada }]
           scenes: scenes
         });
@@ -310,7 +297,12 @@ function EscenaBar(){
             >
               <Image source={require('./Resources/flechaDerecha.png')} style={{width: 70, left:40, height: 50}} />
             </Pressable>
-            <Text style={{fontSize: 40, paddingLeft: 50}} onPress={() => {addScene()}} >Finish</Text>
+            <Pressable  onPress={handleFinish}>
+              <Text style={{fontSize: 40, paddingLeft: 50}} >Finish</Text>
+            </Pressable>
+            {popupVisible && (
+              <PopUp style={{width: '50%', height: '50%'}} visible={popupVisible} onClose={() => setPopupVisible(false)} onSend={handleSend} />
+            )}
         </DownBar>
         </View>
     </View>
