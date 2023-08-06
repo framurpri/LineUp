@@ -41,7 +41,7 @@ function Teams(){
       
     return(
         <View style={styles.container}>
-            <View style={{ height: 650, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+          <View style={{ height: 650, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
       {isLoading ? (
         <Text>Loading...</Text> // Muestra el mensaje de carga mientras se obtienen los datos
       ) : (
@@ -55,24 +55,7 @@ function Teams(){
           ))}
         </ScrollView>
       )}
-    </View>
-
-            <View style={styles.staticContainer}>
-              <DownBar>
-                  <Link to={{ pathname: '/escenas'}}>
-                      <Icon name="film" size={25} color="#900"/>
-                  </Link>
-                  <Link to={{pathname: '/community'}}>
-                      <Icon name="group" size={25} color="#900" />
-                  </Link>
-                  <Link to={{pathname: '/profile'}}>
-                      <Icon name="user" size={25} color="#900" />
-                  </Link>
-                  <Link to={{ pathname: '/settings'}}>
-                      <Icon name="cog" size={25} color="#900" />
-                  </Link>
-              </DownBar>
-            </View>
+          </View>
         </View>
     )
 }

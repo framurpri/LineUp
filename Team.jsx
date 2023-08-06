@@ -8,6 +8,7 @@ import { getFirestore, collection, doc, getDoc, query, where, getDocs } from "fi
 import Icon from 'react-native-vector-icons/FontAwesome'
 import TopBar from './TopBar.jsx'
 import DownBar from './DownBar';
+import Chat from './Chat.jsx';
 
 function Team(){
 
@@ -18,14 +19,20 @@ function Team(){
       const [teamName, setTeamName] = useState('');
       const [captainEmail, setCaptainEmail] = useState('');
       const [captainName, setCaptainName] = useState('');
-      const [teamPlayers, setTeamPlayers] = useState()
+      const [teamPlayers, setTeamPlayers] = useState();
+      const [openChatB, setOpenChatB] = useState(false);
 
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
       const auth = getAuth(app);
       const params = useParams();
       const { id } = params;
-      
+
+      const openChat = () => {
+        console.log("au");
+        setOpenChatB(true);
+      }
+
       const retrieveDocument = async () => {
         
         console.log(id)
@@ -72,7 +79,10 @@ function Team(){
 
      // retrieveDocument();
 
-      
+     if(openChatB){
+      return <Chat></Chat>
+    }
+    
     return(
       <View style={styles.container}>
                 <View>
@@ -83,6 +93,9 @@ function Team(){
             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
               <Image source={require('./Resources/voleyballTeam.png')} style={styles.image}/>
               <Text style={styles.teamAndCaptainText}>{teamName}</Text>
+              <Link to={{pathname: `/profile/teams/${id}/chat`}}>               
+                <Icon name="comments" size={40} color="#c9d8ff" style={{paddingLeft: 20}}/>
+              </Link>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
               <Image source={require('./Resources/voleyballCaptain.png')} style={styles.image2}/>

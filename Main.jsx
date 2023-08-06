@@ -10,6 +10,7 @@ import Teams from './Teams.jsx'
 import { NewTeam } from './NewTeam.jsx'
 import Team from './Team.jsx';
 import ChangePassword from './ChangePassword.jsx'
+import Chat from './Chat.jsx'
 
 
 export default function Main() {
