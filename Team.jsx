@@ -4,11 +4,12 @@ import { Routes, Route, Link, useParams } from 'react-router-native';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, collection, doc, getDoc, query, where, getDocs } from "firebase/firestore";
+import { getFirestore, collection, doc, getDoc, query, where, getDocs, updateDoc } from "firebase/firestore";
 import Icon from 'react-native-vector-icons/FontAwesome'
 import TopBar from './TopBar.jsx'
 import DownBar from './DownBar';
 import Chat from './Chat.jsx';
+import Applications from './Applications.jsx';
 
 function Team(){
 
@@ -20,7 +21,8 @@ function Team(){
       const [captainEmail, setCaptainEmail] = useState('');
       const [captainName, setCaptainName] = useState('');
       const [teamPlayers, setTeamPlayers] = useState();
-      const [openChatB, setOpenChatB] = useState(false);
+      const [teamDoc, setTeamDoc] = useState("");
+      const [teamApplicants, setTeamApplicants] = useState("");
 
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
@@ -28,10 +30,6 @@ function Team(){
       const params = useParams();
       const { id } = params;
 
-      const openChat = () => {
-        console.log("au");
-        setOpenChatB(true);
-      }
 
       const retrieveDocument = async () => {
         
@@ -45,10 +43,12 @@ function Team(){
           // docSnap.data() will be undefined in this case
           console.log("No such document!");
         }
+        setTeamDoc(docSnap.ref);
         setTeamName(docSnap.data().team);
         setCaptainEmail(docSnap.data().userEmail);
-        console.log(Object.keys(docSnap.data().players))
-        setTeamPlayers(Object.keys(docSnap.data().players))
+        console.log(docSnap.data().players)
+        setTeamPlayers(Object.keys(docSnap.data().players));
+        setTeamApplicants(docSnap.data().applicants);
         //getCaptainInfo();
       }
 
@@ -77,12 +77,26 @@ function Team(){
         setCaptainName(querySnapshot.docs[0].data().username);
       }
 
-     // retrieveDocument();
+      async function applyToTeam (){
+        let newApplicants = [];
+        newApplicants = teamApplicants;
+        newApplicants.push(auth.currentUser.email);
+        await updateDoc(teamDoc, {
+          applicants : newApplicants
+        })
+        console.log(newApplicants);
+        console.log("Update succesful!");
 
-     if(openChatB){
-      return <Chat></Chat>
-    }
-    
+      }
+
+      function hasNotApplied(){
+        return !teamApplicants.includes(auth.currentUser.email);
+      }
+
+      function userIsCaptain(){
+        return captainEmail == auth.currentUser.email;
+      }
+
     return(
       <View style={styles.container}>
                 <View>
@@ -96,6 +110,16 @@ function Team(){
               <Link to={{pathname: `/profile/teams/${id}/chat`}}>               
                 <Icon name="comments" size={40} color="#c9d8ff" style={{paddingLeft: 20}}/>
               </Link>
+              {hasNotApplied() ? (
+                <Icon name="user-plus" size={40} color="#c9d8ff" onPress={applyToTeam} />
+              ) : null
+              }
+              {userIsCaptain() ? (
+                <Link to={{pathname: `/profile/teams/${id}/applications`}}>
+                  <Icon name="envelope" size={40} color="#c9d8ff"/>
+                </Link>
+              ) : null
+              }
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
               <Image source={require('./Resources/voleyballCaptain.png')} style={styles.image2}/>

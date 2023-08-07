@@ -16,6 +16,7 @@ import Profile from './Profile';
 import Terms from './Terms';
 import Community from './Community';
 import Chat from './Chat';
+import Applications from './Applications';
 
 function App() {
   return ( 
@@ -44,8 +45,8 @@ function App() {
           <Route path=":id">
             <Route path=""  element={<Team/>}/>
             <Route path="chat" element={<Chat/>}/>
+            <Route path="applications" element={<Applications/>}/>
           </Route>
-
       </Route>
       </Route>
       <Route path="/settings">
