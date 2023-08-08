@@ -22,7 +22,7 @@ function Team(){
       const [captainName, setCaptainName] = useState('');
       const [teamPlayers, setTeamPlayers] = useState();
       const [teamDoc, setTeamDoc] = useState("");
-      const [teamApplicants, setTeamApplicants] = useState("");
+      const [teamApplicants, setTeamApplicants] = useState([]);
 
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
@@ -48,7 +48,9 @@ function Team(){
         setCaptainEmail(docSnap.data().userEmail);
         console.log(docSnap.data().players)
         setTeamPlayers(Object.keys(docSnap.data().players));
+        console.log(docSnap.data().applicants);
         setTeamApplicants(docSnap.data().applicants);
+        console.log(teamApplicants); //Esta línea no se printea , no entiendo por qué
         //getCaptainInfo();
       }
 
@@ -86,7 +88,6 @@ function Team(){
         })
         console.log(newApplicants);
         console.log("Update succesful!");
-
       }
 
       function hasNotApplied(){
