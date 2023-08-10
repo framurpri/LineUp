@@ -27,6 +27,7 @@ export default function Chat() {
     const { id } = params;
     const [teamName, setTeamName] = useState('');
     const [msgContent, setMsgContent] = useState('');
+    const [chatLog, setChatLog] = useState([]);
 
     //Get el doc de la colección chat del team en concreto
     //Updatear el array messages. Appendear un message. 
@@ -50,8 +51,18 @@ export default function Chat() {
     retrieveDocument();
  */
 
-    async function retrieveChatDocument(){
-      
+    const printeaChat = async () => {
+      const q1 = query(collection(db, "users"), where("email", "==", auth.currentUser.email));
+      const querySnapshot1 = await getDocs(q1);
+      console.log(querySnapshot1.docs[0].data().username);
+      let loggedUsername = querySnapshot1.docs[0].data().username;
+      const q = query(collection(db, "chat"), where("teamId", "==", id));
+      const querySnapshot = await getDocs(q);
+      console.log(querySnapshot.docs[0].data().messages);
+      setChatLog(querySnapshot.docs[0].data().messages);
+    }
+
+    const retrieveChatDocument = async () => {
       const q1 = query(collection(db, "users"), where("email", "==", auth.currentUser.email));
       const querySnapshot1 = await getDocs(q1);
       console.log(querySnapshot1.docs[0].data().username);
@@ -65,7 +76,12 @@ export default function Chat() {
       console.log(mensajes);
       console.log(msgContent);
       updateChat(mensajes, querySnapshot.docs[0].ref);
+      setChatLog(mensajes);
     }
+
+    useEffect(() => {
+      printeaChat()
+    },[])
 
     async function updateChat(mensajes, docRefId){
       await updateDoc(docRefId, {
@@ -84,12 +100,18 @@ export default function Chat() {
                     value={msgContent}
                     onChangeText={setMsgContent}
                   />
-                </View>  
+                </View>
                 <Pressable onPress={retrieveChatDocument}>
                     <Icon name="send" size={25} color="black"/>
                 </Pressable>
             </View>
             <Text>Hola</Text>
+            {chatLog.map(mensaje =>(
+                  <View key={chatLog.indexOf(mensaje)}>
+                    <Text style={{ fontSize: 23, fontWeight: 'bold' }}>{mensaje.user}</Text>
+                    <Text style={{ fontSize: 20 }}>{mensaje.content}</Text>
+                  </View>
+                ))}
         </View>
     )
   }
