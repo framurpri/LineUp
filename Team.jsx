@@ -47,7 +47,7 @@ function Team(){
         setTeamName(docSnap.data().team);
         setCaptainEmail(docSnap.data().userEmail);
         console.log(docSnap.data().players)
-        setTeamPlayers(Object.keys(docSnap.data().players));
+        setTeamPlayers(docSnap.data().players);
         console.log(docSnap.data().applicants);
         setTeamApplicants(docSnap.data().applicants);
         console.log(teamApplicants); //Esta línea no se printea , no entiendo por qué
@@ -128,13 +128,16 @@ function Team(){
             </View>
             <View style={styles.hr}></View>
             { playersLoaded && (
-              <ScrollView>
-                {teamPlayers.forEach((player) =>{
-                  <View key={player} style={styles.row}>
-                    <Text style={{ fontSize: 20 }}>{player}</Text>
-                  </View>
-                })}
-              </ScrollView>
+              <View>
+                <Text>Jugadores</Text>
+                <ScrollView>
+                  {teamPlayers.map((player) =>(
+                    <View key={player} style={styles.row}>
+                      <Text style={{ fontSize: 20 }}>{player}</Text>
+                    </View>
+                  ))}
+                </ScrollView>
+              </View>
             )
 
             }
