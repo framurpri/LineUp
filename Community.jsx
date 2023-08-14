@@ -13,9 +13,12 @@ function Community(){
 
       const [datos, setDatos] = useState({});
       const [textInputSearch, setTextInputSearch] = useState('');
+      const [playerInputSearch, setPlayerInputSearch] = useState('');
       const [teamsLoaded, setTeamsLoaded] = useState(false);
       const [teamsNotFound, setTeamsNotFound] = useState(false);
-
+      const [playersLoaded, setPlayersLoaded] = useState(false);
+      const [playersNotFound, setPlayersNotFound] = useState(false);
+      
 
 
       const app = initializeApp(firebaseConfig);
@@ -36,16 +39,15 @@ function Community(){
         setTeamsLoaded(true);
       };
 */
-      const q = query(collection(db, "teams"));
       const getTeamsByName = async () => {
+        debugger;
+        const q = query(collection(db, "teams"));
         console.log("Au!")
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
           
           if(doc.data().team.includes(textInputSearch)){
             datos[doc.id] = doc.data();
-          }else{
-            
           }
         })
         
@@ -59,6 +61,28 @@ function Community(){
         }
       };
 
+      const getPlayersByName = async () => {
+        debugger; 
+        const q = query(collection(db, "users"));
+        console.log("Au!")
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          console.log(doc.data())
+          if(doc.data().username.includes(playerInputSearch)){
+            datos[doc.id] = doc.data();
+          }
+        })
+        
+        if(Object.keys(datos).length === 0){
+          setPlayersNotFound(true)
+          console.log("Búsqueda sin resultados.")
+        }else{
+          const players = Object.entries(datos).map(([clave, valor]) => {return `Player id es: ${clave} y el nombre es: ${valor.username}`});
+          console.log(players);
+          setPlayersLoaded(true);
+        }
+      };
+
       
     return(
       <View style={styles.container}>
@@ -66,23 +90,46 @@ function Community(){
             <View>
               <TopBar />
             </View>
-            <View style = {{paddingTop: 20, justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={{fontSize: 20, fontWeight: 'bold'}}>¿Buscas un equipo?</Text>
-            </View>
-            <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-              <View style={{width: '80%'}}>  
-              <TextInput style={styles.input} onChangeText={setTextInputSearch}></TextInput>
-              </View>  
-            <Pressable style={styles.pressable} onPress= {getTeamsByName}>
-                <Icon name="search" size={25} color="black"/>
-            </Pressable>
+            <View>
+              <View>
+                <View style = {{paddingTop: 20, justifyContent: 'center', alignItems: 'center'}}>
+                  <Text style={{fontSize: 20, fontWeight: 'bold'}}>¿Buscas un equipo?</Text>
+                </View>
+                <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                  <View style={{width: '80%'}}>  
+                    <TextInput style={styles.input} onChangeText={setTextInputSearch}></TextInput>
+                  </View>  
+                  <Pressable style={styles.pressable} onPress= {getTeamsByName}>
+                    <Icon name="search" size={25} color="black"/>
+                  </Pressable>
+                </View>
+              </View>
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                {teamsNotFound && (
+                <Text style={{fontSize: 17}}>No existen equipos con el nombre que buscas.</Text>
+                )}
+              </View>
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                {playersNotFound && (
+                <Text style={{fontSize: 17}}>No existen jugadores con el nombre que buscas.</Text>
+                )}
+              </View>
+              <View>
+                <View style = {{paddingTop: 20, justifyContent: 'center', alignItems: 'center'}}>
+                  <Text style={{fontSize: 20, fontWeight: 'bold'}}>¿Buscas un jugador?</Text>
+                </View>
+                <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                  <View style={{width: '80%'}}>  
+                    <TextInput style={styles.input} onChangeText={setPlayerInputSearch}></TextInput>
+                  </View>  
+                  <Pressable style={styles.pressable} onPress= {getPlayersByName}>
+                    <Icon name="search" size={25} color="black"/>
+                  </Pressable>
+                </View>
+              </View>
             </View>
           </View>
-          <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            {teamsNotFound && (
-              <Text style={{fontSize: 17}}>No existen equipos con el nombre que buscas.</Text>
-            )}
-          </View>
+
           <View style={{ height: 650, alignItems: 'center', width: '100%' }}>
             <Link style={styles.button} to={{ pathname: '/community/newTeam' }}>
               <Text style={{ fontSize: 20, color: "#900", fontWeight: 'bold', width: '100%' }}>+   Create New team</Text>
@@ -95,6 +142,20 @@ function Community(){
                 <View key={clave} style={styles.row}>
                   <Link to={{pathname: `/profile/teams/${clave}`}}>
                     <Text style={{ fontSize: 20 }}>{valor.team}</Text>
+                  </Link>
+                </View>
+              ))}
+            </ScrollView>
+            )
+            }
+          </View>
+          <View>
+            {playersLoaded && (
+            <ScrollView contentContainerStyle={styles.subview2}>
+              {Object.entries(datos).map(([clave, valor]) => (
+                <View key={clave} style={styles.row}>
+                  <Link to={{pathname: `/profile/${clave}`}}>
+                    <Text style={{ fontSize: 20 }}>{valor.username}</Text>
                   </Link>
                 </View>
               ))}
