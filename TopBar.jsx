@@ -1,13 +1,13 @@
-import { View, StyleSheet, Image } from "react-native"
-import { Routes, Route, Link } from 'react-router-native';
-import Basic from './BasicStructPage.jsx'
-
+import { View, StyleSheet, Dimensions } from "react-native"
+import { Link } from 'react-router-native';
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 function Bar(){
+
     return(
         <View style={styles.view}>
             <Link to={{ pathname: '/home'}}>
-                <Image source={require('./Resources/home.png')} style={styles.image} />
+                <Icon name="home" size={60} color={hexToRGBA('#99CCFF')}/>
             </Link>
         </View>
     )
@@ -21,21 +21,25 @@ const hexToRGBA = (hex, alpha = 1) => {
 };
 
 
-
+const { width, height } = Dimensions.get('screen');
+const imageWidth = width * 0.2; 
+const imageHeight = height * 0.1; 
 
 const styles = StyleSheet.create({
     view: {
         flex: 1,
         flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
         top: 0,
         left: 0,
         right: 0,
-        width: 80, 
-        height: 80, 
+        width: '20%', 
+        height: '20%', 
     },
     image: {
-        width: 80, 
-        height: 80, 
+        width: imageWidth, 
+        height: imageHeight, 
         borderRadius: 70,
         backgroundColor: 'transparent',
         tintColor: hexToRGBA('#99CCFF'),
