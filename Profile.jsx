@@ -43,7 +43,7 @@ function Profile(){
                   <Link to={{pathname: '/teams'}}>
                       <Icon name="group" size={25} color="#900" />
                   </Link>
-                  <Link to={{pathname: '/profile'}}>
+                  <Link to={{pathname: '/plays'}}>
                       <Icon name="user" size={25} color="#900" />
                   </Link>
                   <Link to={{ pathname: '/settings'}}>

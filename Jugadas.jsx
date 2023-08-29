@@ -26,7 +26,7 @@ function  Plays(){
       const db = getFirestore(app);
       const auth = getAuth(app);
 
-      const q = query(collection(db, "plays"), where("designer", "==", auth.currentUser.email));
+      const q = query(collection(db, "plays1"), where("designer", "==", auth.currentUser.email));
       const asyncQuery = async () => {
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {

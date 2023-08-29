@@ -10,12 +10,13 @@ import Teams from './Teams.jsx'
 import { NewTeam } from './NewTeam.jsx'
 import Team from './Team.jsx';
 import ChangePassword from './ChangePassword.jsx'
+import Escenas from './escenas.jsx'
 
 
 export default function Main() {
     return (
         <View style={{ flex: 1 }}>
-            <AuthMenu></AuthMenu>
+            <Escenas/>
         </View>
     )
   }

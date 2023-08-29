@@ -23,12 +23,12 @@ function Team(){
       const db = getFirestore(app);
       const auth = getAuth(app);
       
+      const params = useParams();
+      const { id } = params;
+      console.log(id)
+
       const retrieveDocument = async () => {
-        
-        const params = useParams();
-        const { id } = params;
-        console.log(id)
-      
+    
         const docRef = doc(db, "teams", id);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
