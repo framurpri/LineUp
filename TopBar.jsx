@@ -21,27 +21,21 @@ const hexToRGBA = (hex, alpha = 1) => {
 };
 
 
-const { width, height } = Dimensions.get('screen');
+const { width, height } = Dimensions.get('window');
 const imageWidth = width * 0.2; 
 const imageHeight = height * 0.1; 
 
 const styles = StyleSheet.create({
     view: {
-        flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        top: 0,
-        left: 0,
-        right: 0,
-        width: '20%', 
-        height: '20%', 
+        width: '15%', 
+        height: '7%', 
     },
     image: {
         width: imageWidth, 
         height: imageHeight, 
-        borderRadius: 70,
-        backgroundColor: 'transparent',
         tintColor: hexToRGBA('#99CCFF'),
     },
 })

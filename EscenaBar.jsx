@@ -18,17 +18,11 @@ function EscenaBar(){
 
     const [windowDimensions, setWindowDimensions] = useState(Dimensions.get('window'));
 
-    const [capturar, setCatch] = useState(false);
-
     const [finish, setFinish] = useState(true)
 
     const [dictionary, setDictionary] = useState({ S: 0, O: 0, L: 0, WS: 0, MB: 0 });
 
-    const [coordenada, setCoordenada] = useState( {S: {}, O: {}, L: {}, WS: {}, MB: {}});
-
     const [currentScene, setCurrentScene] = useState(0);
-
-    const [username, setUsername] = useState('');
 
     const [scenes, setScenes] = useState({})
     
@@ -43,28 +37,24 @@ function EscenaBar(){
             ref1: useRef(null),
             ref2: useRef(null),
           },
-          coordenadas: []
         },
         O:  {
           Refs: {
             ref1: useRef(null),
             ref2: useRef(null),
           },
-          coordenadas: []
         },
         L: {
           Refs: {
             ref1: useRef(null),
             ref2: useRef(null),
           },
-          coordenadas: []
         },
         WS: {
           Refs: {
             ref1: useRef(null),
             ref2: useRef(null),
           },
-          coordenadas: []
         },
         MB: {
           Refs: {
@@ -72,8 +62,13 @@ function EscenaBar(){
             ref2: useRef(null),
            
           },
-          coordenadas: []
         },
+        B: {
+          Refs: {
+            ref: useRef(null),
+           
+          },
+        }
       }
     ]
 
@@ -89,9 +84,9 @@ function EscenaBar(){
 
  */
 
+    const updateScene = () => {
     
-    useEffect(() => {
-      console.log(currentScene);
+      console.log(currentScene + 1);
     
       coord.forEach((element) => {
         Object.keys(element).forEach((key) => {
@@ -103,12 +98,12 @@ function EscenaBar(){
             if (ref.current) {
               const measureCallback = (currentIndex) => (x, y, width, height, pageX, pageY) => {
                 setScenes(prevScenes => {
-                  const currentSceneData = prevScenes[currentScene] || {}; // Verificar si currentScene ya existe en el objeto
+                  const currentSceneData = prevScenes[currentScene + 1] || {}; // Verificar si currentScene ya existe en el objeto
                   const currentCoordenada = currentSceneData.coordenada || {}; // Verificar si 'coordenada' ya existe en el objeto currentSceneData
     
                   return {
                     ...prevScenes,
-                    [currentScene]: {
+                    [currentScene + 1]: {
                       ...currentSceneData,
                       coordenada: {
                         ...currentCoordenada,
@@ -131,8 +126,8 @@ function EscenaBar(){
       });
     
       console.log('Scenes: ', scenes);
-      console.log(currentScene);
-    }, [capturar]);
+      console.log(currentScene + 1);  
+    };
     
     useEffect(() => {
       // Desactivar el scroll del cuerpo de la página
@@ -191,7 +186,7 @@ function EscenaBar(){
     return (
       <View style={modalVisible ? styles.centeredViewNoOp : styles.centeredViewOp}>
         <Modal
-            animationType="fade"
+            animationType="slide"
             transparent={true}
             visible={modalVisible}
             onRequestClose={() => {
@@ -201,11 +196,11 @@ function EscenaBar(){
               <CreatePlayer setModalVisible={setModalVisible} modalVisible={modalVisible} updateParentState={updateParentState} dictionary={dictionary}/>
             </View>
         </Modal>
+
         <View style={{ bottom: 500, flex: 0, flexDirection: 'row', position: 'absolute' }}>
           
-          
-          <Draggable minX={-(0.49*windowDimensions.width)} minY={-(0.18*windowDimensions.height)} maxX={0.5*windowDimensions.width} maxY={0.47*windowDimensions.height}>
-            <Image style={{width:60, height:60}} source={require('./Resources/balonDeVolley.png')} />
+          <Draggable minX={-(0.49*windowDimensions.width)} minY={-(0.18*windowDimensions.height)} maxX={0.5*windowDimensions.width} maxY={0.46*windowDimensions.height}>
+            <Image ref={coord[0].B.Refs[`ref`]} style={{width:60, height:60}} source={require('./Resources/balonDeVolley.png')} />
           </Draggable>
 
           {dictionary.S > 0 && (
@@ -213,7 +208,7 @@ function EscenaBar(){
               {Array(dictionary.S)
                 .fill()
                 .map((_, index) => (
-                  <Draggable minX={-(0.49*windowDimensions.width)} minY={-(0.18*windowDimensions.height)} maxX={0.5*windowDimensions.width} maxY={0.47*windowDimensions.height} key={index}>
+                  <Draggable minX={-(0.49*windowDimensions.width)} minY={-(0.18*windowDimensions.height)} maxX={0.5*windowDimensions.width} maxY={0.46*windowDimensions.height} key={index}>
                     <Circulo key={index} margin={0} width={60} marginTop={6} size={30} marginT={0}>
                       <Text key={index} ref={coord[0].S.Refs[`ref${index + 1}`]}>S</Text>
                     </Circulo>
@@ -227,7 +222,7 @@ function EscenaBar(){
               {Array(dictionary.O)
                 .fill()
                 .map((_, index) => (
-                  <Draggable minX={-(0.49*windowDimensions.width)} minY={-(0.18*windowDimensions.height)} maxX={0.5*windowDimensions.width} maxY={0.47*windowDimensions.height} key={index}>
+                  <Draggable minX={-(0.49*windowDimensions.width)} minY={-(0.18*windowDimensions.height)} maxX={0.5*windowDimensions.width} maxY={0.46*windowDimensions.height} key={index}>
                     <Circulo key={index} margin={0} width={60} marginTop={6} size={30} marginT={0}>
                       <Text key={index} ref={coord[0].O.Refs[`ref${index + 1}`]}>O</Text>
                     </Circulo>
@@ -240,7 +235,7 @@ function EscenaBar(){
               {Array(dictionary.L)
                 .fill()
                 .map((_, index) => (
-                  <Draggable minX={-(0.49*windowDimensions.width)} minY={-(0.18*windowDimensions.height)} maxX={0.5*windowDimensions.width} maxY={0.47*windowDimensions.height} key={index}>
+                  <Draggable minX={-(0.49*windowDimensions.width)} minY={-(0.18*windowDimensions.height)} maxX={0.5*windowDimensions.width} maxY={0.46*windowDimensions.height} key={index}>
                     <Circulo key={index} margin={0} width={60} marginTop={6} size={30} marginT={0}>
                       <Text key={index} ref={coord[0].L.Refs[`ref${index + 1}`]}>L</Text>
                     </Circulo>
@@ -253,7 +248,7 @@ function EscenaBar(){
               {Array(dictionary.WS)
                 .fill()
                 .map((_, index) => (
-                  <Draggable minX={-(0.49*windowDimensions.width)} minY={-(0.18*windowDimensions.height)} maxX={0.5*windowDimensions.width} maxY={0.47*windowDimensions.height} key={index}>
+                  <Draggable minX={-(0.49*windowDimensions.width)} minY={-(0.18*windowDimensions.height)} maxX={0.5*windowDimensions.width} maxY={0.46*windowDimensions.height} key={index}>
                     <Circulo key={index} margin={0} width={60} marginTop={9} size={30} marginT={0}>
                       <Text key={index} ref={coord[0].WS.Refs[`ref${index + 1}`]}>WS</Text>
                     </Circulo>
@@ -266,7 +261,7 @@ function EscenaBar(){
               {Array(dictionary.MB)
                 .fill()
                 .map((_, index) => (
-                  <Draggable minX={-(0.49*windowDimensions.width)} minY={-(0.18*windowDimensions.height)} maxX={0.5*windowDimensions.width} maxY={0.47*windowDimensions.height} key={index}>
+                  <Draggable minX={-(0.49*windowDimensions.width)} minY={-(0.18*windowDimensions.height)} maxX={0.5*windowDimensions.width} maxY={0.46*windowDimensions.height} key={index}>
                     <Circulo key={index} margin={0} width={60} marginTop={9} size={30} marginT={0}>
                       <Text ref={coord[0].MB.Refs[`ref${index + 1}`]}>MB</Text>
                     </Circulo>
@@ -283,6 +278,7 @@ function EscenaBar(){
           </TouchableOpacity>
             
           <Pressable style={styles.arrows} onPress={()=> { 
+            updateScene()
             currentScene > 1 ? setCurrentScene(currentScene-1):null;
             console.log(currentScene)                 
               }
@@ -290,16 +286,16 @@ function EscenaBar(){
             <Icon name="arrow-left" size={60} color="black"/>
           </Pressable>
           <Pressable style={styles.arrows} onPress={() => {
-            setCatch(!capturar);
+            updateScene();
             setCurrentScene(currentScene+1)
           }}
           >
             <Icon name="arrow-right" size={60} color="black"/>
           </Pressable>
           <TouchableOpacity style={styles.button} 
-            onPress={() => {setCatch(!capturar)
+            onPress={() => {updateScene()
             addScene()}} >
-              <Text style={{fontSize:20, fontWeight: 'bold'}}>Finish</Text>
+              <Text style={{fontSize:20, textAlign:'center', fontWeight: 'bold'}}>Finish</Text>
           </TouchableOpacity>
         </DownBar>
     </View>
@@ -307,6 +303,8 @@ function EscenaBar(){
   };
   
 const {width, height} = Dimensions.get('window')
+
+const heightButton = height*0.17
 
 const styles = StyleSheet.create({
     text: {
@@ -325,11 +323,13 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        width: '110%',
         marginTop: 22,
         opacity: 1
       },
       centeredViewNoOp: {
         flex: 1,
+        width: '110%',
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 22,
@@ -368,19 +368,19 @@ const styles = StyleSheet.create({
         elevation: 5,
       },
       button: {
-        width: width*0.17,
-        height: height*0.08,
+        width: heightButton*0.55,
+        height: heightButton*0.55,
         borderRadius: 50,
         borderWidth: 4,
         borderColor: 'black',
         justifyContent: 'center',
         alignItems: 'center',
-        bottom: 10,
+        bottom: 20,
         backgroundColor: 'transparent',
       },
       arrows:{
         height: height*0.07,
-        bottom:10,
+        bottom:20,
       },
 });
 

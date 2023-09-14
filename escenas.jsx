@@ -19,11 +19,11 @@ function Escenas(){
   const styles = StyleSheet.create({
   image: {
     width: '110%',
-    height: '87%',
+    height: '88%',
     opacity: 1,
     },
     container: {
-      flex: 10,
+      flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
 

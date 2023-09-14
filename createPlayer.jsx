@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, TouchableHighlight, Button, Pressable} from "react-native";
-import Draggable from "./Draggable";
+import { Text, View, StyleSheet, Alert, Pressable} from "react-native";
 import Circulo from "./Circulo";
 import UpButton from "./upButton";
 
@@ -13,14 +12,26 @@ function createPlayer({ updateParentState, dictionary, modalVisible, setModalVis
     };
 
     const [count, setCount] = useState(1);
-    
+
+   
+
     const increment = () => {
-        if (count == 6){
+        var keys = Object.keys(dictionary);
+        var value = dictionary[state]
+
+        if (count == 2 || value >= 1){
             null
         }
-        else {
+        else if (value == 0) {
         setCount(count + 1);
-        }    };
+        console.log(value)
+        }    
+        else {
+            setCount(count + 1);
+            console.log(value)
+
+        }
+    };
     
     const decrement = () => {
         if (count == 1){
@@ -34,13 +45,28 @@ function createPlayer({ updateParentState, dictionary, modalVisible, setModalVis
     const handleClick = () => {
         // Nuevo valor para actualizar el estado del padre (un nuevo diccionario)
         const keys = Object.keys(dictionary);
+
         for (var i=0; i<keys.length; i++ ){
             if(keys[i] == state){
                 var value = dictionary[keys[i]]
-                value += count;
-                updateParentState({ ...dictionary, [state]: value })
+                if (value==0 || value==1){
+                    value += count;
+                    updateParentState({ ...dictionary, [state]: value })
+                    console.log(value)
+
+                }
+                else {
+                    Alert.alert(
+                        'Únicamente se pueden crear 2 jugadores con el mismo rol',
+                        [
+                          { text: 'Aceptar', onPress: () => console.log('Alerta cerrada') }
+                        ],
+                        { cancelable: false }
+                      );
+                }
             }
-        }
+        }   
+       
     };
 
    
