@@ -18,7 +18,7 @@ function EscenaBar(){
 
     const [windowDimensions, setWindowDimensions] = useState(Dimensions.get('window'));
 
-    const [finish, setFinish] = useState(true)
+    const [finish, setFinish] = useState(false)
 
     const [dictionary, setDictionary] = useState({ S: 0, O: 0, L: 0, WS: 0, MB: 0 });
 
@@ -197,6 +197,33 @@ function EscenaBar(){
             </View>
         </Modal>
 
+        <Modal
+            animationType="slide"
+            transparent={true}
+            visible={!finish}
+            onRequestClose={() => {
+            setFinish(!finish);
+            }}>
+            <View style={{top:200, alignItems: 'center', justifyContent: 'center'}}>
+              <View style={styles.modalView5}>
+                <Text style={styles.text1}>ARE YOU SURE ?</Text>
+                <Pressable
+                    style={[styles.button1]}
+                    onPress={() => setFinish(!finish)}>
+                    <Text style={styles.textStyle1}>Back</Text>
+                </Pressable>
+                <Pressable
+                    style={[styles.button2]}
+                    onPress={() => {setFinish(!finish)
+                    updateScene()
+                    addScene()
+                    }}>
+                    <Text style={styles.textStyle1}>Finish</Text>
+                </Pressable>
+              </View>
+            </View>
+        </Modal>
+
         <View style={{ bottom: 500, flex: 0, flexDirection: 'row', position: 'absolute' }}>
           
           <Draggable minX={-(0.49*windowDimensions.width)} minY={-(0.18*windowDimensions.height)} maxX={0.5*windowDimensions.width} maxY={0.46*windowDimensions.height}>
@@ -293,8 +320,8 @@ function EscenaBar(){
             <Icon name="arrow-right" size={60} color="black"/>
           </Pressable>
           <TouchableOpacity style={styles.button} 
-            onPress={() => {updateScene()
-            addScene()}} >
+            onPress={() => {setFinish(!finish)
+            }} >
               <Text style={{fontSize:20, textAlign:'center', fontWeight: 'bold'}}>Finish</Text>
           </TouchableOpacity>
         </DownBar>
@@ -313,6 +340,14 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         fontSize: 16,
     },
+    text1: {
+      justifyContent: 'center',
+      textAlign: 'center',
+      fontStyle: 'italic',
+      fontWeight: 'bold',
+      width: 350,
+      fontSize: 56,
+  },
     currentScene: {
       justifyContent: 'center',
       textAlign: 'center',
@@ -334,6 +369,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 22,
         opacity: 0.5,
+      },
+      modalView5: {
+        backgroundColor: '#F0F8FF',
+        borderRadius: 20,
+        marginHorizontal: 20,
+        width: 100,
+        paddingHorizontal: 180,
+        paddingVertical: 20,
+        top: 100,
+        alignItems: 'center',
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
       },
       modalView: {
         backgroundColor: 'white',
@@ -381,6 +429,35 @@ const styles = StyleSheet.create({
       arrows:{
         height: height*0.07,
         bottom:20,
+      },
+      button1: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+        width: 150,
+        alignItems: 'center',
+        height: 40,
+        top: 30,
+        right: 80,
+        backgroundColor: 'red'
+      },
+      button2: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+        width: 150,
+        alignContent: 'center',
+        height: 40,
+        bottom: 10,
+        left: 80,
+        backgroundColor: 'green'
+
+      },
+      textStyle1: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 15,
+        textAlign: 'center',
       },
 });
 
