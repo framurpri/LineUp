@@ -3,12 +3,16 @@ import { Text, View, StyleSheet, Alert, Pressable} from "react-native";
 import Circulo from "./Circulo";
 import UpButton from "./upButton";
 
-function createPlayer({ updateParentState, dictionary, modalVisible, setModalVisible }){
+function createPlayer({ updateParentState, dictionary, confettiChange, modalVisible, setModalVisible }){
     
     const [state, setState] = useState('S');
 
     const handleStateChange = (newState) => {
         setState(newState);
+    };
+
+    const confettiStateChange = () => {
+        confettiChange(false);
     };
 
     const [count, setCount] = useState(1);
@@ -127,8 +131,11 @@ function createPlayer({ updateParentState, dictionary, modalVisible, setModalVis
             </Pressable>
             <Pressable
                 style={[styles.button2, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}
-                onPressIn={handleClick}>
+                onPress={() => {
+                    setModalVisible(!modalVisible)
+                    confettiStateChange()}}
+                onPressIn={handleClick}
+                >
                 <Text style={styles.textStyle}>Create</Text>
             </Pressable>
         </View>

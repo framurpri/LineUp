@@ -10,7 +10,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { getFirestore, collection, addDoc } from "firebase/firestore"; 
-
+import ConfettiExplosion from 'react-confetti-explosion';
 
 function EscenaBar(){
     
@@ -31,6 +31,8 @@ function EscenaBar(){
   const [state, setState] = useState('S');
 
   const [name, setName] = useState('')
+
+  const [showConfetti, setShowConfetti] = useState(false); // Nuevo estado para controlar la explosión de confeti
 
   const app = initializeApp(firebaseConfig);
 
@@ -146,6 +148,7 @@ function EscenaBar(){
     if(gesture.moveY > 690 && gesture.moveX < 250 && gesture.moveX > 150){
       deletePlayer(state,name);
       setIsDragged(false);
+      setShowConfetti(true)
     } else {
       setIsDragged(false);
     }
@@ -179,10 +182,14 @@ function EscenaBar(){
     }
   }
 
-  const handleStateAndNameChange = (newState, newName) => {
+  const handleStateAndNameChange = (newState, newName) =>{
     setState(newState);
     setName(newName);
 };
+
+  const confettiChange = (newState) =>{
+    setShowConfetti(newState)
+  }
 
   const dropZoneStyle = isDragged
     ? styles.dropZoneDragged
@@ -202,7 +209,7 @@ function EscenaBar(){
           setModalVisible(!modalVisible);
           }}>
           <View style={{top:200, alignItems: 'center', justifyContent: 'center'}}>
-            <CreatePlayer setModalVisible={setModalVisible} modalVisible={modalVisible} updateParentState={updateParentState} dictionary={dictionary}/>
+            <CreatePlayer setModalVisible={setModalVisible} confettiChange={confettiChange} modalVisible={modalVisible} updateParentState={updateParentState} dictionary={dictionary}/>
           </View>
       </Modal>
 
@@ -251,7 +258,7 @@ function EscenaBar(){
                 maxX={0.5*windowDimensions.width} 
                 maxY={0.46*windowDimensions.height} 
                 key={value}>
-                  <Circulo key={value} state={'S'} onPress={handleStateAndNameChange} name={value} margin={0} width={60} marginTop={6} size={30} marginT={0}>
+                  <Circulo key={value} state={'S'} hola={handleStateAndNameChange} name={value} margin={0} width={60} marginTop={6} size={30} marginT={0}>
                     <Text key={value} ref={coord[0].S.Refs[`ref${value}`]}>S</Text>
                   </Circulo>
                 </Draggable>
@@ -261,12 +268,18 @@ function EscenaBar(){
 
         {Object.keys(dictionary.O).length > 0 && (
           <React.Fragment>
-            {Array(Object.keys(dictionary.O).length)
-              .fill()
-              .map((_, index) => (
-                <Draggable onDragRelease={handleDraggableRelease} onDrag={handleDraggableStart} minX={-(0.49*windowDimensions.width)} minY={-(0.18*windowDimensions.height)} maxX={0.5*windowDimensions.width} maxY={0.46*windowDimensions.height} key={index}>
-                  <Circulo key={index} name={`O${index}`} margin={0} width={60} marginTop={6} size={30} marginT={0}>
-                    <Text key={index} ref={coord[0].O.Refs[`ref${index + 1}`]}>O</Text>
+            {Object.values(dictionary.O)
+              .map((value, index) => (
+                <Draggable x={0} y={0} 
+                onDragRelease={handleDraggableRelease} 
+                onDrag={handleDraggableStart}
+                minX={-(0.49*windowDimensions.width)} 
+                minY={-(0.18*windowDimensions.height)} 
+                maxX={0.5*windowDimensions.width} 
+                maxY={0.46*windowDimensions.height} 
+                key={value}>
+                  <Circulo key={value} state={'O'} hola={handleStateAndNameChange} name={value} margin={0} width={60} marginTop={6} size={30} marginT={0}>
+                    <Text key={value} ref={coord[0].O.Refs[`ref${value}`]}>O</Text>
                   </Circulo>
                 </Draggable>
               ))}
@@ -274,12 +287,18 @@ function EscenaBar(){
         )}
         {Object.keys(dictionary.L).length > 0 && (
           <React.Fragment>
-            {Array(Object.keys(dictionary.L).length)
-              .fill()
-              .map((_, index) => (
-                <Draggable onDragRelease={handleDraggableRelease} onDrag={handleDraggableStart} minX={-(0.49*windowDimensions.width)} minY={-(0.18*windowDimensions.height)} maxX={0.5*windowDimensions.width} maxY={0.46*windowDimensions.height} key={index}>
-                  <Circulo key={index} name={`L${index}`} margin={0} width={60} marginTop={6} size={30} marginT={0}>
-                    <Text key={index} ref={coord[0].L.Refs[`ref${index + 1}`]}>L</Text>
+            {Object.values(dictionary.L)
+              .map((value, index) => (
+                <Draggable x={0} y={0} 
+                onDragRelease={handleDraggableRelease} 
+                onDrag={handleDraggableStart}
+                minX={-(0.49*windowDimensions.width)} 
+                minY={-(0.18*windowDimensions.height)} 
+                maxX={0.5*windowDimensions.width} 
+                maxY={0.46*windowDimensions.height} 
+                key={value}>
+                  <Circulo key={value} state={'L'} hola={handleStateAndNameChange} name={value} margin={0} width={60} marginTop={6} size={30} marginT={0}>
+                    <Text key={value} ref={coord[0].L.Refs[`ref${value}`]}>L</Text>
                   </Circulo>
                 </Draggable>
               ))}
@@ -287,12 +306,18 @@ function EscenaBar(){
         )}
         {Object.keys(dictionary.WS).length > 0 && (
           <React.Fragment>
-            {Array(Object.keys(dictionary.WS).length)
-              .fill()
-              .map((_, index) => (
-                <Draggable onDragRelease={handleDraggableRelease} onDrag={handleDraggableStart} minX={-(0.49*windowDimensions.width)} minY={-(0.18*windowDimensions.height)} maxX={0.5*windowDimensions.width} maxY={0.46*windowDimensions.height} key={index}>
-                  <Circulo key={index} name={`WS${index}`} margin={0} width={60} marginTop={9} size={30} marginT={0}>
-                    <Text key={index} ref={coord[0].WS.Refs[`ref${index + 1}`]}>WS</Text>
+            {Object.values(dictionary.WS)
+              .map((value, index) => (
+                <Draggable x={0} y={0} 
+                onDragRelease={handleDraggableRelease} 
+                onDrag={handleDraggableStart}
+                minX={-(0.49*windowDimensions.width)} 
+                minY={-(0.18*windowDimensions.height)} 
+                maxX={0.5*windowDimensions.width} 
+                maxY={0.46*windowDimensions.height} 
+                key={value}>
+                  <Circulo key={value} state={'WS'} hola={handleStateAndNameChange} name={value} margin={0} width={60} marginTop={6} size={30} marginT={0}>
+                    <Text key={value} ref={coord[0].WS.Refs[`ref${value}`]}>WS</Text>
                   </Circulo>
                 </Draggable>
               ))}
@@ -300,17 +325,24 @@ function EscenaBar(){
         )}
         {Object.keys(dictionary.MB).length > 0 && (
           <React.Fragment>
-            {Array(Object.keys(dictionary.MB).length)
-              .fill()
-              .map((_, index) => (
-                <Draggable onDragRelease={handleDraggableRelease} onDrag={handleDraggableStart} minX={-(0.49*windowDimensions.width)} minY={-(0.18*windowDimensions.height)} maxX={0.5*windowDimensions.width} maxY={0.46*windowDimensions.height} key={index}>
-                  <Circulo key={index} name={`MB${index}`} margin={0} width={60} marginTop={9} size={30} marginT={0}>
-                    <Text ref={coord[0].MB.Refs[`ref${index + 1}`]}>MB</Text>
+            {Object.values(dictionary.MB)
+              .map((value, index) => (
+                <Draggable x={0} y={0} 
+                onDragRelease={handleDraggableRelease} 
+                onDrag={handleDraggableStart}
+                minX={-(0.49*windowDimensions.width)} 
+                minY={-(0.18*windowDimensions.height)} 
+                maxX={0.5*windowDimensions.width} 
+                maxY={0.46*windowDimensions.height} 
+                key={value}>
+                  <Circulo key={value} state={'MB'} hola={handleStateAndNameChange} name={value} margin={0} width={60} marginTop={6} size={30} marginT={0}>
+                    <Text key={value} ref={coord[0].MB.Refs[`ref${value}`]}>MB</Text>
                   </Circulo>
                 </Draggable>
               ))}
           </React.Fragment>
         )}
+
       </View>
       
       <Modal
@@ -322,6 +354,14 @@ function EscenaBar(){
           }}>
         <View style={dropZoneStyle}>
           <Icon name="trash-alt" size={30} style={dropIcon}></Icon>
+          {showConfetti && (
+          <ConfettiExplosion
+            particleCount={30} 
+            force={0.4}
+            width={400}
+            timeout={1000} // Tiempo de duración de la explosión de confeti (en milisegundos)
+          />
+          )}
         </View>
       </Modal>
                   
@@ -489,6 +529,8 @@ const styles = StyleSheet.create({
   dropZone: {
     width: '0%',
     height: 0,
+    top: 700,
+    left: 170,
     backgroundColor: 'transparent',
     justifyContent: 'center',
     alignItems: 'center',
