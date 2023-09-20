@@ -42,9 +42,14 @@ function createPlayer({ updateParentState, dictionary, modalVisible, setModalVis
 
     const handleClick = () => {
         const keys = Object.keys(dictionary);
+        let sumJugadores = 0
         for (var i=0; i<keys.length; i++ ){
-            if(keys[i] == state){
-                var array = Object.values(dictionary[keys[i]])
+            const array = Object.values(dictionary[keys[i]])
+            sumJugadores += array.length;
+        }
+        for (var i=0; i<keys.length; i++ ){
+            if(keys[i] == state && sumJugadores < 6){
+                const array = Object.values(dictionary[keys[i]])
                 if (array.length==0 && count == 1){
                     const value = 1;
                     updateParentState({ ...dictionary, [state]: [...dictionary[state], value] })
@@ -61,7 +66,7 @@ function createPlayer({ updateParentState, dictionary, modalVisible, setModalVis
                     const value = 1;
                     updateParentState({ ...dictionary, [state]: [...dictionary[state], value] })
                 }
-                else {
+                else if (array.length==2) {
                     Alert.alert(
                         'Únicamente se pueden crear 2 jugadores con el mismo rol',
                         [
@@ -70,9 +75,16 @@ function createPlayer({ updateParentState, dictionary, modalVisible, setModalVis
                         { cancelable: false }
                     );
                 }
+            } else{
+                Alert.alert(
+                    'Únicamente se pueden crear 6 jugadores como máximo',
+                    [
+                      { text: 'Aceptar', onPress: () => console.log('Alerta cerrada') }
+                    ],
+                    { cancelable: false }
+                );
             }
-        }   
-       
+        } 
     };
 
    
