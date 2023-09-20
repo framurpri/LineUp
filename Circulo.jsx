@@ -4,7 +4,7 @@ import Draggable  from './Draggable.jsx';
 
 function Circulo(props){
 
-  const {children, margin, width, right, bottom, top, left,  marginTop, size, marginT} = props;
+  const {children, margin, width, name, state, onPress, top, left,  marginTop, size, marginT} = props;
 
   return(
     <View style={{
@@ -18,7 +18,7 @@ function Circulo(props){
       left: left,
       marginTop: marginT,
       marginRight: margin}}>
-      <Text selectable={false} style={{fontSize: size,
+      <Text onTouchStart={() => onPress(state, name)} selectable={false} style={{fontSize: size,
         fontWeight: 'bold',
         marginTop: marginTop,}}>
           {children}

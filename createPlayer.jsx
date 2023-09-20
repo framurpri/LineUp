@@ -13,8 +13,6 @@ function createPlayer({ updateParentState, dictionary, modalVisible, setModalVis
 
     const [count, setCount] = useState(1);
 
-   
-
     const increment = () => {
         var keys = Object.keys(dictionary);
         var value = dictionary[state]
@@ -43,17 +41,25 @@ function createPlayer({ updateParentState, dictionary, modalVisible, setModalVis
     };
 
     const handleClick = () => {
-        // Nuevo valor para actualizar el estado del padre (un nuevo diccionario)
         const keys = Object.keys(dictionary);
-
         for (var i=0; i<keys.length; i++ ){
             if(keys[i] == state){
-                var value = dictionary[keys[i]]
-                if (value==0 || value==1){
-                    value += count;
-                    updateParentState({ ...dictionary, [state]: value })
-                    console.log(value)
-
+                var array = Object.values(dictionary[keys[i]])
+                if (array.length==0 && count == 1){
+                    const value = 1;
+                    updateParentState({ ...dictionary, [state]: [...dictionary[state], value] })
+                }
+                else if (array.length==0 && count == 2){
+                    const value = [1,2];
+                    updateParentState({ ...dictionary, [state]: [...dictionary[state], ...value] })
+                }
+                else if (array.length==1 && array.indexOf(1) !== -1){
+                    const value = 2;
+                    updateParentState({ ...dictionary, [state]: [...dictionary[state], value] })
+                }
+                else if (array.length==1 && array.indexOf(2) !== -1){
+                    const value = 1;
+                    updateParentState({ ...dictionary, [state]: [...dictionary[state], value] })
                 }
                 else {
                     Alert.alert(
@@ -62,7 +68,7 @@ function createPlayer({ updateParentState, dictionary, modalVisible, setModalVis
                           { text: 'Aceptar', onPress: () => console.log('Alerta cerrada') }
                         ],
                         { cancelable: false }
-                      );
+                    );
                 }
             }
         }   
@@ -129,16 +135,16 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
-      },
-      subView: {
+    },
+    subView: {
         backgroundColor:'#DDA0DD', 
         alignItems: 'center',
         width:340, 
         height:150, 
         bottom:410, 
         borderRadius:20,
-      },
-      button: {
+    },
+    button: {
         borderRadius: 20,
         padding: 10,
         elevation: 2,
@@ -147,8 +153,8 @@ const styles = StyleSheet.create({
         height: 40,
         bottom: 460,
         right: 80
-      },
-      button2: {
+    },
+    button2: {
         borderRadius: 20,
         padding: 10,
         elevation: 2,
@@ -157,16 +163,16 @@ const styles = StyleSheet.create({
         height: 40,
         bottom: 500,
         left: 80
-      },
-      buttonClose: {
+    },
+    buttonClose: {
         backgroundColor: '#2196F3',
-      },
-      textStyle: {
+    },
+        textStyle: {
         color: 'white',
         fontWeight: 'bold',
         fontSize: 15,
         textAlign: 'center',
-      },
+    },
 })
 
 export default createPlayer;
