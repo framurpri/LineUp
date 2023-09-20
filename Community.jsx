@@ -8,6 +8,8 @@ import { getFirestore, collection, query, where, getDocs } from "firebase/firest
 import Icon from 'react-native-vector-icons/FontAwesome';
 import TopBar from './TopBar.jsx'
 import DownBar from './DownBar';
+import {Button, ButtonGroup} from "@nextui-org/react";
+
 
 function Community(){
 

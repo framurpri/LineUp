@@ -1,21 +1,36 @@
 import React, { useState } from 'react';
 import { Routes, Route, Link } from 'react-router-native'
 import Registro from './Registro';
-import { View, TextInput, Button, StyleSheet, Text } from 'react-native';
+import { View,  StyleSheet, Text, Dimensions } from 'react-native';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import  Main  from './Main';
 import Basic from './BasicStructPage';
+import { Button, TextInput } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginSuccess, setLoginSuccess] = useState(false);
+  const [flatTextSecureEntry, setFlatTextSecureEntry] = useState(true);
+
+  const { width , height } = Dimensions.get('window');
+
+  const initialState = () => {
+    flatTextPassword: 'Password';
+    flatTextSecureEntry: true;
+  }
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
+  const inputActionHandler = (type, payload) =>
+    dispatch({
+      type: type,
+      payload: payload,
+    });
 
   const handleLogin = () => {
 
@@ -45,24 +60,59 @@ export function Login() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>INICIO DE SESIÓN</Text>
+    
+      <View style={[styles.containerDiv, {width: width*0.85, height: height*0.6}]}>
+        
+        <Text style={styles.text}>INICIO DE SESIÓN</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Correo electrónico"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Contraseña"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-        <Button title="Iniciar sesión" onPress={handleLogin} />
+        <TextInput
+              placeholder="Email"
+              onChangeText={setEmail}
+              left={
+                <TextInput.Icon
+                icon={() => (
+                  <Icon
+                    name="envelope"
+                    size={24}
+                    color = '#F29C46'
+                  />
+                )}
+                />
+              }
+              style={[styles.input, {width: width*0.60}]}
+            />
 
+        <TextInput
+              placeholder="Password"
+              onChangeText={setPassword}
+              value={password}
+              secureTextEntry={flatTextSecureEntry}
+              left={
+                <TextInput.Icon
+                icon={() => (
+                  <Icon
+                    name="lock"
+                    size={24}
+                    color='#F29C46'
+                  />
+                )}
+                />
+              }
+              right={
+                <TextInput.Icon
+                  icon={flatTextSecureEntry ? 'eye' : 'eye-off'}
+                  onPress={() => setFlatTextSecureEntry(!flatTextSecureEntry)}
+                  forceTextInputFocus={false}
+                  color = '#F29C46'
+                />
+              }
+              style={[styles.input, {width: width*0.60}]}
+          />
+
+          <Button mode="contained" onPress = {handleLogin} style={{backgroundColor: '#F29C46'}}>
+              Iniciar sesión
+          </Button>
+      </View>
     </View>
   );
 };
@@ -73,19 +123,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: 'grey',
   },
   text: {
     fontSize: 30,
     padding: 20,
+    color: 'white'
   },
   input: {
-    width: '100%',
-    height: 40,
     marginBottom: 10,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
     backgroundColor: 'white',
+    color: 'black',
   },
+  containerDiv: {
+    backgroundColor: '#303747',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    borderRadius: 5
+  }
 });
