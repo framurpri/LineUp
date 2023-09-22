@@ -12,7 +12,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 import { getFirestore, collection, addDoc } from "firebase/firestore"; 
 import ConfettiExplosion from 'react-confetti-explosion';
 
-function EscenaBar(){
+function EscenaBar({handlePlusScene, handleLessScene}){
     
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -22,7 +22,7 @@ function EscenaBar(){
 
   const [dictionary, setDictionary] = useState({ S: [], O: [], L: [], WS: [], MB: [] });
 
-  const [currentScene, setCurrentScene] = useState(0);
+  const [currentScene, setCurrentScene] = useState(1);
 
   const [scenes, setScenes] = useState({})
   
@@ -85,7 +85,7 @@ function EscenaBar(){
   };
 
   const updateScene = () => {
-    console.log(currentScene + 1);
+    console.log(currentScene);
     coord.forEach((element) => {
       Object.keys(element).forEach((key) => {
         const refs = element[key].Refs;
@@ -94,17 +94,17 @@ function EscenaBar(){
           if (ref.current) {
             const measureCallback = (currentIndex) => (x, y, width, height, pageX, pageY) => {
               setScenes(prevScenes => {
-                const currentSceneData = prevScenes[currentScene + 1] || {}; // Verificar si currentScene ya existe en el objeto
+                const currentSceneData = prevScenes[currentScene] || {}; // Verificar si currentScene ya existe en el objeto
                 const currentCoordenada = currentSceneData.coordenada || {}; // Verificar si 'coordenada' ya existe en el objeto currentSceneData
                 return {
                   ...prevScenes,
-                  [currentScene + 1]: {
+                  [currentScene]: {
                     ...currentSceneData,
                     coordenada: {
                       ...currentCoordenada,
                       [key]: {
                         ...currentCoordenada[key],
-                        [`coordenada${currentIndex + 1}`]: [pageX, pageY],
+                        [`coordenada${currentIndex}`]: [pageX, pageY],
                       },
                     },
                   },
@@ -119,7 +119,7 @@ function EscenaBar(){
       });
     });
     console.log('Scenes: ', scenes);
-    console.log(currentScene + 1);  
+    console.log(currentScene);  
   };
   
   useEffect(() => {
@@ -149,6 +149,9 @@ function EscenaBar(){
       deletePlayer(state,name);
       setIsDragged(false);
       setShowConfetti(true)
+      setTimeout(() => {
+        setShowConfetti(false);
+      }, 3000); 
     } else {
       setIsDragged(false);
     }
@@ -356,10 +359,14 @@ function EscenaBar(){
           <Icon name="trash-alt" size={30} style={dropIcon}></Icon>
           {showConfetti && (
           <ConfettiExplosion
+            style={{left: 20}}
             particleCount={30} 
             force={0.4}
             width={400}
-            timeout={1000} // Tiempo de duración de la explosión de confeti (en milisegundos)
+            colors={['blue']}
+            color='blue'
+            particleSize={10}
+            timeout={2000} // Tiempo de duración de la explosión de confeti (en milisegundos)
           />
           )}
         </View>
@@ -373,7 +380,10 @@ function EscenaBar(){
           
         <Pressable style={styles.arrows} onPress={()=> { 
           updateScene()
-          currentScene > 1 ? setCurrentScene(currentScene-1):null;
+          handleLessScene(currentScene-1)
+          setTimeout(() => {
+            currentScene > 1 ? setCurrentScene(currentScene-1):null;
+          }, 1); 
           console.log(currentScene)                 
             }
           }>
@@ -381,7 +391,10 @@ function EscenaBar(){
         </Pressable>
         <Pressable style={styles.arrows} onPress={() => {
           updateScene();
-          setCurrentScene(currentScene+1)
+          handlePlusScene(currentScene+1)
+          setTimeout(() => {
+            setCurrentScene(currentScene+1);
+          }, 1); 
         }}
         >
           <Icon name="arrow-right" size={60} color="black"/>

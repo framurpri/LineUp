@@ -1,15 +1,30 @@
-import React from 'react';
-import { View, Image, StyleSheet} from 'react-native';
+import React, { useState } from 'react';
+import { View, Image, StyleSheet, Text} from 'react-native';
 import EscenaBar from './EscenaBar';
 import TopBar from './TopBar.jsx'
 
 function Escenas(){
+
+  const [currentScene, setCurrentScene] = useState(1)
+
+  const handlePlusScene = (newScene) => {
+    setCurrentScene(newScene)
+  }
+
+  const handleLessScene = (newScene) => {
+    setCurrentScene(newScene)
+  }
+
     return(
     <View style={{flex:1}}>
-        <TopBar />
+        <TopBar>
+          <Text>
+            ESCENA: {currentScene}
+          </Text>
+        </TopBar>
         <View style={styles.container}>
             <Image source={require('./Resources/cancha.png')} style={styles.image}/>
-            <EscenaBar/>
+            <EscenaBar handlePlusScene={handlePlusScene} handleLessScene={handleLessScene}/>
         </View>
     </View>
     )

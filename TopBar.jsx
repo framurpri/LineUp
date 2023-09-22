@@ -1,14 +1,22 @@
-import { View, StyleSheet, Dimensions } from "react-native"
+import { View, StyleSheet, Dimensions, Text } from "react-native"
 import { Link } from 'react-router-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
+import { Children } from "react";
 
-function Bar(){
+function Bar(props){
+
+    const {children} = props
 
     return(
         <View style={styles.view}>
             <Link to={{ pathname: '/home'}}>
                 <Icon name="home" size={60} color={hexToRGBA('#99CCFF')}/>
             </Link>
+            <View style={styles.text}>
+            <Text style={styles.text1}>
+                {children}
+            </Text>
+            </View>
         </View>
     )
 } 
@@ -27,9 +35,9 @@ const imageHeight = height * 0.1;
 
 const styles = StyleSheet.create({
     view: {
-        flexDirection: 'column',
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         width: '15%', 
         height: '7%', 
     },
@@ -38,6 +46,14 @@ const styles = StyleSheet.create({
         height: imageHeight, 
         tintColor: hexToRGBA('#99CCFF'),
     },
+    text: {
+        left: width*0.54,
+    },
+    text1: {
+        fontStyle: 'italic',
+        fontWeight: 'bold',
+        fontSize: 25 
+    }
 })
 
 export default Bar;
