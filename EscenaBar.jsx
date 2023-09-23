@@ -20,9 +20,11 @@ function EscenaBar({handlePlusScene, handleLessScene}){
 
   const [finish, setFinish] = useState(false)
 
+  const [capturar, setCatch] = useState(false);
+
   const [dictionary, setDictionary] = useState({ S: [], O: [], L: [], WS: [], MB: [] });
 
-  const [currentScene, setCurrentScene] = useState(1);
+  const [currentScene, setCurrentScene] = useState(0);
 
   const [scenes, setScenes] = useState({})
   
@@ -84,7 +86,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
     setIsDragged(true);
   };
 
-  const updateScene = () => {
+  useEffect(() => { 
     console.log(currentScene);
     coord.forEach((element) => {
       Object.keys(element).forEach((key) => {
@@ -104,7 +106,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
                       ...currentCoordenada,
                       [key]: {
                         ...currentCoordenada[key],
-                        [`coordenada${currentIndex}`]: [pageX, pageY],
+                        [`coordenada${currentIndex + 1}`]: [pageX, pageY],
                       },
                     },
                   },
@@ -119,8 +121,8 @@ function EscenaBar({handlePlusScene, handleLessScene}){
       });
     });
     console.log('Scenes: ', scenes);
-    console.log(currentScene);  
-  };
+    console.log(currentScene);
+  }, [capturar]);
   
   useEffect(() => {
     // Desactivar el scroll del cuerpo de la página
@@ -173,9 +175,9 @@ function EscenaBar({handlePlusScene, handleLessScene}){
 
   const addScene = async () => {
     try {
-      const docRef = await addDoc(collection(db, "plays1"), {
-        designer: auth.currentUser.email,
-        name: "nombre de prueba",
+      const docRef = await addDoc(collection(db, "plays"), {
+        designer: "guixe",
+        name: "jugada 100",
         //scenes: [{ [currentScene]: coordenada }]
         scenes: scenes
       });
@@ -234,7 +236,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
               <Pressable
                   style={[styles.button2]}
                   onPress={() => {setFinish(!finish)
-                  updateScene()
+                  setCatch(!capturar)
                   addScene()
                   }}>
                   <Text style={styles.textStyle1}>Finish</Text>
@@ -379,7 +381,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
         </TouchableOpacity>
           
         <Pressable style={styles.arrows} onPress={()=> { 
-          updateScene()
+          setCatch(!capturar)
           handleLessScene(currentScene-1)
           setTimeout(() => {
             currentScene > 1 ? setCurrentScene(currentScene-1):null;
@@ -390,7 +392,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
           <Icon name="arrow-left" size={60} color="black"/>
         </Pressable>
         <Pressable style={styles.arrows} onPress={() => {
-          updateScene();
+          setCatch(!capturar)
           handlePlusScene(currentScene+1)
           setTimeout(() => {
             setCurrentScene(currentScene+1);

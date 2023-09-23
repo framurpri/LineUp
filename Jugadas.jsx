@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, Pressable, ScrollView, Image } from 'react-native'
+import { View, StyleSheet, Pressable, ScrollView, Image } from 'react-native'
 import { Routes, Route, Link } from 'react-router-native';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
@@ -8,6 +8,7 @@ import { getFirestore, collection, query, where, getDocs } from "firebase/firest
 import Icon from 'react-native-vector-icons/FontAwesome';
 import TopBar from './TopBar.jsx'
 import DownBar from './DownBar';
+import { Card, Text } from 'react-native-paper';
 
 function  Plays(){
 
@@ -26,7 +27,7 @@ function  Plays(){
       const db = getFirestore(app);
       const auth = getAuth(app);
 
-      const q = query(collection(db, "plays1"), where("designer", "==", auth.currentUser.email));
+      const q = query(collection(db, "plays"));
       const asyncQuery = async () => {
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
@@ -46,21 +47,21 @@ function  Plays(){
                     <TopBar />
                 </View>
             </View>
-            <View style={{ height: 650, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+          <View style={{ height: 650, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
       <Text style={{ fontSize: 20, color: "#006775", fontWeight: 'bold', width: '100%' , textAlign: 'center'}}>My Plays</Text>
       {isLoading ? (
         <Text>Loading...</Text> // Muestra el mensaje de carga mientras se obtienen los datos
       ) : (
         <ScrollView contentContainerStyle={styles.subview2}>
           {Object.entries(datos).map(([clave, valor]) => (
-            <View key={clave} style={styles.row}>
               <Link to={{pathname: `/plays/${clave}`}}>
-                <React.Fragment>
-                  <Image source={require('./Resources/cancha.png')} style={styles.image} />
-                  <Text style={{ fontSize: 20 }}>{valor.name}</Text>
-                </React.Fragment>
+                <>
+                <Card style={{marginBottom: 30}}>
+                  <Card.Cover source={require('./Resources/cancha.png')} />
+                  <Card.Title title={valor.name} />
+                </Card>
+                </>
               </Link>
-            </View>
           ))}
         </ScrollView>
       )}
@@ -91,18 +92,19 @@ const styles = StyleSheet.create({
       flex: 1,
     },
     image: {
-      width: 150,
-      height: 150,
+      width: 50,
+      height: 50,
       opacity: 1,
-      left: 10,
+      left: 30,
+      justifyContent: "center",
       alignItems: 'center',
       },
     row: {
     flexDirection: 'row',
-    paddingHorizontal: 16,
     paddingVertical: 8,
     borderBottomWidth: 1,
-    width: '50%', 
+    width: '80%',
+    height: '40%', 
     backgroundColor: 'grey'
   },
     staticContainer: {
@@ -115,6 +117,11 @@ const styles = StyleSheet.create({
       flex: 1,
       width: 393,
       alignItems: 'center',
+      justifyContent: 'space-between',
+      display: 'grid', 
+      paddingHorizontal: 16,
+      gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+      marginBottom: 30 
     },
     item: {
       height: 50,

@@ -1,7 +1,5 @@
 import React, { forwardRef, useEffect, useRef , useImperativeHandle} from 'react';
 import { Animated, View, StyleSheet, TouchableOpacity, Text } from 'react-native';
-import Circulo from './Circulo';
-
 const EnlaceTransiciones = forwardRef((props, ref) => {
 
     const {numEscenas, coordenadas, children} = props;
@@ -18,7 +16,7 @@ const EnlaceTransiciones = forwardRef((props, ref) => {
     const duration = 2500; // Duración de cada animación en milisegundos
 
     const transiciones = {};
-
+    console.log('Coordenadas: ' + coordenadas)
     for (let i = 1; i < numEscenas; i++) {
       const nombreTransicion = `transicion${i}`;
       const newCoordX = coordenadas[i][0] - coordenadas[0][0]
