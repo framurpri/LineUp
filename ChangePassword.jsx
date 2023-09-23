@@ -22,6 +22,7 @@ function  ChangePassword(){
     const auth = getAuth(app);
 
     const handlePasswordChange = async () => {
+      debugger;
       getUser();
       if(newPassword == confirmPassword){
         const docRef = doc(db, "users", userDocId);

@@ -8,12 +8,16 @@ import Profile from './Profile';
 import Settings from './Settings';
 import Community from './Community';
 import Escenas from './escenas';
+import Main from './Main';
+import AuthMenu from './AuthMenu';
 
 const Tab = createBottomTabNavigator();
 
-export default function MyComponent() {
-  return (
-    <Tab.Navigator
+export default function MyComponent( ) {
+  debugger;
+return(
+
+<Tab.Navigator
       screenOptions={{
         headerShown: false,
       }}
@@ -21,6 +25,9 @@ export default function MyComponent() {
         <BottomNavigation.Bar
           navigationState={state}
          safeAreaInsets={insets}
+         inactiveColor='white'
+         activeColor='#F29C46'
+         style={{backgroundColor:'#303747'}}
           onTabPress={({ route, preventDefault }) => {
             const event = navigation.emit({
               type: 'tabPress',
@@ -38,13 +45,15 @@ export default function MyComponent() {
             }
           }}
           renderIcon={({ route, focused, color }) => {
+            
             const { options } = descriptors[route.key];
             if (options.tabBarIcon) {
-              return options.tabBarIcon({ focused, color, size: 24 });
+              return options.tabBarIcon({ focused, color: 'white', size: 24});
             }
 
             return null;
           }}
+            //Este código de getLabelText en la práctica no sirve pq le seteo yo el nombre en tabBarLabel con un String
           getLabelText={({ route }) => {
             const { options } = descriptors[route.key];
             const label =
@@ -64,18 +73,19 @@ export default function MyComponent() {
         component={HomeScreen}
         options={{
           tabBarLabel: 'Home',
-          tabBarIcon: ({ color, size }) => {
-            return <Icon name="movie-open" size={size} color={color} />;
+          tabBarIcon: ({ focused, color, size }) => {
+            return <Icon name="movie-open" size={size} color={focused?'#F29C46':color}/>;
           },
         }}
       />
       <Tab.Screen
         name="Community"
+
         component={CommunityScreen}
         options={{
           tabBarLabel: 'Community',
-          tabBarIcon: ({ color, size }) => {
-            return <Icon name="account-group" size={size} color={color} />;
+          tabBarIcon: ({ focused, color, size }) => {
+            return <Icon name="account-group" size={size} color={focused?'#F29C46':color} />;
           },
         }}
       />
@@ -84,8 +94,8 @@ export default function MyComponent() {
         component={ProfileScreen}
         options={{
           tabBarLabel: 'Profile',
-          tabBarIcon: ({ color, size }) => {
-            return <Icon name="account" size={size} color={color} />;
+          tabBarIcon: ({ focused, color, size }) => {
+            return <Icon name="account" size={size} color={focused?'#F29C46':color} />;
           },
         }}
       />
@@ -94,14 +104,20 @@ export default function MyComponent() {
         component={SettingsScreen}
         options={{
           tabBarLabel: 'Settings',
-          tabBarIcon: ({ color, size }) => {
-            return <Icon name="cog" size={size} color={color} />;
+          tabBarIcon: ({ focused, color, size }) => {
+            return <Icon name="cog" size={size} color={focused?'#F29C46':color} />;
           },
         }}
       />
     </Tab.Navigator>
-  );
+
+  )
 }
+
+
+
+
+
 
 function HomeScreen() {
   return (
@@ -116,7 +132,7 @@ function CommunityScreen() {
 
 function ProfileScreen() {
   return (
-      <Settings></Settings>
+      <Profile></Profile>
   );
 }
 function SettingsScreen() {

@@ -10,6 +10,7 @@ import DownBar from './DownBar';
 import TopBar from './TopBar';
 import { TextInput } from 'react-native-web';
 import Main from './Main';
+import PruebaDownbar from './PruebaDownbar'
 
 const Settings = () => {
 
@@ -53,18 +54,19 @@ const handleDeleteUser = () => {
   }
 
   if(deletionSucceeded){
-    return <Main></Main>
+    return <Main>
+    </Main>
   }
 
   if(logoutSuccessful){
-    return <Main></Main>
+    return(
+    <Main/>
+    )
   }
 
     return (
         <View style={styles.container}>
-        <View>
-            <TopBar />
-        </View>           
+        
     <View style={{ height: 650, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
 
     <Text style={styles.title}>LineUp</Text>
@@ -87,23 +89,6 @@ const handleDeleteUser = () => {
 
           <TextInput onChangeText = {setConfirmDeletion} placeholder = "Escriba CONFIRMAR" style = {{opacity: showDeletionInput ? 1 : 0}}/>
         </View>
-
-    <View style={styles.staticContainer}>
-      <DownBar>
-          <Link to={{ pathname: '/escenas'}}>
-              <Icon name="film" size={25} color="#900"/>
-          </Link>
-          <Link to={{pathname: '/community'}}>
-              <Icon name="group" size={25} color="#900" />
-          </Link>
-          <Link to={{pathname: '/profile'}}>
-              <Icon name="user" size={25} color="#900" />
-          </Link>
-          <Link to={{ pathname: '/settings'}}>
-              <Icon name="cog" size={25} color="#900" />
-          </Link>
-      </DownBar>
-    </View>
 </View>
       
     );

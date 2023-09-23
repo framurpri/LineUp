@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, Pressable, ScrollView , Image} from 'react-native'
+import { View, StyleSheet, Text, Pressable, SafeAreaView , Image} from 'react-native'
 import { Routes, Route, Link, useParams } from 'react-router-native';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
@@ -10,6 +10,7 @@ import TopBar from './TopBar.jsx'
 import DownBar from './DownBar';
 import MyPlays from './Jugadas';
 import Teams from './Teams';
+import { SegmentedButtons } from 'react-native-paper';
 
 function Profile(){
 
@@ -18,6 +19,7 @@ function Profile(){
       const [showPlays, setToggleShowPlays] = useState(false);
 
       const [showTeams, setToggleShowTeams] = useState(false);
+      const [value, setValue] = useState('');
 
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
@@ -40,54 +42,46 @@ function Profile(){
       getUserInfo();
 
     return(
-      <View style={styles.container}>
-                <View>
-                    <TopBar />
-                </View>           
-            <View style={{ height: 650, alignItems: 'center', width: '100%'}}>
+            <View>             
               <View style={styles.hr}></View>
               <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <Image source={require('./Resources/pelotaVoley.jpeg')} style={styles.image}/>
                 <Text style={styles.profileUsername}>{username}</Text>
               </View>
               <View style={styles.hr}></View>
-              <Pressable onPress = {handleShowPlays}>
-                <Text style={styles.textMyPlays}>My plays</Text>
-              </Pressable>
-                {showPlays && (                  
+              <SafeAreaView style={styles.container}>
+                <SegmentedButtons
+                  value={value}
+                  onValueChange={setValue}
+                  buttons={[
+                  {
+                    value: 'plays',
+                    label: 'My plays',
+                  },
+                  {
+                    value: 'teams',
+                    label: 'My teams',
+                  }
+                  ]}
+                />
+              </SafeAreaView>
+
+                {value=='plays' && (                  
                   <MyPlays></MyPlays>)}
               
-              <View style={styles.hr}></View>
-              <Pressable onPress = {handleShowTeams}>
-                <Text style={styles.textMyPlays}>My teams</Text>
-              </Pressable>
-                {showTeams && (                  
+
+                {value=='teams' && (                  
                   <Teams></Teams>)}
             </View>
-
-            <View style={styles.staticContainer}>
-              <DownBar>
-                  <Link to={{ pathname: '/escenas'}}>
-                      <Icon name="film" size={25} color="#900"/>
-                  </Link>
-                  <Link to={{pathname: '/community'}}>
-                      <Icon name="group" size={25} color="#900" />
-                  </Link>
-                  <Link to={{pathname: '/profile'}}>
-                      <Icon name="user" size={25} color="#900" />
-                  </Link>
-                  <Link to={{ pathname: '/settings'}}>
-                      <Icon name="cog" size={25} color="#900" />
-                  </Link>
-              </DownBar>
-            </View>
-      </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
       flex: 1,
+      width: '80%',
+      display: 'flex',
+      alignItems: 'center'
     },
     row: {
     flexDirection: 'row',
@@ -135,12 +129,6 @@ const styles = StyleSheet.create({
       paddingBottom: 20,
       fontSize: 20,
     },
-    textMyPlays: {
-      fontSize: 17,
-      paddingTop: 20,
-      fontWeight: 'bold',
-      color: "#006775",
-    }
 
   });
 

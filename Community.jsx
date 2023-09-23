@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, Pressable, ScrollView, TextInput } from 'react-native'
+import { View, StyleSheet, Text, Pressable, ScrollView,  } from 'react-native'
 import { Routes, Route, Link } from 'react-router-native';
+import { Button, TextInput, IconButton, List } from 'react-native-paper';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, query, where, getDocs } from "firebase/firestore"; 
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import TopBar from './TopBar.jsx'
 import DownBar from './DownBar';
-import {Button, ButtonGroup} from "@nextui-org/react";
 
 
 function Community(){
@@ -20,6 +20,10 @@ function Community(){
       const [teamsNotFound, setTeamsNotFound] = useState(false);
       const [playersLoaded, setPlayersLoaded] = useState(false);
       const [playersNotFound, setPlayersNotFound] = useState(false);
+      const [search, setSearch] = useState("");
+      const [teamSearch, setTeamSearch] = useState(false);
+      const [playerSearch, setPlayerSearch] = useState(false);
+
       
 
 
@@ -41,14 +45,26 @@ function Community(){
         setTeamsLoaded(true);
       };
 */
+
+      const checkSearchType = () => {
+        if(teamSearch){
+          getTeamsByName()
+        }else if(playerSearch){
+          getPlayersByName()
+        }else{
+          console.log("Por favor seleccione equipos o jugadores.")
+        }
+      }
       const getTeamsByName = async () => {
+        setPlayersLoaded(false);
+        setTeamsLoaded(false);
         debugger;
         const q = query(collection(db, "teams"));
         console.log("Au!")
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
           
-          if(doc.data().team.includes(textInputSearch)){
+          if(doc.data().team.includes(search)){
             datos[doc.id] = doc.data();
           }
         })
@@ -64,13 +80,15 @@ function Community(){
       };
 
       const getPlayersByName = async () => {
+        setPlayersLoaded(false);
+        setTeamsLoaded(false);
         debugger; 
         const q = query(collection(db, "users"));
         console.log("Au!")
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
           console.log(doc.data())
-          if(doc.data().username.includes(playerInputSearch)){
+          if(doc.data().username.includes(search)){
             datos[doc.id] = doc.data();
           }
         })
@@ -88,98 +106,103 @@ function Community(){
       
     return(
       <View style={styles.container}>
-          <View>
-            <View>
-              <TopBar />
+          <View style={{display: "flex", alignItems: "center"}}> 
+            
+          </View>
+          <View style={{display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: 'center', marginTop: 10}}>
+            <TextInput
+              placeholder="Yuji Nishida..."
+              onChangeText={setSearch}
+            />
+            <IconButton
+            icon="magnify"
+            iconColor="#F29C46"
+            containerColor="#303747"
+            size={40}
+            onPress={() => 
+              checkSearchType()
+            }
+            />
+          </View>
+          <View style={{display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: 'center', marginTop: 10}}>
+          <View style={{display: 'flex', flexDirection: "column"}}>
+          <IconButton
+            icon="account"
+            iconColor="#F29C46"
+            containerColor="#303747"
+            size={40}
+            style={{opacity: playerSearch?1:0.7}}
+            onPress={() => {          
+              setPlayerSearch(true)
+              setTeamSearch(false)
+            }
+            }
+            />
+            <Text>Jugador</Text>
             </View>
-            <View>
-              <View>
-                <View style = {{paddingTop: 20, justifyContent: 'center', alignItems: 'center'}}>
-                  <Text style={{fontSize: 20, fontWeight: 'bold'}}>¿Buscas un equipo?</Text>
-                </View>
-                <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                  <View style={{width: '80%'}}>  
-                    <TextInput style={styles.input} onChangeText={setTextInputSearch}></TextInput>
-                  </View>  
-                  <Pressable style={styles.pressable} onPress= {getTeamsByName}>
-                    <Icon name="search" size={25} color="black"/>
-                  </Pressable>
-                </View>
-              </View>
-              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{display: 'flex', flexDirection: "column"}}>
+            <IconButton
+            icon="account-group"
+            iconColor="#F29C46"
+            containerColor="#303747"
+            size={40}
+            style={{opacity: teamSearch?1:0.7}}
+            onPress={() => {
+              setTeamSearch(true)
+              setPlayerSearch(false)
+            }
+            }
+            />
+            <Text>Equipo</Text>
+            </View>
+          </View>  
+          <View>
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
                 {teamsNotFound && (
                 <Text style={{fontSize: 17}}>No existen equipos con el nombre que buscas.</Text>
                 )}
-              </View>
-              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            </View>
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
                 {playersNotFound && (
                 <Text style={{fontSize: 17}}>No existen jugadores con el nombre que buscas.</Text>
                 )}
-              </View>
-              <View>
-                <View style = {{paddingTop: 20, justifyContent: 'center', alignItems: 'center'}}>
-                  <Text style={{fontSize: 20, fontWeight: 'bold'}}>¿Buscas un jugador?</Text>
-                </View>
-                <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                  <View style={{width: '80%'}}>  
-                    <TextInput style={styles.input} onChangeText={setPlayerInputSearch}></TextInput>
-                  </View>  
-                  <Pressable style={styles.pressable} onPress= {getPlayersByName}>
-                    <Icon name="search" size={25} color="black"/>
-                  </Pressable>
-                </View>
-              </View>
             </View>
           </View>
 
-          <View style={{ height: 650, alignItems: 'center', width: '100%' }}>
-            <Link style={styles.button} to={{ pathname: '/community/newTeam' }}>
-              <Text style={{ fontSize: 20, color: "#900", fontWeight: 'bold', width: '100%' }}>+   Create New team</Text>
-            </Link>
-          </View>
           <View>
             {teamsLoaded && (
-            <ScrollView contentContainerStyle={styles.subview2}>
-              {Object.entries(datos).map(([clave, valor]) => (
-                <View key={clave} style={styles.row}>
-                  <Link to={{pathname: `/profile/teams/${clave}`}}>
-                    <Text style={{ fontSize: 20 }}>{valor.team}</Text>
-                  </Link>
-                </View>
-              ))}
-            </ScrollView>
+              <List.Section>
+                    <ScrollView contentContainerStyle={styles.subview2}>
+                      {Object.entries(datos).map(([clave, valor]) => (            
+                      <View key={clave} style={styles.row}>
+                        <Link to={{pathname: `/profile/teams/${clave}`}}>
+                          <List.Item title={valor.team} left={() => <List.Icon icon="account-group" />}/>
+                        </Link>
+                      </View>
+                      ))}
+                    </ScrollView>
+                  </List.Section>
             )
             }
           </View>
           <View>
             {playersLoaded && (
             <ScrollView contentContainerStyle={styles.subview2}>
-              {Object.entries(datos).map(([clave, valor]) => (
-                <View key={clave} style={styles.row}>
-                  <Link to={{pathname: `/profile/${clave}`}}>
-                    <Text style={{ fontSize: 20 }}>{valor.username}</Text>
-                  </Link>
-                </View>
-              ))}
+                  <List.Section>
+                      {Object.entries(datos).map(([clave, valor]) => (            
+                      <View key={clave} style={styles.row}>
+                        <Link to={{pathname: `/profile/${clave}`}}>
+                          <List.Item title={valor.username} left={() => <List.Icon icon="account" />}/>
+                        </Link>
+                      </View>
+                      ))}
+                  </List.Section>
             </ScrollView>
             )
+
             }
-          </View>
-          <View style={styles.staticContainer}>
-            <DownBar>
-                <Link to={{ pathname: '/escenas'}}>
-                    <Icon name="film" size={25} color="#900"/>
-                </Link>
-                <Link to={{pathname: '/community'}}>
-                    <Icon name="group" size={25} color="#900" />
-                </Link>
-                <Link to={{pathname: '/profile'}}>
-                    <Icon name="user" size={25} color="#900" />
-                </Link>
-                <Link to={{ pathname: '/settings'}}>
-                    <Icon name="cog" size={25} color="#900" />
-                </Link>
-            </DownBar>
+
+            
           </View>
   </View>
     )

@@ -7,8 +7,10 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import  Main  from './Main';
 import Basic from './BasicStructPage';
+import PruebaDownbar from './PruebaDownbar';
 import { Button, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { NavigationContainer } from '@react-navigation/native';
 
 export function Login() {
   const [email, setEmail] = useState('');
@@ -55,7 +57,11 @@ export function Login() {
     console.log('Iniciando sesión...');
     console.log('Correo electrónico:', email);
     console.log('Contraseña:', password);
-    return <Basic></Basic>
+    return <>
+      <NavigationContainer>
+        <PruebaDownbar isLoggedIn={true}/>
+      </NavigationContainer>
+    </>
   }
 
   return (
