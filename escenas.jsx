@@ -5,21 +5,23 @@ import TopBar from './TopBar.jsx'
 
 function Escenas(){
 
-  const [currentScene, setCurrentScene] = useState(1)
+  const [currentScene, setCurrentScene] = useState(0)
 
   const handlePlusScene = (newScene) => {
     setCurrentScene(newScene)
   }
 
   const handleLessScene = (newScene) => {
+    if(currentScene != 0){
     setCurrentScene(newScene)
+    }
   }
 
     return(
     <View style={{flex:1}}>
         <TopBar>
           <Text>
-            ESCENA: {currentScene}
+            ESCENA: {currentScene + 1}
           </Text>
         </TopBar>
         <View style={styles.container}>
