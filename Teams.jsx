@@ -32,8 +32,8 @@ function Teams(){
         querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots       
         datos[doc.id] = doc.data();
-        setIsLoading(false); // Se actualiza el estado para indicar que los datos se han cargado
       });
+      setIsLoading(false); // Se actualiza el estado para indicar que los datos se han cargado
         const teams = Object.entries(datos).map(([clave, valor]) => {return `Team id es: ${clave} y el nombre es: ${valor.team}`});
         console.log(teams);
       } 
@@ -41,47 +41,21 @@ function Teams(){
       
     return(
         <View style={styles.container}>
-            <View>
-                <View>
-                    <TopBar />
-                </View>
-            </View>
-            <View style={{ height: 650, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-      <Link to={{ pathname: '/teams/new' }}>
-        <Text style={{ fontSize: 20, color: "#900", fontWeight: 'bold', width: '100%' }}>+   Create New team</Text>
-      </Link>
-      <Text style={{ fontSize: 20, color: "#006775", fontWeight: 'bold', width: '100%' , textAlign: 'center'}}>My Teams</Text>
+          <View style={{ height: 650, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
       {isLoading ? (
         <Text>Loading...</Text> // Muestra el mensaje de carga mientras se obtienen los datos
       ) : (
         <ScrollView contentContainerStyle={styles.subview2}>
           {Object.entries(datos).map(([clave, valor]) => (
             <View key={clave} style={styles.row}>
-              <Link to={{pathname: `/teams/${clave}`}}>
+              <Link to={{pathname: `/profile/teams/${clave}`}}>
                 <Text style={{ fontSize: 20 }}>{valor.team}</Text>
               </Link>
             </View>
           ))}
         </ScrollView>
       )}
-    </View>
-
-            <View style={styles.staticContainer}>
-              <DownBar>
-                  <Link to={{ pathname: '/escenas'}}>
-                      <Icon name="film" size={25} color="#900"/>
-                  </Link>
-                  <Link to={{pathname: '/teams'}}>
-                      <Icon name="group" size={25} color="#900" />
-                  </Link>
-                  <Link to={{pathname: '/profile'}}>
-                      <Icon name="user" size={25} color="#900" />
-                  </Link>
-                  <Link to={{ pathname: '/settings'}}>
-                      <Icon name="cog" size={25} color="#900" />
-                  </Link>
-              </DownBar>
-            </View>
+          </View>
         </View>
     )
 }

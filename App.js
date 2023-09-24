@@ -14,37 +14,55 @@ import Plays from './Jugadas'
 import Play from './Play';
 import Profile from './Profile';
 import Terms from './Terms';
+import Community from './Community';
+import Chat from './Chat';
+import Applications from './Applications';
+import TermsNoAuth from './TermsNoAuth';
+import { PaperProvider } from 'react-native-paper';
+import Paper from './Paper';
+
 
 function App() {
   return ( 
     <>
-    <NativeRouter>
-    <Routes>
-      <Route path="/" element={<Main/>}/>
-      <Route path="/authentication">
-        <Route path="login" element={<Login />}/>
-        <Route path="registro" element={<Registro />}/>
-      </Route>
-      <Route path="/home" element={<Basic/>}/>
-      <Route path="/escenas" element={<Escenas/>}/>
-      <Route path="/teams">
-        <Route path="" element={<Teams/>}/>
-        <Route path="new" element={<NewTeam/>}/>
-        <Route path=":id" element={<Team/>}/>
-      </Route>
-      <Route path="/plays">
-        <Route path="" element={<Plays/>}/>
-        <Route path=":id" element={<Play/>}/>
-      </Route>
-
-      <Route path="/settings">
-        <Route path='' element={<Settings/>}/>
-        <Route path='changePassword' element={<ChangePassword/>}/>
-        <Route path='terms' element={<Terms/>}/>
-      </Route> 
-
-    </Routes>
-    </NativeRouter>
+    <PaperProvider>
+      <NativeRouter>
+      <Routes>
+        <Route path="/" element={<Main/>}/>
+        <Route path="/authentication">
+          <Route path="login" element={<Login />}/>
+          <Route path="registro" element={<Registro />}/>
+        </Route>
+        <Route path="/home" element={<Basic/>}/>
+        <Route path="/escenas" element={<Escenas/>}/>
+        <Route path="/community">
+          <Route path="" element={<Community/>}/>
+          <Route path="newTeam" element={<NewTeam/>}/>
+        </Route>
+        <Route path="/profile">
+          <Route path="" element={<Profile/>}/>
+          <Route path="plays">
+            <Route path="" element={<Plays/>}/>
+            <Route path=":id" element={<Play/>}/>
+          </Route>
+          <Route path="teams">
+            <Route path="" element={<Teams/>}/>
+            <Route path=":id">
+              <Route path=""  element={<Team/>}/>
+              <Route path="chat" element={<Chat/>}/>
+              <Route path="applications" element={<Applications/>}/>
+            </Route>
+        </Route>
+        </Route>
+        <Route path="/settings">
+          <Route path='' element={<Settings/>}/>
+          <Route path='changePassword' element={<ChangePassword/>}/>
+          <Route path='terms' element={<Terms/>}/>
+        </Route> 
+        <Route path="/termsNoAuth" element={<TermsNoAuth/>}/>
+      </Routes>
+      </NativeRouter>
+    </PaperProvider>
     </>
   )
 }
