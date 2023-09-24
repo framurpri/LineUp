@@ -13,6 +13,9 @@ const EnlaceTransiciones = forwardRef((props, ref) => {
     })
 
     const iniciarTransicion = () =>{
+    
+    position.setValue({ x: 0, y: 0 });
+      
     const duration = 2500; // Duración de cada animación en milisegundos
 
     const transiciones = {};
