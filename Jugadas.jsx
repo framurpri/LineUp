@@ -11,7 +11,7 @@ import DownBar from './DownBar';
 import { Card, Text, Title, Paragraph, IconButton } from 'react-native-paper';
 import MyCard from './CustomCard';
 
-function  Plays(){
+function Plays(){
 
       const [datos, setDatos] = useState({});
       const [teamNames, setTeamNames] = useState([]);

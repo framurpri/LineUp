@@ -6,6 +6,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, addDoc } from "firebase/firestore"; 
 import Teams from './Teams';
+import Profile from './Profile';
 
 export function NewTeam() {
 
@@ -21,20 +22,38 @@ export function NewTeam() {
  
   async function docRef(){
     try {
+      let players = [];
+      players.push(auth.currentUser.email);
+      let applicants = [];
       const docRefId = await addDoc(collection(db, "teams"), {
         team: teamName,
         description: description,
-        userEmail: auth.currentUser.email
+        userEmail: auth.currentUser.email,
+        players: players,
+        applicants: applicants,
       });
       setCreateTeamSuccess(true);
       console.log("Document written with ID: ", docRefId.id);
+      createChatDoc(docRefId.id);
     } catch (e) {
       console.error("Error adding document: ", e);
     }
   }
   
   if(createTeamSuccess){
-    return <Teams></Teams>
+    return <Profile></Profile>
+  }
+
+  function createChatDoc(teamDocId){
+    try{
+      addDoc(collection(db, "chat"), {
+        teamId: teamDocId,
+        messages: [],
+      });
+    console.log("Document written");
+    }catch (e) {
+      console.error("Error adding document: ", e);
+    }
   }
 
   return (

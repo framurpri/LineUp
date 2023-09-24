@@ -8,8 +8,8 @@ import Draggable from 'react-native-draggable';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
+import { getFirestore, collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import { getFirestore, collection, addDoc } from "firebase/firestore"; 
 import ConfettiExplosion from 'react-confetti-explosion';
 
 function EscenaBar({handlePlusScene, handleLessScene}){
@@ -169,6 +169,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
         if (indiceAEliminar !== -1) {
           array.splice(indiceAEliminar, 1);
         }
+
       }
     }
   };
@@ -371,6 +372,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
             timeout={2000} // Tiempo de duración de la explosión de confeti (en milisegundos)
           />
           )}
+
         </View>
       </Modal>
                   

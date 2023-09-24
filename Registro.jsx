@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet , Text, CheckBox} from 'react-native';
+import { View, StyleSheet , Text, CheckBox, Dimensions } from 'react-native';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore, collection, addDoc } from "firebase/firestore"; 
 import { NativeRouter, Routes, Route, Link } from 'react-router-native';
 import  Main  from './Main';
-
+import { Button, TextInput } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export function Registro() {
 
@@ -15,7 +16,10 @@ export function Registro() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [username, setUsername] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
-  const [registerSuccess, setRegisterSuccess] = useState(false);  
+  const [registerSuccess, setRegisterSuccess] = useState(false); 
+  const [flatTextSecureEntry, setFlatTextSecureEntry] = useState(true); 
+
+  const { width , height } = Dimensions.get('window');
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
@@ -52,41 +56,62 @@ export function Registro() {
 
   return (
         <View style={styles.container}>
-            <Text style={styles.text}>REGISTRO</Text>
-
-            <TextInput
-                style={styles.input}
-                placeholder="Nombre de usuario"
-                value={username}
-                onChangeText={setUsername}
-            />     
-            <TextInput
-                style={styles.input}
-                placeholder="Correo electrónico"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Contraseña"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Confirmar Contraseña"
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                secureTextEntry
-            />                        
+          <View style={[styles.containerDiv, {width: width*0.9, height: height*0.7}]}>
+            
+              <Text style={styles.text}>REGISTRO</Text>
+          
+            
+              <TextInput
+              placeholder="Username"
+              onChangeText={setUsername}
+              left={<TextInput.Icon icon={() => (<Icon name="user" size={24} color='#303747'/>)}/>}
+              style={styles.input}
+              />
+              <TextInput
+              placeholder="Email"
+              onChangeText={setEmail}
+              left={<TextInput.Icon icon={() => (<Icon name="envelope" size={24} color='#303747' />)}/>}
+              style={styles.input}
+              />          
+              <TextInput
+              placeholder="Password"
+              onChangeText={setPassword}
+              left={<TextInput.Icon icon={() => (<Icon name="lock" size={24} color='#303747'/>)}/>}
+              right={
+                    <TextInput.Icon
+                      icon={flatTextSecureEntry ? 'eye' : 'eye-off'}
+                      onPress={() => setFlatTextSecureEntry(!flatTextSecureEntry)}
+                      forceTextInputFocus={false}/>
+                    }
+              secureTextEntry={flatTextSecureEntry}
+              style={styles.input}
+              />
+              <TextInput
+              placeholder="Confirm password"
+              onChangeText={setConfirmPassword}
+              left={<TextInput.Icon icon={() => (<Icon name="lock" size={24} color='#303747'/>)}/>}
+              right={
+                <TextInput.Icon
+                  icon={flatTextSecureEntry ? 'eye' : 'eye-off'}
+                  onPress={() => setFlatTextSecureEntry(!flatTextSecureEntry)}
+                  forceTextInputFocus={false}/>
+                }
+              secureTextEntry={flatTextSecureEntry}
+              style={styles.input}
+              />
+            
             <View style={styles.checkboxContainer}>
                 <CheckBox value={termsAccepted} onValueChange={setTermsAccepted} />
-                <Text style={styles.checkboxLabel}>He leído y acepto los términos y condiciones</Text>
+                <Text style={styles.checkboxLabel}>He leído y acepto los </Text> 
+                <Link to={{ pathname: '/termsNoAuth'}} style = {styles.button}>
+                  <Text style={styles.underlined}>Términos y Condiciones</Text>
+                </Link>
             </View>
-                <Button title="Registrar" onPress={handleRegistration} disabled={!termsAccepted} />      
+            <Button type="submit" mode="contained" onPress = {handleRegistration} disabled={!termsAccepted} style={{backgroundColor: '#F29C46' , opacity: termsAccepted? 1 : 0.35}}>
+              Registrarse
+            </Button>    
         </View>
+      </View>
   );
 };
 
@@ -96,16 +121,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: 'grey',
+  },
+  containerDiv: {
+    backgroundColor: '#303747',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'space-evenly'
   },
   text: {
     fontSize: 50,
-    padding: 70,
+    color: 'white'
   },
   input: {
-    width: '100%',
+    width: '90%',
     height: 40,
-    marginBottom: 10,
     paddingHorizontal: 10,
     borderWidth: 1,
     borderColor: '#ccc',
@@ -114,11 +143,15 @@ const styles = StyleSheet.create({
   checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
   },
   checkboxLabel: {
     marginLeft: 8,
+    color: 'white'
   },
+  underlined: {
+    textDecorationLine: 'underline',
+    color: 'white'
+  }
 });
 
 
