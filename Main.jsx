@@ -13,6 +13,7 @@ import ChangePassword from './ChangePassword.jsx';
 import Chat from './Chat.jsx';
 import PruebaDownbar from './PruebaDownbar.jsx';
 import { NavigationContainer } from '@react-navigation/native';
+import Escenas from './escenas.jsx'
 
 export default function Main() {
     return (

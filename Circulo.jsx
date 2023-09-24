@@ -1,13 +1,17 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import Draggable  from './Draggable.jsx';
+import { View, Text } from 'react-native';
 
 function Circulo(props){
 
-  const {children, margin, width, right, bottom, top, left,  marginTop, size, marginT} = props;
+  const {children, margin, width, name, state, hola, top, left,  marginTop, size, marginT} = props;
+
+  const onPressState = () => {
+    hola(state, name)
+  }
 
   return(
-    <View style={{
+    <View onTouchStart={onPressState}
+    style={{
       width: width,
       height: width,
       alignItems: 'center',

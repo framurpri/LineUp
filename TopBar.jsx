@@ -1,14 +1,22 @@
-import { View, StyleSheet, Image } from "react-native"
-import { Routes, Route, Link } from 'react-router-native';
-import Basic from './BasicStructPage.jsx'
+import { View, StyleSheet, Dimensions, Text } from "react-native"
+import { Link } from 'react-router-native';
+import Icon from 'react-native-vector-icons/FontAwesome'
+import { Children } from "react";
 
+function Bar(props){
 
-function Bar(){
+    const {children} = props
+
     return(
         <View style={styles.view}>
             <Link to={{ pathname: '/home'}}>
-                <Image source={require('./Resources/home.png')} style={styles.image} />
+                <Icon name="home" size={60} color={hexToRGBA('#99CCFF')}/>
             </Link>
+            <View style={styles.text}>
+            <Text style={styles.text1}>
+                {children}
+            </Text>
+            </View>
         </View>
     )
 } 
@@ -21,25 +29,31 @@ const hexToRGBA = (hex, alpha = 1) => {
 };
 
 
-
+const { width, height } = Dimensions.get('window');
+const imageWidth = width * 0.2; 
+const imageHeight = height * 0.1; 
 
 const styles = StyleSheet.create({
     view: {
-        flex: 1,
-        flexDirection: 'column',
-        top: 0,
-        left: 0,
-        right: 0,
-        width: 80, 
-        height: 80, 
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '15%', 
+        height: '7%', 
     },
     image: {
-        width: 80, 
-        height: 80, 
-        borderRadius: 70,
-        backgroundColor: 'transparent',
+        width: imageWidth, 
+        height: imageHeight, 
         tintColor: hexToRGBA('#99CCFF'),
     },
+    text: {
+        left: width*0.54,
+    },
+    text1: {
+        fontStyle: 'italic',
+        fontWeight: 'bold',
+        fontSize: 25 
+    }
 })
 
 export default Bar;

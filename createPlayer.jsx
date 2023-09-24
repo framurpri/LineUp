@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, TouchableHighlight, Button, Pressable} from "react-native";
-import Draggable from "./Draggable";
+import { Text, View, StyleSheet, Alert, Pressable} from "react-native";
 import Circulo from "./Circulo";
 import UpButton from "./upButton";
 
-function createPlayer({ updateParentState, dictionary, modalVisible, setModalVisible }){
+function createPlayer({ updateParentState, dictionary, confettiChange, modalVisible, setModalVisible }){
     
     const [state, setState] = useState('S');
 
@@ -12,15 +11,29 @@ function createPlayer({ updateParentState, dictionary, modalVisible, setModalVis
         setState(newState);
     };
 
+    const confettiStateChange = () => {
+        confettiChange(false);
+    };
+
     const [count, setCount] = useState(1);
-    
+
     const increment = () => {
-        if (count == 6){
+        var keys = Object.keys(dictionary);
+        var value = dictionary[state]
+
+        if (count == 2 || value >= 1){
             null
         }
-        else {
+        else if (value == 0) {
         setCount(count + 1);
-        }    };
+        console.log(value)
+        }    
+        else {
+            setCount(count + 1);
+            console.log(value)
+
+        }
+    };
     
     const decrement = () => {
         if (count == 1){
@@ -32,15 +45,50 @@ function createPlayer({ updateParentState, dictionary, modalVisible, setModalVis
     };
 
     const handleClick = () => {
-        // Nuevo valor para actualizar el estado del padre (un nuevo diccionario)
         const keys = Object.keys(dictionary);
+        let sumJugadores = 0
         for (var i=0; i<keys.length; i++ ){
-            if(keys[i] == state){
-                var value = dictionary[keys[i]]
-                value += count;
-                updateParentState({ ...dictionary, [state]: value })
-            }
+            const array = Object.values(dictionary[keys[i]])
+            sumJugadores += array.length;
         }
+        for (var i=0; i<keys.length; i++ ){
+            if(keys[i] == state && sumJugadores < 6){
+                const array = Object.values(dictionary[keys[i]])
+                if (array.length==0 && count == 1){
+                    const value = 1;
+                    updateParentState({ ...dictionary, [state]: [...dictionary[state], value] })
+                }
+                else if (array.length==0 && count == 2){
+                    const value = [1,2];
+                    updateParentState({ ...dictionary, [state]: [...dictionary[state], ...value] })
+                }
+                else if (array.length==1 && array.indexOf(1) !== -1){
+                    const value = 2;
+                    updateParentState({ ...dictionary, [state]: [...dictionary[state], value] })
+                }
+                else if (array.length==1 && array.indexOf(2) !== -1){
+                    const value = 1;
+                    updateParentState({ ...dictionary, [state]: [...dictionary[state], value] })
+                }
+                else if (array.length==2) {
+                    Alert.alert(
+                        'Únicamente se pueden crear 2 jugadores con el mismo rol',
+                        [
+                          { text: 'Aceptar', onPress: () => console.log('Alerta cerrada') }
+                        ],
+                        { cancelable: false }
+                    );
+                }
+            } else{
+                Alert.alert(
+                    'Únicamente se pueden crear 6 jugadores como máximo',
+                    [
+                      { text: 'Aceptar', onPress: () => console.log('Alerta cerrada') }
+                    ],
+                    { cancelable: false }
+                );
+            }
+        } 
     };
 
    
@@ -83,8 +131,11 @@ function createPlayer({ updateParentState, dictionary, modalVisible, setModalVis
             </Pressable>
             <Pressable
                 style={[styles.button2, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}
-                onPressIn={handleClick}>
+                onPress={() => {
+                    setModalVisible(!modalVisible)
+                    confettiStateChange()}}
+                onPressIn={handleClick}
+                >
                 <Text style={styles.textStyle}>Create</Text>
             </Pressable>
         </View>
@@ -103,16 +154,16 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
-      },
-      subView: {
+    },
+    subView: {
         backgroundColor:'#DDA0DD', 
         alignItems: 'center',
         width:340, 
         height:150, 
         bottom:410, 
         borderRadius:20,
-      },
-      button: {
+    },
+    button: {
         borderRadius: 20,
         padding: 10,
         elevation: 2,
@@ -121,8 +172,8 @@ const styles = StyleSheet.create({
         height: 40,
         bottom: 460,
         right: 80
-      },
-      button2: {
+    },
+    button2: {
         borderRadius: 20,
         padding: 10,
         elevation: 2,
@@ -131,16 +182,16 @@ const styles = StyleSheet.create({
         height: 40,
         bottom: 500,
         left: 80
-      },
-      buttonClose: {
+    },
+    buttonClose: {
         backgroundColor: '#2196F3',
-      },
-      textStyle: {
+    },
+        textStyle: {
         color: 'white',
         fontWeight: 'bold',
         fontSize: 15,
         textAlign: 'center',
-      },
+    },
 })
 
 export default createPlayer;

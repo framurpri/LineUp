@@ -15,15 +15,14 @@ const EnlaceTransiciones = forwardRef((props, ref) => {
     })
 
     const iniciarTransicion = () =>{
-    const duration = 2000; // Duración de cada animación en milisegundos
+    const duration = 2500; // Duración de cada animación en milisegundos
 
     const transiciones = {};
 
     for (let i = 1; i < numEscenas; i++) {
       const nombreTransicion = `transicion${i}`;
-      
-      const newCoordX = coordenadas[i][0] - coordenadas[i-1][0]
-      const newCoordY = coordenadas[i][1] - coordenadas[i-1][1]
+      const newCoordX = coordenadas[i][0] - coordenadas[0][0]
+      const newCoordY = coordenadas[i][1] - coordenadas[0][1]
 
 
       transiciones[nombreTransicion] = Animated.timing(position, {

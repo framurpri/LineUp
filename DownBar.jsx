@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 
 function DownBar({ children }) {
 
@@ -9,17 +9,15 @@ function DownBar({ children }) {
   );
 };
 
+const {width, height} = Dimensions.get('window')
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    height: 100,
+    height: height*0.15,
+    width: width,
     backgroundColor: 'grey',
   },
 });
