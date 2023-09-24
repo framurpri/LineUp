@@ -7,7 +7,7 @@ import Circulo from './Circulo.jsx';
 import Draggable from 'react-native-draggable';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth
+import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import ConfettiExplosion from 'react-confetti-explosion';
