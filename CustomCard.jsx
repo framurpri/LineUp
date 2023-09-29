@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Modal, TextInput, TouchableHighlight } from 'react-native';
 import { Card, Title, Paragraph, IconButton, Text } from 'react-native-paper';
+import { Link } from 'react-router-native';
 
-const MyCard = ({ id, clave, handleExpand, deleted, isExpanded }) => {
+const MyCard = ({ id, clave, descripcion, handleExpand, deleted, isExpanded }) => {
   const [title, setTitle] = useState(`${id}`);
-  const [paragraph, setParagraph] = useState('Añade una descripción');
+  const [paragraph, setParagraph] = useState(descripcion !== undefined ? descripcion : 'Añade una descripción');
 
   const [isParagraphModalVisible, setParagraphModalVisible] = useState(false);
   const [text, setText] = useState(paragraph);
@@ -30,7 +31,9 @@ const MyCard = ({ id, clave, handleExpand, deleted, isExpanded }) => {
 
   return (
     <Card>
-      <Card.Cover style={styles.image} source={require('./Resources/cancha.png')} />
+      <Link to={{pathname: `/profile/plays/${clave}`}}>
+        <Card.Cover style={styles.image} source={require('./Resources/cancha.png')} />
+      </Link>
       <Card.Content>
         <Title>{title}</Title>
         <Paragraph numberOfLines={isExpanded ? 0 : 2}>{tempText}</Paragraph>

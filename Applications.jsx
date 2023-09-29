@@ -16,7 +16,7 @@ import { firebaseConfig } from './firebase-config.js';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, doc, getDoc, query, where, getDocs, updateDoc } from "firebase/firestore";
-import { ScrollView } from 'react-native-web';
+import { ScrollView, TouchableOpacity } from 'react-native-web';
 
 
 export default function Applications() {
@@ -82,8 +82,12 @@ export default function Applications() {
                 {teamApplicants.map(applicant => (
                     <View key={applicant} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                         <Text>{applicant}</Text>
-                        <Icon name="check" size={40} color="#03E833" style={{paddingLeft: 20}} onPress={acceptApplicant(applicant)}/>
-                        <Icon name="minus" size={40} color="#E80311" style={{paddingLeft: 20}} onPress={denyApplicant(applicant)}/>
+                        <TouchableOpacity>
+                          <Icon name="check" size={40} color="#03E833" style={{paddingLeft: 20}} onPress={acceptApplicant(applicant)}/>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                          <Icon name="minus" size={40} color="#03E833" style={{paddingLeft: 20}} onPress={denyApplicant(applicant)}/>
+                        </TouchableOpacity>                    
                     </View>
                 ))}
             </ScrollView>

@@ -7,13 +7,16 @@ import CreatePlayer from './createPlayer.jsx';
 import { NavMenu } from './NavMenu';
 import  AuthMenu from './AuthMenu';
 import Teams from './Teams.jsx';
-import { NewTeam } from './NewTeam.jsx';
+import  NewTeam from './NewTeam.jsx';
 import Team from './Team.jsx';
 import ChangePassword from './ChangePassword.jsx';
 import Chat from './Chat.jsx';
+import Profile from './Profile.jsx';
 import PruebaDownbar from './PruebaDownbar.jsx';
 import { NavigationContainer } from '@react-navigation/native';
 import Escenas from './escenas.jsx'
+import Plays from './Plays.jsx';
+import RealTimeChat from './RealTimeMessage.jsx';
 
 export default function Main() {
     return (

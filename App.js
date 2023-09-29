@@ -10,7 +10,7 @@ import Settings from './Settings';
 import Team from './Team';
 import { NewTeam } from './NewTeam';
 import ChangePassword from './ChangePassword';
-import Plays from './Jugadas'
+import Plays from './Plays'
 import Play from './Play';
 import Profile from './Profile';
 import Terms from './Terms';
@@ -19,7 +19,7 @@ import Chat from './Chat';
 import Applications from './Applications';
 import TermsNoAuth from './TermsNoAuth';
 import { PaperProvider } from 'react-native-paper';
-import Paper from './Paper';
+import CardsList from './Card';
 
 
 function App() {
@@ -42,7 +42,7 @@ function App() {
         <Route path="/profile">
           <Route path="" element={<Profile/>}/>
           <Route path="plays">
-            <Route path="" element={<Plays/>}/>
+            <Route path="" element={<CardsList/>}/>
             <Route path=":id" element={<Play/>}/>
           </Route>
           <Route path="teams">
