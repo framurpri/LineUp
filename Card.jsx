@@ -5,9 +5,10 @@ import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, query, getDocs } from "firebase/firestore"; 
+import { Text } from 'react-native-paper';
 
 
-const CardsList = () => {
+const Teams = () => {
     const [datos, setDatos] = useState({});
     const [teamNames, setTeamNames] = useState([]);
     const [docsIds, setDocsIds] = useState([]);
@@ -18,7 +19,7 @@ const CardsList = () => {
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    const q = query(collection(db, "plays"));
+    const q = query(collection(db, "teams"));
     const asyncQuery = async () => {
       const querySnapshot = await getDocs(q);
     
@@ -43,12 +44,16 @@ const CardsList = () => {
   const { width } = Dimensions.get('window');
 
   return (
+    isLoading ? (
+        <Text style={{justifyContent:'center', alignSelf: 'center'}}>Loading...</Text>
+        ) : (
     <ScrollView contentContainerStyle={styles.container}>
         {Object.entries(datos).map(([clave, valor]) => (
           <>
           <View style={styles.cardContainer}>
             <MyCard
-              id={valor.name}
+              id={valor.team}
+              descripcion={valor.description}
               clave={clave}
               handleExpand={handleExpand}
               deleted={onDelete}
@@ -58,7 +63,8 @@ const CardsList = () => {
           </>
         ))}
       </ScrollView>
-  );
+    )
+  )
 };
 
 const {width,height} = Dimensions.get('window')
@@ -81,4 +87,4 @@ const {width,height} = Dimensions.get('window')
     },
   });
 
-export default CardsList;
+export default Teams;
