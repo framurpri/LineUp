@@ -1,135 +1,242 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, Pressable, SafeAreaView , Image} from 'react-native'
-import { Routes, Route, Link, useParams } from 'react-router-native';
+import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, collection, doc, getDoc, query, where, getDocs, QuerySnapshot } from "firebase/firestore";
-import Icon from 'react-native-vector-icons/FontAwesome'
-import TopBar from './TopBar.jsx'
-import DownBar from './DownBar';
-import MyPlays from './Jugadas';
-import Teams from './Teams';
-import { SegmentedButtons } from 'react-native-paper';
+import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
+import * as ImagePicker from 'expo-image-picker';
+import {SegmentedButtons, Avatar, Text} from 'react-native-paper';
+import CardsList from './Card';
 
-function Profile(){
+const AvatarExample = () => {
+  const [imagenUri, setImagenUri] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [username, setUsername] = useState('');
+  const [value, setValue] = useState('plays');
 
-      const [username, setUsername] = useState('');
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
 
-      const [showPlays, setToggleShowPlays] = useState(false);
+  const q = query(collection(db, "users"), where("email", "==", 'guixe@email.com'));
+  const getUserInfo = async () => {
+    const querySnapshot = await getDocs(q);
+    setUsername(querySnapshot.docs[0].data().username);
+  }
+  getUserInfo();
 
-      const [showTeams, setToggleShowTeams] = useState(false);
-      const [value, setValue] = useState('');
+  const openImagePicker = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+  
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+    }
+  };
+  
+  const handleCameraLaunch = async () => {
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 2],
+      quality: 1,
+    });
+  
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+    }
+  };
 
-      const app = initializeApp(firebaseConfig);
-      const db = getFirestore(app);
-      const auth = getAuth(app);
-   
-      const q = query(collection(db, "users"), where("email", "==", auth.currentUser.email));
-      const getUserInfo = async () => {
-        const querySnapshot = await getDocs(q);
-        setUsername(querySnapshot.docs[0].data().username);
-      }
+  const handleSeleccionarImagen = () => {
+    // Abre el modal para seleccionar una imagen
+    setModalVisible(true);
+  };
 
-      const handleShowPlays = () => {
-        setToggleShowPlays(!showPlays);
-      }
+  const handleCerrarModal = () => {
+    // Cierra el modal sin seleccionar ninguna imagen
+    setModalVisible(false);
+  };
 
-      const handleShowTeams = () => {
-        setToggleShowTeams(!showTeams);
-      }
+  // const handleTomarFoto = () => {
+  //   // Opciones de configuración para la cámara
+  //   const options = {
+  //     title: 'Selecciona una imagen',
+  //     storageOptions: {
+  //       skipBackup: true,
+  //       path: 'images',
+  //     },
+  //   };
 
-      getUserInfo();
+  //   // Abre la cámara o la galería para seleccionar una imagen
+  //   ImagePicker.showImagePicker(options, (response) => {
+  //     if (response.didCancel) {
+  //       // El usuario canceló la selección
+  //       console.log('Selección de imagen cancelada');
+  //     } else if (response.error) {
+  //       // Ocurrió un error al seleccionar la imagen
+  //       console.error('Error al seleccionar la imagen:', response.error);
+  //     } else {
+  //       // Seleccionar la imagen exitosamente
+  //       setImagenUri(response.uri);
+  //       setImagenSeleccionada(true);
+  //       setModalVisible(false); // Cierra el modal después de seleccionar la imagen
+  //     }
+  //   });
+  // };
 
-    return(
-            <View>             
-              <View style={styles.hr}></View>
-              <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <Image source={require('./Resources/pelotaVoley.jpeg')} style={styles.image}/>
-                <Text style={styles.profileUsername}>{username}</Text>
-              </View>
-              <View style={styles.hr}></View>
-              <SafeAreaView style={styles.container}>
-                <SegmentedButtons
-                  value={value}
-                  onValueChange={setValue}
-                  buttons={[
-                  {
-                    value: 'plays',
-                    label: 'My plays',
-                  },
-                  {
-                    value: 'teams',
-                    label: 'My teams',
-                  }
-                  ]}
-                />
-              </SafeAreaView>
-
-                {value=='plays' && (                  
-                  <MyPlays></MyPlays>)}
-              
-
-                {value=='teams' && (                  
-                  <Teams></Teams>)}
+  return (
+    <View style={{flex:1, backgroundColor: '#eeeeee'}}>
+      <View style={styles.containerView}>
+        {selectedImage ? (
+          // Si hay una imagen seleccionada, muestra la imagen
+          <View style={styles.avatarContainer}>
+            <TouchableOpacity onLongPress={openImagePicker}>
+              <Image
+                source={{ uri: selectedImage }}
+                style={styles.imagen}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+            <View style={styles.textView}>
+              <Text style={{fontWeight: 'bold', fontSize: 40, fontStyle: 'italic', textDecorationColor: 'white'}}>{username}</Text>
             </View>
-    )
-}
+          </View>
+        ) : (
+          // Si no hay una imagen seleccionada, muestra el icono "+" y el texto "Agregar imagen"
+            <View style={styles.avatarContainer1}>
+              <TouchableOpacity onPress={openImagePicker}>
+                <Avatar.Icon
+                  style={styles.avatar}
+                  icon="plus"
+                  size={80}
+                />
+              </TouchableOpacity>
+              <Text>Agregar imagen</Text>
+              <View style={styles.textView1}>
+              <Text style={{fontWeight: 'bold', fontSize: 40, fontStyle: 'italic', textDecorationColor: 'white'}}>{username}</Text>              </View>
+            </View>
+        )}
+      </View>
+      <View style={styles.hr}/>
+        <View style={{flex:1}}>
+        <View style={styles.container}>
+          <SegmentedButtons
+            value={value}
+            onValueChange={setValue}
+            buttons={[
+            {
+              value: 'plays',
+              label: 'My plays',
+            },
+            {
+              value: 'teams',
+              label: 'My teams',
+            }
+            ]}
+          />
+        </View>
+        <View style={{flex: 1}}>
+          
+          {value=='plays' && (  
+            <View style={{marginBottom:10, marginTop:20, flex:1}}>                
+              <CardsList/>
+            </View>
+            )}
+
+          {value=='teams' && (                  
+            <Text>Teams</Text>)}
+        </View>
+        
+      </View>
+  </View>
+
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      width: '80%',
-      display: 'flex',
-      alignItems: 'center'
-    },
-    row: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    width: '100%',
-    borderBottomColor: 'gray',
-    
+  imagen: {
+    width: 100,
+    height: 100,
+    borderRadius: 30,
   },
-  image: {
-    width: 40,
-    height: 40,
-    opacity: 1,
-    },
-    staticContainer: {
-      height: 100
-    },
-    subview1: {
-      backgroundColor: 'red',
-    },
-    subview2: {
-      flex: 1,
-      width: 393,
-    },
-    item: {
-      height: 50,
-      borderBottomWidth: 1,
-      borderBottomColor: 'gray',
-      justifyContent: 'center',
-      paddingHorizontal: 16,
-    },
-    subview3: {
-      backgroundColor: 'blue',
-    },
-    hr: {
-      height: 1,
-      width: '100%',
-      borderBottomWidth: 1,
-      borderBottomColor: 'gray',
-    },
-    profileUsername: {
-      paddingTop: 20,
-      paddingBottom: 20,
-      fontSize: 20,
-    },
+  textView: {
+    left:120, 
+    bottom:110, 
+    width: 180, 
+    borderRadius:30, 
+    height:130, 
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  textView1: {
+    left:120, 
+    bottom:130, 
+    width: 180, 
+    borderRadius:30, 
+    height:130, 
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  containerView: {
+    height: 200,
+    width: '85%',
+    borderRadius: 30,
+    alignContent: 'center',
+    marginLeft: 28,
+    marginTop: 50,
+    justifyContent: 'center',
+    backgroundColor: '#A9D0F5'
+  },
+  avatarContainer: {
+    alignItems: 'baseline',
+    marginLeft: 25,
+    marginTop: 20,
+    top: 50
+  },
+  avatarContainer1: {
+    alignItems: 'baseline',
+    marginLeft: 25,
+    marginTop: 20,
+    top: 60
+  },
+  avatar: {
+    backgroundColor: 'gray',
+    width: 100,
+    height: 100,
+    borderRadius: 30,
 
-  });
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  hr: {
+    height: 1,
+    width: '100%',
+    top:5,
+    borderBottomWidth: 1,
+    borderBottomColor: 'gray',
+  },
+  container: {
+    width: '80%',
+    top: 10,
+    display: 'flex',
+    alignSelf:'center',
+    alignItems: 'center',
+  },
+});
 
-export default Profile;
+export default AvatarExample;

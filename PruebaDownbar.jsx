@@ -14,8 +14,8 @@ import AuthMenu from './AuthMenu';
 const Tab = createBottomTabNavigator();
 
 export default function MyComponent( ) {
-  debugger;
-return(
+
+  return(
 
 <Tab.Navigator
       screenOptions={{
@@ -80,7 +80,6 @@ return(
       />
       <Tab.Screen
         name="Community"
-
         component={CommunityScreen}
         options={{
           tabBarLabel: 'Community',
