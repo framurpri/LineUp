@@ -1,33 +1,29 @@
 import React, { useState } from 'react';
-import { View, Image, Text, TouchableHighlight, StyleSheet, Pressable} from 'react-native';
-import { NativeRouter, Routes, Route, Link } from 'react-router-native';
+import { View, Text, StyleSheet, Pressable} from 'react-native';
+import { Link, Route } from 'react-router-native';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signOut } from 'firebase/auth';
 import { getFirestore } from "firebase/firestore"; 
-import Icon from 'react-native-vector-icons/FontAwesome';
-import DownBar from './DownBar';
-import TopBar from './TopBar';
 import { TextInput } from 'react-native-web';
 import Main from './Main';
-import PruebaDownbar from './PruebaDownbar'
 
 const Settings = () => {
 
-const [confirmDeletion, setConfirmDeletion ] = useState('');
+  const [confirmDeletion, setConfirmDeletion ] = useState('');
 
-const [showDeletionInput, setShowDeletionInput ] = useState(false);
+  const [showDeletionInput, setShowDeletionInput ] = useState(false);
 
-const [deletionSucceeded, setDeletionSucceeded ] = useState(false);
+  const [deletionSucceeded, setDeletionSucceeded ] = useState(false);
 
-const [logoutSuccessful, setLogoutSuccessful ] = useState(false);
+  const [logoutSuccessful, setLogoutSuccessful ] = useState(false);
 
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
 
-const handleDeleteUser = () => {
+  const handleDeleteUser = () => {
 
     if(confirmDeletion == 'CONFIRMAR' ){
 
@@ -51,6 +47,8 @@ const handleDeleteUser = () => {
       console.log("-----------ERROR----------")
       console.error(error);
     });
+
+   
   }
 
   if(deletionSucceeded){
@@ -76,9 +74,9 @@ const handleDeleteUser = () => {
           <Link to={{ pathname: '/settings/terms'}} style = {styles.button}>
                 <Text >Términos y Condiciones</Text>
           </Link>
-          <Pressable onPress = {handleLogout} style = {styles.button}>
+          <Link to={{ pathname: '/'}} onPress = {handleLogout} style = {styles.button}>
                 <Text >Salir</Text>
-          </Pressable>
+          </Link>
           <Pressable onPress = {() => {
             setShowDeletionInput(true)
             handleDeleteUser()
