@@ -8,7 +8,7 @@ import { getFirestore, collection, addDoc } from "firebase/firestore";
 import Teams from './Teams';
 import Profile from './Profile';
 
-export function NewTeam() {
+export default function NewTeam() {
 
   const [teamName, setTeamName] = useState('');
   const [description, setDescription] = useState('');

@@ -58,13 +58,12 @@ function Community(){
       const getTeamsByName = async () => {
         setPlayersLoaded(false);
         setTeamsLoaded(false);
-        debugger;
         const q = query(collection(db, "teams"));
         console.log("Au!")
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
           
-          if(doc.data().team.includes(search)){
+          if(doc.data().team.toLowerCase().includes(search.toLowerCase())){
             datos[doc.id] = doc.data();
           }
         })
@@ -82,7 +81,6 @@ function Community(){
       const getPlayersByName = async () => {
         setPlayersLoaded(false);
         setTeamsLoaded(false);
-        debugger; 
         const q = query(collection(db, "users"));
         console.log("Au!")
         const querySnapshot = await getDocs(q);

@@ -13,7 +13,7 @@ import Draggable from "react-native-draggable";
 function visualizacion(){
 
   const [captainEmail, setCaptainEmail] = useState('');
-  const [coord, setCoord] = useState();
+  const [coord, setCoord] = useState([]);
   const [isLoading, setIsLoading] = useState(true); // Estado para indicar si se están cargando los datos
 
   const [extract, setExtract] = useState(
@@ -59,10 +59,10 @@ function visualizacion(){
       setCoord(docSnap.data().scenes);
       setIsLoading(false);
 
-      Object.keys(docSnap.data().scenes[1].coordenada).forEach((refKey, index) => {
+      Object.keys(docSnap.data().scenes[0].coordenada).forEach((refKey, index) => {
         setNumJugadores((prevState) => ({
           ...prevState,
-          [refKey]: Object.keys(docSnap.data().scenes[1].coordenada[refKey]).length,
+          [refKey]: Object.keys(docSnap.data().scenes[0].coordenada[refKey]).length,
         }));
       });
       
@@ -117,12 +117,13 @@ function visualizacion(){
     const sacarCoordenadas = (indicador, clave) =>{
             const coordenadas = [];
             const scenes = Object.entries(coord)
-            console.log(scenes)
-            const keys = Object.keys(coord[1].coordenada)
+            console.log(coord[0])
+            const keys = Object.keys(coord[0].coordenada)
             scenes.forEach((scene) =>{
             keys.forEach((key)=>{
                 if(clave===key){
                     const c = `coordenada${indicador}`;
+                    console.log(scene[1])
                     const coordenada = scene[1].coordenada[clave][c];
                     coordenadas.push(coordenada)
                 }
@@ -164,7 +165,7 @@ function visualizacion(){
     <View style={{flex:1}}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center',}} >
             <View style={styles.view}>
-                <Link to={{ pathname: '/plays'}}>
+                <Link to={{ pathname: '/profile'}}>
                     <Text style={styles.text1}>
                         Return
                     </Text>
@@ -183,7 +184,7 @@ function visualizacion(){
                             .map((_, index) => (
                                 <EnlaceTransiciones ref={refs.S.Refs[`ref${index + 1}`]} key={index} numEscenas={Object.keys(coord).length} coordenadas={sacarCoordenadas(index+1,"S")}>
                                     <Draggable disabled={true} key={index}>
-                                    <Circulo key={index} top={coord[1].coordenada.S[`coordenada${index+1}`][1] - 357.3333435058594} left={(coord[1].coordenada.S[`coordenada${index+1}`][0]) - 218.25} margin={0} width={60} marginTop={6} size={30} marginT={0}>
+                                    <Circulo key={index} top={coord[0].coordenada.S[`coordenada${index+1}`][1] - 357.3333435058594} left={(coord[0].coordenada.S[`coordenada${index+1}`][0]) - 218.25} margin={0} width={60} marginTop={6} size={30} marginT={0}>
                                     <Text key={index}>S</Text>
                                     </Circulo>
                                     </Draggable>
@@ -199,7 +200,7 @@ function visualizacion(){
                             .map((_, index) => (
                                 <EnlaceTransiciones ref={refs.O.Refs[`ref${index + 1}`]} key={index} numEscenas={Object.keys(coord).length} coordenadas={sacarCoordenadas(index+1,"O")}>
                                     <Draggable disabled={true} key={index}>
-                                        <Circulo key={index} top={coord[1].coordenada.O[`coordenada${index+1}`][1] - 357.3333435058594} left={(coord[1].coordenada.O[`coordenada${index+1}`][0]) - 215.2916717529297} margin={0} width={60} marginTop={6} size={30} marginT={0}>
+                                        <Circulo key={index} top={coord[0].coordenada.O[`coordenada${index+1}`][1] - 357.3333435058594} left={(coord[0].coordenada.O[`coordenada${index+1}`][0]) - 215.2916717529297} margin={0} width={60} marginTop={6} size={30} marginT={0}>
                                         <Text key={index}>O</Text>
                                         </Circulo>
                                     </Draggable>
@@ -214,7 +215,7 @@ function visualizacion(){
                             .map((_, index) => (
                                 <EnlaceTransiciones ref={refs.L.Refs[`ref${index + 1}`]} key={index} numEscenas={Object.keys(coord).length} coordenadas={sacarCoordenadas(index+1,"L")}>
                                     <Draggable disabled={true} key={index}>
-                                        <Circulo key={index} top={coord[1].coordenada.L[`coordenada${index+1}`][1] - 357.3333435058594} left={(coord[1].coordenada.L[`coordenada${index+1}`][0]) - 218.98959350585938} margin={0} width={60} marginTop={6} size={30} marginT={0}>
+                                        <Circulo key={index} top={coord[0].coordenada.L[`coordenada${index+1}`][1] - 357.3333435058594} left={(coord[0].coordenada.L[`coordenada${index+1}`][0]) - 218.98959350585938} margin={0} width={60} marginTop={6} size={30} marginT={0}>
                                             <Text key={index}>L</Text>
                                         </Circulo>
                                     </Draggable>
@@ -229,7 +230,7 @@ function visualizacion(){
                             .map((_, index) => (
                                 <EnlaceTransiciones ref={refs.WS.Refs[`ref${index + 1}`]} key={index} numEscenas={Object.keys(coord).length} coordenadas={sacarCoordenadas(index+1,"WS")}>
                                     <Draggable disabled={true} key={index}>
-                                        <Circulo key={index} top={coord[1].coordenada.WS[`coordenada${index+1}`][1] - 357.3333435058594} left={(coord[1].coordenada.WS[`coordenada${index+1}`][0]) - 203.17709350585938} margin={0} width={60} marginTop={9} size={30} marginT={0}>
+                                        <Circulo key={index} top={coord[0].coordenada.WS[`coordenada${index+1}`][1] - 357.3333435058594} left={(coord[0].coordenada.WS[`coordenada${index+1}`][0]) - 203.17709350585938} margin={0} width={60} marginTop={9} size={30} marginT={0}>
                                             <Text key={index}>WS</Text>
                                         </Circulo>
                                     </Draggable>
@@ -244,7 +245,7 @@ function visualizacion(){
                             .map((_, index) => (
                                 <EnlaceTransiciones ref={refs.MB.Refs[`ref${index + 1}`]} key={index} numEscenas={Object.keys(coord).length} coordenadas={sacarCoordenadas(index+1,"MB")}>
                                     <Draggable disabled={true} key={index}>
-                                        <Circulo key={index} top={coord[1].coordenada.MB[`coordenada${index+1}`][1] - 357.3333435058594} left={(coord[1].coordenada.MB[`coordenada${index+1}`][0]) - 202.6875} margin={0} width={60} marginTop={9} size={30} marginT={0}>
+                                        <Circulo key={index} top={coord[0].coordenada.MB[`coordenada${index+1}`][1] - 357.3333435058594} left={(coord[0].coordenada.MB[`coordenada${index+1}`][0]) - 202.6875} margin={0} width={60} marginTop={9} size={30} marginT={0}>
                                             <Text>MB</Text>
                                         </Circulo>
                                     </Draggable>

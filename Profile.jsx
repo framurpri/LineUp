@@ -6,7 +6,9 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
 import * as ImagePicker from 'expo-image-picker';
 import {SegmentedButtons, Avatar, Text} from 'react-native-paper';
-import CardsList from './Card';
+import Plays from './Plays';
+import Teams from './Card';
+import RealTimeChat from './RealTimeMessage';
 
 const AvatarExample = () => {
   const [imagenUri, setImagenUri] = useState(null);
@@ -14,15 +16,17 @@ const AvatarExample = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [username, setUsername] = useState('');
   const [value, setValue] = useState('plays');
+  const [isLoading, setIsLoading] = useState(true)
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   const auth = getAuth(app);
 
-  const q = query(collection(db, "users"), where("email", "==", 'guixe@email.com'));
+  const q = query(collection(db, "users"), where("email", "==", auth.currentUser.email));
   const getUserInfo = async () => {
     const querySnapshot = await getDocs(q);
     setUsername(querySnapshot.docs[0].data().username);
+    setIsLoading(false)
   }
   getUserInfo();
 
@@ -103,7 +107,11 @@ const AvatarExample = () => {
               />
             </TouchableOpacity>
             <View style={styles.textView}>
-              <Text style={{fontWeight: 'bold', fontSize: 40, fontStyle: 'italic', textDecorationColor: 'white'}}>{username}</Text>
+              {isLoading ? (
+                  <Text style={{justifyContent:'center', alignSelf: 'center'}}>Loading...</Text>
+                ) : (
+                <Text style={{fontWeight: 'bold', fontSize: 40, fontStyle: 'italic', textDecorationColor: 'white'}}>{username}</Text>
+              )}
             </View>
           </View>
         ) : (
@@ -144,12 +152,15 @@ const AvatarExample = () => {
           
           {value=='plays' && (  
             <View style={{marginBottom:10, marginTop:20, flex:1}}>                
-              <CardsList/>
+              <Plays/>
             </View>
             )}
 
-          {value=='teams' && (                  
-            <Text>Teams</Text>)}
+          {value=='teams' && (   
+            <View style={{marginBottom:10, marginTop:20, flex:1}}>                               
+              <Teams/>
+            </View>
+            )}
         </View>
         
       </View>
