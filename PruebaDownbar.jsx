@@ -4,6 +4,7 @@ import { CommonActions } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text, BottomNavigation } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Link } from 'react-router-native';
 import Profile from './Profile';
 import Settings from './Settings';
 import Community from './Community';
@@ -13,8 +14,7 @@ import AuthMenu from './AuthMenu';
 
 const Tab = createBottomTabNavigator();
 
-export default function MyComponent( ) {
-  debugger;
+export default function PruebaDownbar( ) {
 return(
 
 <Tab.Navigator
@@ -89,16 +89,17 @@ return(
           },
         }}
       />
-      <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{
-          tabBarLabel: 'Profile',
-          tabBarIcon: ({ focused, color, size }) => {
-            return <Icon name="account" size={size} color={focused?'#F29C46':color} />;
-          },
-        }}
-      />
+      <Link to={{ pathname: '/profile'}}>
+        <Tab.Screen
+          name="Profile"
+          options={{
+            tabBarLabel: 'Profile',
+            tabBarIcon: ({ focused, color, size }) => {
+              return <Icon name="account" size={size} color={focused?'#F29C46':color} />;
+            },
+          }}
+        />
+      </Link>
       <Tab.Screen
         name="Settings"
         component={SettingsScreen}

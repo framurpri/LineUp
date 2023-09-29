@@ -14,11 +14,12 @@ import Chat from './Chat.jsx';
 import PruebaDownbar from './PruebaDownbar.jsx';
 import { NavigationContainer } from '@react-navigation/native';
 import Escenas from './escenas.jsx'
+import BottomBar from './BottomBar.jsx';
 
 export default function Main() {
     return (
         <View style={{ flex: 1 }}>
-            <AuthMenu/>
+            <AuthMenu></AuthMenu>
         </View>
     )
   }

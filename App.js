@@ -20,6 +20,7 @@ import Applications from './Applications';
 import TermsNoAuth from './TermsNoAuth';
 import { PaperProvider } from 'react-native-paper';
 import Paper from './Paper';
+import Home from './Home';
 
 
 function App() {
@@ -33,7 +34,7 @@ function App() {
           <Route path="login" element={<Login />}/>
           <Route path="registro" element={<Registro />}/>
         </Route>
-        <Route path="/home" element={<Basic/>}/>
+        <Route path="/home" element={<Home/>}/>
         <Route path="/escenas" element={<Escenas/>}/>
         <Route path="/community">
           <Route path="" element={<Community/>}/>

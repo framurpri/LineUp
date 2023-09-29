@@ -9,6 +9,8 @@ import { getFirestore, collection, query, where, getDocs } from "firebase/firest
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import TopBar from './TopBar.jsx'
 import DownBar from './DownBar';
+import BottomBar from './BottomBar';
+import HeaderBar from './HeaderBar';
 
 
 function Community(){
@@ -106,10 +108,10 @@ function Community(){
       
     return(
       <View style={styles.container}>
-          <View style={{display: "flex", alignItems: "center"}}> 
-            
-          </View>
-          <View style={{display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: 'center', marginTop: 10}}>
+        
+          <HeaderBar></HeaderBar>
+        
+          <View style={{flex: 1, display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: 'center'}}>
             <TextInput
               placeholder="Yuji Nishida..."
               onChangeText={setSearch}
@@ -124,36 +126,36 @@ function Community(){
             }
             />
           </View>
-          <View style={{display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: 'center', marginTop: 10}}>
-          <View style={{display: 'flex', flexDirection: "column"}}>
-          <IconButton
-            icon="account"
-            iconColor="#F29C46"
-            containerColor="#303747"
-            size={40}
-            style={{opacity: playerSearch?1:0.7}}
-            onPress={() => {          
-              setPlayerSearch(true)
-              setTeamSearch(false)
-            }
-            }
-            />
-            <Text>Jugador</Text>
+          <View style={{display: 'flex', flex: 1, flexDirection: "row", alignItems: "center", justifyContent: 'center', marginTop: 10}}>
+            <View style={{display: 'flex',flex: 1, flexDirection: "column"}}>
+              <IconButton
+              icon="account"
+              iconColor="#F29C46"
+              containerColor="#303747"
+              size={40}
+              style={{opacity: playerSearch?1:0.7}}
+              onPress={() => {          
+                setPlayerSearch(true)
+                setTeamSearch(false)
+              }
+              }
+              />
+              <Text>Jugador</Text>
             </View>
             <View style={{display: 'flex', flexDirection: "column"}}>
-            <IconButton
-            icon="account-group"
-            iconColor="#F29C46"
-            containerColor="#303747"
-            size={40}
-            style={{opacity: teamSearch?1:0.7}}
-            onPress={() => {
-              setTeamSearch(true)
-              setPlayerSearch(false)
-            }
-            }
-            />
-            <Text>Equipo</Text>
+              <IconButton
+              icon="account-group"
+              iconColor="#F29C46"
+              containerColor="#303747"
+              size={40}
+              style={{opacity: teamSearch?1:0.7}}
+              onPress={() => {
+                setTeamSearch(true)
+                setPlayerSearch(false)
+              }
+              }
+              />
+              <Text>Equipo</Text>
             </View>
           </View>  
           <View>
@@ -168,7 +170,6 @@ function Community(){
                 )}
             </View>
           </View>
-
           <View>
             {teamsLoaded && (
               <List.Section>
@@ -204,6 +205,7 @@ function Community(){
 
             
           </View>
+          <BottomBar></BottomBar>
   </View>
     )
 }
@@ -220,7 +222,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     width: '100%',
     borderBottomColor: 'gray',
-    
   },
     staticContainer: {
       height: 100

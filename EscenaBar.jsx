@@ -131,7 +131,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
     return () => {
       // Restaurar el scroll cuando el componente se desmonte
       document.body.style.overflow = 'auto';
-    };
+  HeaderBar.jsxHeaderBar.jsx  };
   }, []);
   
   // const getUserInfo = async () => {

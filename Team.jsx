@@ -10,6 +10,9 @@ import TopBar from './TopBar.jsx'
 import DownBar from './DownBar';
 import Chat from './Chat.jsx';
 import Applications from './Applications.jsx';
+import PruebaDownbar from './PruebaDownbar';
+import { NavigationContainer } from '@react-navigation/native';
+import BottomBar from './BottomBar';
 
 function Team(){
 
@@ -142,23 +145,7 @@ function Team(){
 
             }
             </View>
-
-            <View style={styles.staticContainer}>
-              <DownBar>
-                  <Link to={{ pathname: '/escenas'}}>
-                      <Icon name="film" size={25} color="#900"/>
-                  </Link>
-                  <Link to={{pathname: '/community'}}>
-                      <Icon name="group" size={25} color="#900" />
-                  </Link>
-                  <Link to={{pathname: '/profile'}}>
-                      <Icon name="user" size={25} color="#900" />
-                  </Link>
-                  <Link to={{ pathname: '/settings'}}>
-                      <Icon name="cog" size={25} color="#900" />
-                  </Link>
-              </DownBar>
-            </View>
+            <BottomBar/>
       </View>
     )
 }

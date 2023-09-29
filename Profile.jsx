@@ -11,14 +11,12 @@ import DownBar from './DownBar';
 import MyPlays from './Jugadas';
 import Teams from './Teams';
 import { SegmentedButtons } from 'react-native-paper';
+import BottomBar from './BottomBar';
+import HeaderBar from './HeaderBar';
 
 function Profile(){
 
       const [username, setUsername] = useState('');
-
-      const [showPlays, setToggleShowPlays] = useState(false);
-
-      const [showTeams, setToggleShowTeams] = useState(false);
       const [value, setValue] = useState('');
 
       const app = initializeApp(firebaseConfig);
@@ -42,14 +40,15 @@ function Profile(){
       getUserInfo();
 
     return(
-            <View>             
+            <View style={styles.container}>
+              <HeaderBar></HeaderBar>             
               <View style={styles.hr}></View>
-              <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <Image source={require('./Resources/pelotaVoley.jpeg')} style={styles.image}/>
                 <Text style={styles.profileUsername}>{username}</Text>
               </View>
               <View style={styles.hr}></View>
-              <SafeAreaView style={styles.container}>
+              <SafeAreaView style={styles.container2}>
                 <SegmentedButtons
                   value={value}
                   onValueChange={setValue}
@@ -72,12 +71,16 @@ function Profile(){
 
                 {value=='teams' && (                  
                   <Teams></Teams>)}
+                  <BottomBar></BottomBar>
             </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
+      flex: 1,
+    },
+    container2: {
       flex: 1,
       width: '80%',
       display: 'flex',
@@ -119,6 +122,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'blue',
     },
     hr: {
+      flex: 1,
       height: 1,
       width: '100%',
       borderBottomWidth: 1,

@@ -11,6 +11,8 @@ import TopBar from './TopBar';
 import { TextInput } from 'react-native-web';
 import Main from './Main';
 import PruebaDownbar from './PruebaDownbar'
+import BottomBar from './BottomBar';
+import HeaderBar from './HeaderBar';
 
 const Settings = () => {
 
@@ -66,6 +68,7 @@ const handleDeleteUser = () => {
 
     return (
         <View style={styles.container}>
+          <HeaderBar></HeaderBar>
         
     <View style={{ height: 650, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
 
@@ -89,6 +92,7 @@ const handleDeleteUser = () => {
 
           <TextInput onChangeText = {setConfirmDeletion} placeholder = "Escriba CONFIRMAR" style = {{opacity: showDeletionInput ? 1 : 0}}/>
         </View>
+        <BottomBar></BottomBar>
 </View>
       
     );
