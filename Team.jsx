@@ -20,7 +20,7 @@ function Team(){
       const [teamName, setTeamName] = useState('');
       const [captainEmail, setCaptainEmail] = useState('');
       const [captainName, setCaptainName] = useState('');
-      const [teamPlayers, setTeamPlayers] = useState();
+      const [teamPlayers, setTeamPlayers] = useState([]);
       const [teamDoc, setTeamDoc] = useState("");
       const [teamApplicants, setTeamApplicants] = useState([]);
 
@@ -33,7 +33,7 @@ function Team(){
 
 
       const retrieveDocument = async () => {
-        
+        debugger;
         console.log(id)
         const docRef = doc(db, "teams", id);
         const docSnap = await getDoc(docRef);
@@ -91,7 +91,7 @@ function Team(){
       }
 
       function hasNotApplied(){
-        return !teamApplicants.includes(auth.currentUser.email);
+        return !teamApplicants.includes(auth.currentUser.email)  && !teamPlayers.includes(auth.currentUser.email);;
       }
 
       function userIsCaptain(){
@@ -111,7 +111,7 @@ function Team(){
               <Link to={{pathname: `/profile/teams/${id}/chat`}}>               
                 <Icon name="comments" size={40} color="#c9d8ff" style={{paddingLeft: 20}}/>
               </Link>
-              {hasNotApplied() ? (
+              {hasNotApplied() && !userIsCaptain() ?(
                 <Icon name="user-plus" size={40} color="#c9d8ff" onPress={applyToTeam} />
               ) : null
               }

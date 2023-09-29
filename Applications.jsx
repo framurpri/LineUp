@@ -83,10 +83,10 @@ export default function Applications() {
                     <View key={applicant} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                         <Text>{applicant}</Text>
                         <TouchableOpacity>
-                          <Icon name="check" size={40} color="#03E833" style={{paddingLeft: 20}} onPress={acceptApplicant(applicant)}/>
+                          <Icon name="check" size={40} color="#03E833" style={{paddingLeft: 20}} onPress={() => acceptApplicant(applicant)}/>
                         </TouchableOpacity>
                         <TouchableOpacity>
-                          <Icon name="minus" size={40} color="#03E833" style={{paddingLeft: 20}} onPress={denyApplicant(applicant)}/>
+                          <Icon name="minus" size={40} color="#E80311" style={{paddingLeft: 20}} onPress={() => denyApplicant(applicant)}/>
                         </TouchableOpacity>                    
                     </View>
                 ))}
