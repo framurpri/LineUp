@@ -91,26 +91,30 @@ function Team(){
       }
 
       function hasNotApplied(){
-        return !teamApplicants.includes(auth.currentUser.email)  && !teamPlayers.includes(auth.currentUser.email);;
+        return !teamApplicants.includes(auth.currentUser.email)  && !teamPlayers.includes(auth.currentUser.email);
       }
 
       function userIsCaptain(){
         return captainEmail == auth.currentUser.email;
       }
 
+      function isPartOfTheTeam(){
+        return teamPlayers.includes(auth.currentUser.email);
+      }
+
     return(
-      <View style={styles.container}>
-                <View>
-                    <TopBar />
-                </View>           
+      <View style={styles.container}>       
             <View style={{ height: 650, alignItems: 'center', width: '100%' }}>
             <View style={styles.hr}></View>
             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
               <Image source={require('./Resources/voleyballTeam.png')} style={styles.image}/>
               <Text style={styles.teamAndCaptainText}>{teamName}</Text>
-              <Link to={{pathname: `/profile/teams/${id}/chat`}}>               
-                <Icon name="comments" size={40} color="#c9d8ff" style={{paddingLeft: 20}}/>
-              </Link>
+              {isPartOfTheTeam() ? (
+                <Link to={{pathname: `/profile/teams/${id}/chat`}}>               
+                  <Icon name="comments" size={40} color="#c9d8ff" style={{paddingLeft: 20}}/>
+                </Link>
+              ) : null 
+              }
               {hasNotApplied() && !userIsCaptain() ?(
                 <Icon name="user-plus" size={40} color="#c9d8ff" onPress={applyToTeam} />
               ) : null
@@ -141,23 +145,6 @@ function Team(){
             )
 
             }
-            </View>
-
-            <View style={styles.staticContainer}>
-              <DownBar>
-                  <Link to={{ pathname: '/escenas'}}>
-                      <Icon name="film" size={25} color="#900"/>
-                  </Link>
-                  <Link to={{pathname: '/community'}}>
-                      <Icon name="group" size={25} color="#900" />
-                  </Link>
-                  <Link to={{pathname: '/profile'}}>
-                      <Icon name="user" size={25} color="#900" />
-                  </Link>
-                  <Link to={{ pathname: '/settings'}}>
-                      <Icon name="cog" size={25} color="#900" />
-                  </Link>
-              </DownBar>
             </View>
       </View>
     )
