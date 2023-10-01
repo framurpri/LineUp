@@ -2,6 +2,7 @@ import { View, StyleSheet, Dimensions, Text } from "react-native"
 import { Link } from 'react-router-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { Children } from "react";
+import HomeScreen from "./Home";
 
 function Bar(props){
 
@@ -10,7 +11,11 @@ function Bar(props){
     return(
         <View style={styles.view}>
             <Link to={{ pathname: '/home'}}>
-                <Icon name="home" size={60} color={hexToRGBA('#99CCFF')}/>
+                <View style={{left: 20}}>
+                    <Text style={styles.text1}>
+                        RETURN
+                    </Text>
+                </View>
             </Link>
             <View style={styles.text}>
             <Text style={styles.text1}>
@@ -47,7 +52,7 @@ const styles = StyleSheet.create({
         tintColor: hexToRGBA('#99CCFF'),
     },
     text: {
-        left: width*0.54,
+        left: width*0.4,
     },
     text1: {
         fontStyle: 'italic',

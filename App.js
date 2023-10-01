@@ -20,6 +20,8 @@ import Applications from './Applications';
 import TermsNoAuth from './TermsNoAuth';
 import { PaperProvider } from 'react-native-paper';
 import CardsList from './Card';
+import RealTimeChat from './RealTimeMessage';
+import HomeScreen from './Home';
 
 
 function App() {
@@ -33,7 +35,7 @@ function App() {
           <Route path="login" element={<Login />}/>
           <Route path="registro" element={<Registro />}/>
         </Route>
-        <Route path="/home" element={<Basic/>}/>
+        <Route path="/home" element={<HomeScreen/>}/>
         <Route path="/escenas" element={<Escenas/>}/>
         <Route path="/community">
           <Route path="" element={<Community/>}/>
@@ -49,7 +51,7 @@ function App() {
             <Route path="" element={<Teams/>}/>
             <Route path=":id">
               <Route path=""  element={<Team/>}/>
-              <Route path="chat" element={<Chat/>}/>
+              <Route path="chat" element={<RealTimeChat/>}/>
               <Route path="applications" element={<Applications/>}/>
             </Route>
         </Route>
