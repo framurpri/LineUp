@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Link } from 'react-router-native';
 
 const HomeScreen = () => {
   return (
@@ -13,7 +14,9 @@ const HomeScreen = () => {
         <Text style={styles.title}>¡Bienvenido a Volleyball App!</Text>
         <Text style={styles.subtitle}>Descubre el emocionante mundo del volleyball</Text>
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Explorar</Text>
+          <Link to={{pathname: '/escenas'}}>
+            <Text style={styles.buttonText}>Explorar</Text>
+          </Link>
         </TouchableOpacity>
       </View>
     </View>

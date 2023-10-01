@@ -29,6 +29,8 @@ export default function Applications() {
     const [docRef, setDocRef] = useState('');
     const [teamApplicants, setTeamApplicants] = useState([]);
     const [teamPlayers, setTeamPlayers] = useState([]);
+    const [applicants, setApplicants] = useState([]);
+
    
     const retrieveTeamDocument = async () => {
         
@@ -45,6 +47,7 @@ export default function Applications() {
         setTeamPlayers(docSnap.data().players);
         console.log(docSnap.data().applicants);
         setDocRef(docRef);
+        setApplicants(docSnap.data().applicants);
       }
 
       useEffect(() => {
@@ -63,6 +66,9 @@ export default function Applications() {
           players : newPlayer,
           applicants : updatedApplicants
         })
+        setTeamPlayers(newPlayer);
+        setTeamApplicants(updatedApplicants);
+        setApplicants(updatedApplicants);
       }
 
       async function denyApplicant(applicant){
@@ -73,13 +79,14 @@ export default function Applications() {
         await updateDoc(docRef, {
             applicants : updatedApplicants
         })
+        setTeamApplicants(updatedApplicants);
+        setApplicants(updatedApplicants);
       }
 
     return (
         <View style={{ flex: 1 }}>
-            <Text>Hola</Text>
             <ScrollView>
-                {teamApplicants.map(applicant => (
+                {applicants.map(applicant => (
                     <View key={applicant} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                         <Text>{applicant}</Text>
                         <TouchableOpacity>
