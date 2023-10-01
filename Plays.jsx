@@ -4,7 +4,7 @@ import MyCard from './CustomCard';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, collection, query, getDocs } from "firebase/firestore"; 
+import { getFirestore, collection, query, getDocs, where } from "firebase/firestore"; 
 import { Text } from 'react-native-paper';
 
 
@@ -19,17 +19,31 @@ const Plays = () => {
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    const q = query(collection(db, "plays"));
-    const asyncQuery = async () => {
-      const querySnapshot = await getDocs(q);
-    
-      querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots       
-        datos[doc.id] = doc.data();
-        setIsLoading(false); // Se actualiza el estado para indicar que los datos se han cargado
-      });
-    };    
-    asyncQuery()
+  const q = query(collection(db, "plays"), where("designer", "==", auth.currentUser.email));
+  const asyncQuery = async () => {
+      try {
+        const querySnapshot = await getDocs(q);
+        
+        if (!querySnapshot.empty) {
+          // La colección no está vacía
+          querySnapshot.forEach((doc) => {
+            datos[doc.id] = doc.data();
+          });
+          setIsLoading(false); // Se actualiza el estado para indicar que los datos se han cargado
+        } else {
+          // La colección está vacía
+          console.log('La colección está vacía');
+          setIsLoading(false); // Se actualiza el estado, pero puedes manejarlo de acuerdo a tus necesidades
+        }
+      } catch (error) {
+        console.error('Error al consultar la colección:', error);
+        setIsLoading(false); // Maneja el error según tus necesidades
+      }
+    };
+
+    // Llama a la función asyncQuery para realizar la consulta
+    asyncQuery();
+
 
   const handleExpand = (id) => {
     setExpandedCardId((prevId) => (prevId === id ? null : id));
@@ -54,6 +68,8 @@ const Plays = () => {
             <MyCard
               id={valor.name}
               clave={clave}
+              diff={'plays'}
+              descripcion={valor.descripcion}
               handleExpand={handleExpand}
               deleted={onDelete}
               isExpanded={expandedCardId === clave}
