@@ -55,6 +55,7 @@ const Teams = () => {
               id={valor.team}
               descripcion={valor.description}
               clave={clave}
+              diff={'teams'}
               handleExpand={handleExpand}
               deleted={onDelete}
               isExpanded={expandedCardId === clave}
