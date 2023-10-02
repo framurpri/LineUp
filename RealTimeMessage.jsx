@@ -4,7 +4,7 @@ import { GiftedChat } from 'react-native-gifted-chat'
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-native';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import AvatarExample from './Profile';
 import { Link } from 'react-router-native';
