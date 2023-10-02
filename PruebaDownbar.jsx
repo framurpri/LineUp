@@ -7,15 +7,13 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Profile from './Profile';
 import Settings from './Settings';
 import Community from './Community';
-import Escenas from './escenas';
-import Main from './Main';
-import AuthMenu from './AuthMenu';
+import HomeScreen from './Home';
 
 const Tab = createBottomTabNavigator();
 
 export default function MyComponent( ) {
-  debugger;
-return(
+
+  return(
 
 <Tab.Navigator
       screenOptions={{
@@ -70,17 +68,16 @@ return(
     >
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeScreen1}
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({ focused, color, size }) => {
-            return <Icon name="movie-open" size={size} color={focused?'#F29C46':color}/>;
+            return <Icon name="home" size={size} color={focused?'#F29C46':color}/>;
           },
         }}
       />
       <Tab.Screen
         name="Community"
-
         component={CommunityScreen}
         options={{
           tabBarLabel: 'Community',
@@ -119,9 +116,9 @@ return(
 
 
 
-function HomeScreen() {
+function HomeScreen1() {
   return (
-    <Escenas></Escenas>
+    <HomeScreen></HomeScreen>
   );
 }
 function CommunityScreen() {
@@ -137,7 +134,7 @@ function ProfileScreen() {
 }
 function SettingsScreen() {
   return (
-      <Settings></Settings>
+      <Settings/>
   );
 }
 

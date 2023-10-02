@@ -1,10 +1,13 @@
 import React, { useState , useEffect } from 'react';
-import { View, StyleSheet, Text, Pressable, ScrollView, Image } from 'react-native'
+import { View, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native'
 import { Routes, Route, Link, useParams } from 'react-router-native';
+import { Avatar, Text} from 'react-native-paper';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, doc, getDoc, query, where, getDocs, updateDoc } from "firebase/firestore";
+import { List } from 'react-native-paper';
+import * as ImagePicker from 'expo-image-picker';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import TopBar from './TopBar.jsx'
 import DownBar from './DownBar';
@@ -20,9 +23,12 @@ function Team(){
       const [teamName, setTeamName] = useState('');
       const [captainEmail, setCaptainEmail] = useState('');
       const [captainName, setCaptainName] = useState('');
-      const [teamPlayers, setTeamPlayers] = useState();
+      const [teamPlayers, setTeamPlayers] = useState([]);
       const [teamDoc, setTeamDoc] = useState("");
       const [teamApplicants, setTeamApplicants] = useState([]);
+      const [applied, setApplied] = useState(false);
+      const [selectedImage, setSelectedImage] = useState(null);
+      const [isLoading, setIsLoading] = useState(true)
 
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
@@ -30,30 +36,7 @@ function Team(){
 
       const params = useParams();
       const { id } = params;
-
-
-      const retrieveDocument = async () => {
-        
-        console.log(id)
-        const docRef = doc(db, "teams", id);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          console.log("Document data:", docSnap.data());
-        } else {
-          // docSnap.data() will be undefined in this case
-          console.log("No such document!");
-        }
-        setTeamDoc(docSnap.ref);
-        setTeamName(docSnap.data().team);
-        setCaptainEmail(docSnap.data().userEmail);
-        console.log(docSnap.data().players)
-        setTeamPlayers(docSnap.data().players);
-        console.log(docSnap.data().applicants);
-        setTeamApplicants(docSnap.data().applicants);
-        console.log(teamApplicants); //Esta línea no se printea , no entiendo por qué
-        //getCaptainInfo();
-      }
-
+     
       useEffect(() => {
         retrieveDocument();
       }, [])
@@ -72,6 +55,48 @@ function Team(){
         }
       }, [captainEmail])
 
+      useEffect(() => {
+        console.log('teamApplicants ha cambiado:', teamApplicants);
+        if(teamApplicants.includes(auth.currentUser.email) || teamPlayers.includes(auth.currentUser.email)){
+          setApplied(true);
+        }
+      }, [teamApplicants]);
+
+      const retrieveDocument = async () => {
+        console.log(id)
+        const docRef = doc(db, "teams", id);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data());
+        } else {
+          // docSnap.data() will be undefined in this case
+          console.log("No such document!");
+        }
+        setTeamDoc(docSnap.ref);
+        setTeamName(docSnap.data().team);
+        setCaptainEmail(docSnap.data().userEmail);
+        setIsLoading(false);
+        console.log(docSnap.data().players)
+        setTeamPlayers(docSnap.data().players);
+        console.log(docSnap.data().applicants);
+        setTeamApplicants(docSnap.data().applicants);
+        console.log(teamApplicants); //Esta línea no se printea , no entiendo por qué
+        //getCaptainInfo();
+      }
+
+      const openImagePicker = async () => {
+        const result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: true,
+          aspect: [1, 1],
+          quality: 1,
+        });
+      
+        if (!result.canceled) {
+          setSelectedImage(result.assets[0].uri);
+        }
+      };
+
       const getCaptainInfo = async () => {
         const q = query(collection(db, "users"), where("email", "==", captainEmail));
         const querySnapshot = await getDocs(q);
@@ -82,83 +107,103 @@ function Team(){
       async function applyToTeam (){
         let newApplicants = [];
         newApplicants = teamApplicants;
-        newApplicants.push(auth.currentUser.email);
-        await updateDoc(teamDoc, {
-          applicants : newApplicants
-        })
-        console.log(newApplicants);
-        console.log("Update succesful!");
-      }
-
-      function hasNotApplied(){
-        return !teamApplicants.includes(auth.currentUser.email);
+        if(!newApplicants.includes(auth.currentUser.email)){
+          newApplicants.push(auth.currentUser.email);
+          await updateDoc(teamDoc, {
+            applicants : newApplicants
+          })
+          setTeamApplicants(newApplicants);
+          console.log(newApplicants);
+          console.log("Update succesful!");
+        }
       }
 
       function userIsCaptain(){
         return captainEmail == auth.currentUser.email;
       }
 
+      function isPartOfTheTeam(){
+        return teamPlayers.includes(auth.currentUser.email);
+      }
+
     return(
-      <View style={styles.container}>
-                <View>
-                    <TopBar />
-                </View>           
-            <View style={{ height: 650, alignItems: 'center', width: '100%' }}>
-            <View style={styles.hr}></View>
-            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-              <Image source={require('./Resources/voleyballTeam.png')} style={styles.image}/>
-              <Text style={styles.teamAndCaptainText}>{teamName}</Text>
-              <Link to={{pathname: `/profile/teams/${id}/chat`}}>               
-                <Icon name="comments" size={40} color="#c9d8ff" style={{paddingLeft: 20}}/>
-              </Link>
-              {hasNotApplied() ? (
-                <Icon name="user-plus" size={40} color="#c9d8ff" onPress={applyToTeam} />
-              ) : null
-              }
-              {userIsCaptain() ? (
-                <Link to={{pathname: `/profile/teams/${id}/applications`}}>
-                  <Icon name="envelope" size={40} color="#c9d8ff"/>
-                </Link>
-              ) : null
-              }
+      <View style={styles.container}>       
+        <View style={styles.topContainer}>
+          <View style={styles.leftContainer}>
+            <View style={styles.avatarContainer}>
+              {selectedImage ? (
+                // Si hay una imagen seleccionada, muestra la imagen
+                  <TouchableOpacity onLongPress={openImagePicker}>
+                    <Image
+                      source={{ uri: selectedImage }}
+                      style={styles.imagen}
+                      resizeMode="contain"
+                    />
+                  </TouchableOpacity>
+              ) : (
+              // Si no hay una imagen seleccionada, muestra el icono "+" y el texto "Agregar imagen"
+                <>
+                  <TouchableOpacity onPress={openImagePicker}>
+                    <Avatar.Icon
+                      style={styles.avatar}
+                      icon="plus"
+                      size={80}
+                    />
+                  </TouchableOpacity>
+                  <Text style={{color: 'white'}}>Agregar imagen</Text>
+                </>
+                  )}
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-              <Image source={require('./Resources/voleyballCaptain.png')} style={styles.image2}/>
-              <Text style={styles.teamAndCaptainText}>Capitán: {captainName}</Text>
+          </View>
+          <View style={styles.rightContainer}>
+            <View style={styles.teamNameContainer}>
+                  {isLoading ? (
+                    <Text style={{justifyContent:'center', alignSelf: 'center', color: 'white'}}>Loading...</Text>
+                    ) : (
+                    <Text style={{fontWeight: 'bold', fontStyle: 'italic', color: 'white', fontSize: 30}}>{teamName}</Text>
+                  )}
             </View>
-            <View style={styles.hr}></View>
+            <View style={styles.buttonsContainer}>
+                {isPartOfTheTeam() ? (
+                  <Link to={{pathname: `/profile/teams/${id}/chat`}}>               
+                    <Icon name="comments" size={40} color="#c9d8ff"/>
+                  </Link>
+                ) : null 
+                }
+                {!applied && !userIsCaptain() ?(
+                  <Icon name="user-plus" size={40} color="#c9d8ff" onPress={applyToTeam} />
+                ) : null
+                }
+                {userIsCaptain() ? (
+                  <Link to={{pathname: `/profile/teams/${id}/applications`}}>
+                    <Icon name="envelope" size={40} color="#c9d8ff"/>
+                  </Link>
+                ) : null
+                }
+            </View>
+          </View>
+        </View>
+        <View style={styles.bottomContainer}>
             { playersLoaded && (
-              <View>
-                <Text>Jugadores</Text>
-                <ScrollView>
+              <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={{fontSize: 25, marginTop: 20}}>Jugadores</Text>
+                <ScrollView style={{width: '90%'}}>
                   {teamPlayers.map((player) =>(
                     <View key={player} style={styles.row}>
-                      <Text style={{ fontSize: 20 }}>{player}</Text>
+                      <List.Item
+                        title={player}
+                        description="Aquí podemos poner la posición"
+                        style={{width: '100%', flex: 1, justifyContent: 'center', marginLeft: 30}}
+                        left={props => <List.Icon {...props} icon="account" style={{color: '#303747'}}/>}
+                      />
                     </View>
                   ))}
                 </ScrollView>
               </View>
+             
             )
-
-            }
-            </View>
-
-            <View style={styles.staticContainer}>
-              <DownBar>
-                  <Link to={{ pathname: '/escenas'}}>
-                      <Icon name="film" size={25} color="#900"/>
-                  </Link>
-                  <Link to={{pathname: '/community'}}>
-                      <Icon name="group" size={25} color="#900" />
-                  </Link>
-                  <Link to={{pathname: '/profile'}}>
-                      <Icon name="user" size={25} color="#900" />
-                  </Link>
-                  <Link to={{ pathname: '/settings'}}>
-                      <Icon name="cog" size={25} color="#900" />
-                  </Link>
-              </DownBar>
-            </View>
+          }
+        </View>
       </View>
     )
 }
@@ -166,58 +211,70 @@ function Team(){
 const styles = StyleSheet.create({
     container: {
       flex: 1,
+      flexDirection: 'column'
+    },
+    topContainer: {
+      flex: 2.5,
+      flexDirection: 'row',
+      backgroundColor: '#303747'
+    },
+    bottomContainer: {
+      flex: 7.5,
+      backgroundColor: '#FFF4E8'
+    },
+    leftContainer: {
+      flex: 3.5,
+      backgroundColor: '#303747',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    rightContainer: {
+      flex: 6.5,
+      backgroundColor: '#303747',
+      flexDirection: 'column',
+    },
+    avatarContainer: {
+      flex: 1,
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      
+    },
+    teamNameContainer: {
+      flex: 1,
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '50%'
+    },
+    buttonsContainer: {
+      flex: 1,
+      width: '100%',
+      height: '50%',
+      flexDirection: 'row',
+      justifyContent: 'space-evenly',
+      alignItems: 'center'
+    },
+    imagen: {
+      width: 100,
+      height: 100,
+      borderRadius: 30,
+    },
+    avatar: {
+      backgroundColor: 'gray',
+      width: 100,
+      height: 100,
+      borderRadius: 30,
     },
     row: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    width: '100%',
-    borderBottomColor: 'gray',
-    
-  },
-    staticContainer: {
-      height: 100
-    },
-    subview1: {
-      backgroundColor: 'red',
-    },
-    subview2: {
       flex: 1,
-      width: 393,
-    },
-    item: {
-      height: 50,
-      borderBottomWidth: 1,
-      borderBottomColor: 'gray',
-      justifyContent: 'center',
-      paddingHorizontal: 16,
-    },
-    subview3: {
-      backgroundColor: 'blue',
-    },
-    hr: {
-      height: 1,
       width: '100%',
-      borderBottomWidth: 1,
-      borderBottomColor: 'gray',
-    },
-    teamAndCaptainText: {
-      paddingTop: 20,
-      paddingBottom: 20,
-      fontSize: 20,
-    },
-    image: {
-      width: 40,
-      height: 40,
-      opacity: 1,
-      },
-      image2: {
-        width: 70,
-        height: 70,
-        opacity: 1,
-        },
-  });
+      backgroundColor: '#F29C46',
+      borderRadius: 10,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginBottom: 7,
+    }
+  })
 
 export default Team;

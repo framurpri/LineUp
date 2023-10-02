@@ -16,7 +16,7 @@ import { firebaseConfig } from './firebase-config.js';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, doc, getDoc, query, where, getDocs, updateDoc } from "firebase/firestore";
-import { ScrollView } from 'react-native-web';
+import { ScrollView, TouchableOpacity } from 'react-native-web';
 
 
 export default function Applications() {
@@ -29,6 +29,8 @@ export default function Applications() {
     const [docRef, setDocRef] = useState('');
     const [teamApplicants, setTeamApplicants] = useState([]);
     const [teamPlayers, setTeamPlayers] = useState([]);
+    const [applicants, setApplicants] = useState([]);
+
    
     const retrieveTeamDocument = async () => {
         
@@ -45,6 +47,7 @@ export default function Applications() {
         setTeamPlayers(docSnap.data().players);
         console.log(docSnap.data().applicants);
         setDocRef(docRef);
+        setApplicants(docSnap.data().applicants);
       }
 
       useEffect(() => {
@@ -63,6 +66,9 @@ export default function Applications() {
           players : newPlayer,
           applicants : updatedApplicants
         })
+        setTeamPlayers(newPlayer);
+        setTeamApplicants(updatedApplicants);
+        setApplicants(updatedApplicants);
       }
 
       async function denyApplicant(applicant){
@@ -73,17 +79,22 @@ export default function Applications() {
         await updateDoc(docRef, {
             applicants : updatedApplicants
         })
+        setTeamApplicants(updatedApplicants);
+        setApplicants(updatedApplicants);
       }
 
     return (
         <View style={{ flex: 1 }}>
-            <Text>Hola</Text>
             <ScrollView>
-                {teamApplicants.map(applicant => (
+                {applicants.map(applicant => (
                     <View key={applicant} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                         <Text>{applicant}</Text>
-                        <Icon name="check" size={40} color="#03E833" style={{paddingLeft: 20}} onPress={acceptApplicant(applicant)}/>
-                        <Icon name="minus" size={40} color="#E80311" style={{paddingLeft: 20}} onPress={denyApplicant(applicant)}/>
+                        <TouchableOpacity>
+                          <Icon name="check" size={40} color="#03E833" style={{paddingLeft: 20}} onPress={() => acceptApplicant(applicant)}/>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                          <Icon name="minus" size={40} color="#E80311" style={{paddingLeft: 20}} onPress={() => denyApplicant(applicant)}/>
+                        </TouchableOpacity>                    
                     </View>
                 ))}
             </ScrollView>
