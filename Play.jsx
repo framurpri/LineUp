@@ -104,6 +104,11 @@ function visualizacion(){
             ref2: useRef(null),
           },
         },
+        B: {
+          Refs: {
+            ref1: useRef(null),
+          },
+        },
     }
 
 
@@ -185,6 +190,13 @@ function visualizacion(){
                     <div>Loading...</div> // Muestra el mensaje de carga mientras se obtienen los datos
                 ) : (
                 <View style={{ bottom: 500, flex: 0, flexDirection: 'row', position: 'absolute' }}>
+                    
+                    <EnlaceTransiciones ref={refs.B.Refs[`ref${1}`]} speed={values[currentIndex]} numEscenas={Object.keys(coord).length} coordenadas={sacarCoordenadas(1,"B")}>
+                      <Draggable disabled={true}>
+                            <Image style={{width:60, height:60, top: (coord[0].coordenada.B[`coordenada${1}`][1] - 351.3333435058594), left:((coord[0].coordenada.B[`coordenada${1}`][0]) - 196.6666717529297) }} source={require('./Resources/balonDeVolley.png')} />
+                      </Draggable>
+                    </EnlaceTransiciones>
+
                     {numJugadores.S > 0 && (
                         <React.Fragment>
                             {Array(numJugadores.S)
