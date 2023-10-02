@@ -8,7 +8,7 @@ import Escenas from './escenas';
 import Teams from './Teams';
 import Settings from './Settings';
 import Team from './Team';
-import { NewTeam } from './NewTeam';
+import  NewTeam  from './NewTeam';
 import ChangePassword from './ChangePassword';
 import Plays from './Plays'
 import Play from './Play';

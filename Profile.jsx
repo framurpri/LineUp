@@ -126,7 +126,7 @@ const AvatarExample = () => {
               </TouchableOpacity>
               <Text>Agregar imagen</Text>
               <View style={styles.textView1}>
-              <Text style={{fontWeight: 'bold', fontSize: 40, fontStyle: 'italic', textDecorationColor: 'white'}}>{username}</Text>              </View>
+              <Text style={{fontWeight: 'bold', fontSize: 40, fontStyle: 'italic', textDecorationColor: 'white', color: 'white'}}>{username}</Text>              </View>
             </View>
         )}
       </View>
@@ -201,8 +201,8 @@ const styles = StyleSheet.create({
     marginLeft: 28,
     marginTop: 50,
     justifyContent: 'center',
-    backgroundColor: '#A9D0F5'
-  },
+    backgroundColor: '#303747',
+    },
   avatarContainer: {
     alignItems: 'baseline',
     marginLeft: 25,

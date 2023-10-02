@@ -13,9 +13,11 @@ const HomeScreen = () => {
       <View style={styles.contentContainer}>
         <Text style={styles.title}>¡Bienvenido a Volleyball App!</Text>
         <Text style={styles.subtitle}>Descubre el emocionante mundo del volleyball</Text>
-        <Link to={{ pathname: '/escenas'}} style={styles.button}>
-          <Text style={styles.buttonText}>Explorar</Text>
-        </Link>
+        <TouchableOpacity style={styles.button}>
+          <Link to={{pathname: '/escenas'}}>
+            <Text style={styles.buttonText}>Explorar</Text>
+          </Link>
+        </TouchableOpacity>
       </View>
     </View>
   );

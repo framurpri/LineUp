@@ -105,7 +105,14 @@ function Community(){
     return(
       <View style={styles.container}>
           <View style={{display: "flex", alignItems: "center"}}> 
-            
+          <Link to={{pathname: '/community/newTeam'}}>
+            <IconButton
+              icon="magnify"
+              iconColor="#F29C46"
+              containerColor="#303747"
+              size={40}
+              />
+          </Link>
           </View>
           <View style={{display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: 'center', marginTop: 10}}>
             <TextInput
