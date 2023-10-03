@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Routes, Route, Link } from 'react-router-native'
-import { View, TextInput, Button, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
+import { Button, TextInput } from 'react-native-paper';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
@@ -72,9 +73,10 @@ export default function NewTeam() {
         value={description}
         onChangeText={setDescription}
       />
-      <Link>
-        <Button title="Crear equipo" onPress={docRef}/>
-      </Link>
+  
+      <Button mode="contained" onPress = {docRef} style={{backgroundColor: '#F29C46', marginTop: '5%'}}>
+              Crear equipo
+        </Button>
 
     </View>
   );
@@ -86,19 +88,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: 'grey',
+    backgroundColor: '#303747',
   },
   text: {
     fontSize: 30,
     padding: 20,
+    color: 'white'
   },
   input: {
-    width: '100%',
+    width: '80%',
     height: 40,
-    marginBottom: 10,
+    marginBottom: '5%',
     paddingHorizontal: 10,
     borderWidth: 1,
     borderColor: '#ccc',
     backgroundColor: 'white',
-  },
+    },
 });
