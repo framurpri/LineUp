@@ -2,14 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Modal, TextInput, TouchableHighlight } from 'react-native';
 import { Card, Title, Paragraph, IconButton, Text } from 'react-native-paper';
 import { Link } from 'react-router-native';
+import { firebaseConfig } from './firebase-config';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, doc, updateDoc } from "firebase/firestore";
 
-const MyCard = ({ id, clave, descripcion, handleExpand, deleted, isExpanded }) => {
+const MyCard = ({ id, clave, diff, descripcion, handleExpand, deleted, isExpanded }) => {
   const [title, setTitle] = useState(`${id}`);
-  const [paragraph, setParagraph] = useState(descripcion !== undefined ? descripcion : 'Añade una descripción');
+  const [paragraph, setParagraph] = useState(descripcion !== '' ? descripcion : 'Añade una descripción');
 
   const [isParagraphModalVisible, setParagraphModalVisible] = useState(false);
   const [text, setText] = useState(paragraph);
   const [tempText, setTempText] = useState(paragraph); // Estado temporal para seguimiento de cambios
+  
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
   // Función para guardar los cambios
   const handleSave = () => {
@@ -25,13 +31,20 @@ const MyCard = ({ id, clave, descripcion, handleExpand, deleted, isExpanded }) =
     handleExpand(clave);
   };
 
-  const handleDelete = (clave) => {
+  const updateDescripcion = async () => {
+    const chatDocRef = doc(db, 'plays', clave);
+      await updateDoc(chatDocRef, {
+        descripcion: tempText,
+      });
+  }
+
+  const handleDelete = () => {
     deleted(clave);
   };
 
   return (
     <Card>
-      <Link to={{pathname: `/profile/plays/${clave}`}}>
+      <Link to={{pathname: `/profile/${diff}/${clave}`}}>
         <Card.Cover style={styles.image} source={require('./Resources/cancha.png')} />
       </Link>
       <Card.Content>
@@ -51,7 +64,7 @@ const MyCard = ({ id, clave, descripcion, handleExpand, deleted, isExpanded }) =
         <IconButton
           icon="delete"
           iconColor='red'
-          onPress={() => handleDelete(clave)}
+          onPress={handleDelete}
           style={styles.editButton}
         />
       </Card.Actions>
@@ -74,7 +87,8 @@ const MyCard = ({ id, clave, descripcion, handleExpand, deleted, isExpanded }) =
             </TouchableHighlight>
             <TouchableHighlight style={styles.button2} onPress={() => {
               handleSave()
-              setParagraphModalVisible(false)}}>
+              setParagraphModalVisible(false)
+              updateDescripcion()}}>
             <Text style={{justifyContent:'center', alignSelf: 'center'}}>Ok</Text>
             </TouchableHighlight>
           </View>

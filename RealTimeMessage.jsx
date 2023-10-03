@@ -8,6 +8,7 @@ import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import AvatarExample from './Profile';
 import { Link, useParams } from 'react-router-native';
 
+
 export default function RealTimeChat() {
   const [messages, setMessages] = useState([]);
   const [username, setUsername] = useState('');

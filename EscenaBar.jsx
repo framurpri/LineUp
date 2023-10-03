@@ -1,5 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react';
-import { StyleSheet, Text, Modal, Pressable, Dimensions, Image} from 'react-native';
+import { StyleSheet, Text, Modal, Pressable, Dimensions, Image, TextInput} from 'react-native';
 import DownBar from './DownBar.jsx'
 import { TouchableOpacity, View } from 'react-native-web';
 import CreatePlayer from './createPlayer.jsx';
@@ -11,6 +11,8 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import ConfettiExplosion from 'react-confetti-explosion';
+import { Alert } from 'react-native';
+import HomeScreen from './Home.jsx';
 
 function EscenaBar({handlePlusScene, handleLessScene}){
     
@@ -36,11 +38,19 @@ function EscenaBar({handlePlusScene, handleLessScene}){
 
   const [showConfetti, setShowConfetti] = useState(false); // Nuevo estado para controlar la explosión de confeti
 
+  const [notDeleted, setNotDeleted] = useState(true);
+
+  const [nombreJugada, setNombreJugada] = useState('')
+
+  const [secondModal, setSecondModal] = useState(false)
+
   const app = initializeApp(firebaseConfig);
 
   const db = getFirestore(app);
 
   const auth = getAuth(app);
+
+  const numJugadores = Object.values(dictionary).every((array) => array.length === 0);
 
   const coord =[
     {
@@ -122,7 +132,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
     });
     console.log('Scenes: ', scenes);
     console.log(currentScene);
-  }, [capturar]);
+  }, [capturar, dictionary]);
   
   useEffect(() => {
     // Desactivar el scroll del cuerpo de la página
@@ -153,7 +163,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
       setShowConfetti(true)
       setTimeout(() => {
         setShowConfetti(false);
-      }, 3000); 
+      }, 1000); 
     } else {
       setIsDragged(false);
     }
@@ -177,9 +187,9 @@ function EscenaBar({handlePlusScene, handleLessScene}){
   const addScene = async () => {
     try {
       const docRef = await addDoc(collection(db, "plays"), {
-        designer: "guixe",
-        name: "jugada 100",
-        //scenes: [{ [currentScene]: coordenada }]
+        designer: auth.currentUser.email,
+        name: nombreJugada,
+        descripcion: '',
         scenes: scenes
       });
       console.log("Document written with ID: ", docRef.id);
@@ -236,11 +246,42 @@ function EscenaBar({handlePlusScene, handleLessScene}){
               </Pressable>
               <Pressable
                   style={[styles.button2]}
+                  onPress={() => {setSecondModal(!secondModal)}}
+                  >
+                  <Text style={styles.textStyle1}>Finish</Text>
+              </Pressable>
+            </View>
+          </View>
+      </Modal>
+
+      <Modal
+          animationType="fade"
+          transparent={true}
+          visible={secondModal}
+          onRequestClose={() => {
+          setSecondModal(!secondModal);
+          }}>
+          <View style={{top:200, alignItems: 'center', justifyContent: 'center'}}>
+            <View style={styles.modalView4}>
+              <TextInput style={styles.text11}
+              placeholder="Introduce un titulo para la jugada"
+              onChangeText={setNombreJugada}/>
+              <Pressable
+                  style={[styles.button11]}
                   onPress={() => {setFinish(!finish)
+                  setSecondModal(!secondModal)
+                  }}>
+                  <Text style={styles.textStyle1}>Back</Text>
+              </Pressable>
+              <Pressable
+                  style={[styles.button22]}
+                  onPress={() => {setFinish(!finish)
+                  setSecondModal(!secondModal)
                   setCatch(!capturar)
                   addScene()
-                  }}>
-                  <Text style={styles.textStyle1}>Finish</Text>
+                  }}
+                  >
+                  <Text style={styles.textStyle1}>Create Play</Text>
               </Pressable>
             </View>
           </View>
@@ -257,7 +298,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
             {Object.values(dictionary.S)
               .map((value, index) => (
                 <Draggable x={0} y={0} 
-                onDragRelease={handleDraggableRelease} 
+                onDragRelease={notDeleted ? handleDraggableRelease : null} 
                 onDrag={handleDraggableStart}
                 minX={-(0.49*windowDimensions.width)} 
                 minY={-(0.18*windowDimensions.height)} 
@@ -277,7 +318,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
             {Object.values(dictionary.O)
               .map((value, index) => (
                 <Draggable x={0} y={0} 
-                onDragRelease={handleDraggableRelease} 
+                onDragRelease={notDeleted ? handleDraggableRelease : null} 
                 onDrag={handleDraggableStart}
                 minX={-(0.49*windowDimensions.width)} 
                 minY={-(0.18*windowDimensions.height)} 
@@ -296,7 +337,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
             {Object.values(dictionary.L)
               .map((value, index) => (
                 <Draggable x={0} y={0} 
-                onDragRelease={handleDraggableRelease} 
+                onDragRelease={notDeleted ? handleDraggableRelease : null} 
                 onDrag={handleDraggableStart}
                 minX={-(0.49*windowDimensions.width)} 
                 minY={-(0.18*windowDimensions.height)} 
@@ -315,7 +356,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
             {Object.values(dictionary.WS)
               .map((value, index) => (
                 <Draggable x={0} y={0} 
-                onDragRelease={handleDraggableRelease} 
+                onDragRelease={notDeleted ? handleDraggableRelease : null} 
                 onDrag={handleDraggableStart}
                 minX={-(0.49*windowDimensions.width)} 
                 minY={-(0.18*windowDimensions.height)} 
@@ -334,7 +375,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
             {Object.values(dictionary.MB)
               .map((value, index) => (
                 <Draggable x={0} y={0} 
-                onDragRelease={handleDraggableRelease} 
+                onDragRelease={notDeleted ? handleDraggableRelease : null} 
                 onDrag={handleDraggableStart}
                 minX={-(0.49*windowDimensions.width)} 
                 minY={-(0.18*windowDimensions.height)} 
@@ -354,7 +395,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
       <Modal
           animationType="fade"
           transparent={true}
-          visible={isDragged}
+          visible={isDragged && notDeleted}
           onRequestClose={() => {
           setIsDragged(!isDragged);
           }}>
@@ -369,7 +410,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
             colors={['blue']}
             color='blue'
             particleSize={10}
-            timeout={2000} // Tiempo de duración de la explosión de confeti (en milisegundos)
+            timeout={2000} 
           />
           )}
 
@@ -386,7 +427,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
           setCatch(!capturar)
           handleLessScene(currentScene-1)
           setTimeout(() => {
-            currentScene > 1 ? setCurrentScene(currentScene-1):null;
+            currentScene > 0 ? setCurrentScene(currentScene-1):null;
           }, 1); 
           console.log(currentScene)                 
             }
@@ -394,11 +435,25 @@ function EscenaBar({handlePlusScene, handleLessScene}){
           <Icon name="arrow-left" size={60} color="black"/>
         </Pressable>
         <Pressable style={styles.arrows} onPress={() => {
-          setCatch(!capturar)
-          handlePlusScene(currentScene+1)
-          setTimeout(() => {
+          if(currentScene===0){
+            setNotDeleted(false)
+          }
+          if(!numJugadores){
+            setCatch(!capturar)
+            handlePlusScene(currentScene+1)
+            setTimeout(() => {
             setCurrentScene(currentScene+1);
           }, 1); 
+          }else{
+            Alert.alert(
+              'Añade al menos un jugador para poder inicar la jugada',
+              [
+                { text: 'Aceptar', onPress: () => console.log('Alerta cerrada') }
+              ],
+              { cancelable: false }
+          );
+          }
+          
         }}
         >
           <Icon name="arrow-right" size={60} color="black"/>
@@ -432,6 +487,13 @@ const styles = StyleSheet.create({
     width: 350,
     fontSize: 56,
   },
+  text11: {
+    justifyContent: 'center',
+    textAlign: 'center',
+    fontStyle: 'italic',
+    width: 230,
+    fontSize: 15,
+  },
   currentScene: {
     justifyContent: 'center',
     textAlign: 'center',
@@ -453,6 +515,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 22,
     opacity: 0.5,
+  },
+  modalView4: {
+    backgroundColor: '#F0F8FF',
+    borderRadius: 20,
+    marginHorizontal: 20,
+    width: 60,
+    paddingHorizontal: 130,
+    paddingVertical: 20,
+    top: 150,
+    alignItems: 'center',
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   modalView5: {
     backgroundColor: '#F0F8FF',
@@ -514,6 +589,28 @@ const styles = StyleSheet.create({
     height: height*0.07,
     bottom:20,
   },
+  button11: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    width: 100,
+    alignItems: 'center',
+    height: 40,
+    top: 50,
+    right: 70,
+    backgroundColor: '#f56141'
+  },
+  button22: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    width: 100,
+    alignContent: 'center',
+    height: 40,
+    left: 70,
+    top: 10,
+    backgroundColor: '#62f541'
+  },
   button1: {
     borderRadius: 20,
     padding: 10,
@@ -523,7 +620,7 @@ const styles = StyleSheet.create({
     height: 40,
     top: 30,
     right: 80,
-    backgroundColor: 'red'
+    backgroundColor: '#f56141'
   },
   button2: {
     borderRadius: 20,
@@ -534,8 +631,7 @@ const styles = StyleSheet.create({
     height: 40,
     bottom: 10,
     left: 80,
-    backgroundColor: 'green'
-
+    backgroundColor: '#62f541'
   },
   textStyle1: {
     color: 'white',
