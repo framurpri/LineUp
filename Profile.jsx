@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import * as ImagePicker from 'expo-image-picker';
 import {SegmentedButtons, Avatar, Text} from 'react-native-paper';
 import Plays from './Plays';
@@ -17,10 +18,13 @@ const AvatarExample = () => {
   const [username, setUsername] = useState('');
   const [value, setValue] = useState('plays');
   const [isLoading, setIsLoading] = useState(true)
+  const [playerImageRef, setPlayerImageRef] = useState();
+  const [playerImgUrl, setPlayerImgUrl] = useState('');
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   const auth = getAuth(app);
+  const storage = getStorage(app);
 
   const q = query(collection(db, "users"), where("email", "==", auth.currentUser.email));
   const getUserInfo = async () => {
@@ -28,6 +32,12 @@ const AvatarExample = () => {
     setUsername(querySnapshot.docs[0].data().username);
     setIsLoading(false)
   }
+
+  useEffect(() => {
+    setPlayerImageRef(ref(storage, `playerImages/${username}.jpg`));
+    getImage(ref(storage, `playerImages/${username}.jpg`))
+  }, [username])
+  
   getUserInfo();
 
   const openImagePicker = async () => {
@@ -40,8 +50,28 @@ const AvatarExample = () => {
   
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
+      const response = await fetch(result.uri);
+        const blob = await response.blob();
+        try{
+          await uploadBytes(playerImageRef, blob);
+          console.log('Imagen subida con éxito.');
+          getImage(playerImageRef);
+        }catch (error){
+          console.error('Error al cargar la imagen: ', error)
+        }
     }
   };
+
+  const getImage = async (playerImageRef) => {
+    getDownloadURL(playerImageRef).then((url) => {
+      setSelectedImage(true)
+      setPlayerImgUrl(url)
+    }).catch((error) => {
+      console.error('Error al obtener la URL de descarga:', error);
+      setSelectedImage(false);
+      setPlayerImgUrl(null);
+    })
+  }
   
   const handleCameraLaunch = async () => {
     const result = await ImagePicker.launchCameraAsync({
@@ -101,7 +131,7 @@ const AvatarExample = () => {
           <View style={styles.avatarContainer}>
             <TouchableOpacity onLongPress={openImagePicker}>
               <Image
-                source={{ uri: selectedImage }}
+                source={{ uri: playerImgUrl }}
                 style={styles.imagen}
                 resizeMode="contain"
               />

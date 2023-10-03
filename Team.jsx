@@ -6,7 +6,7 @@ import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, doc, getDoc, query, where, getDocs, updateDoc } from "firebase/firestore";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { List } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -29,7 +29,9 @@ function Team(){
       const [teamApplicants, setTeamApplicants] = useState([]);
       const [applied, setApplied] = useState(false);
       const [selectedImage, setSelectedImage] = useState(null);
-      const [isLoading, setIsLoading] = useState(true)
+      const [isLoading, setIsLoading] = useState(true);
+      const [teamImgUrl, setTeamImgUrl] = useState('');
+      const [imgAlreadySet, setImgAlreadySet ] = useState(false);
 
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
@@ -46,6 +48,7 @@ function Team(){
 
       useEffect(() => {
         setTeamImageRef(ref(storage, `teamImages/${teamName}.jpg`));
+        getImage(ref(storage, `teamImages/${teamName}.jpg`))
       }, [teamName])
       
       useEffect(() => {
@@ -101,18 +104,29 @@ function Team(){
         });
       
         if (!result.canceled) {
-          debugger;
           setSelectedImage(result.assets[0].uri);
           const response = await fetch(result.uri);
           const blob = await response.blob();
           try{
             await uploadBytes(teamImageRef, blob);
             console.log('Imagen subida con éxito.');
+            getImage(teamImageRef);
           }catch (error){
             console.error('Error al cargar la imagen: ', error)
           }
         }
       };
+
+      const getImage = async (teamImageRef) => {
+        getDownloadURL(teamImageRef).then((url) => {
+          setSelectedImage(true)
+          setTeamImgUrl(url)
+        }).catch((error) => {
+          console.error('Error al obtener la URL de descarga:', error);
+          setSelectedImage(false);
+          setTeamImgUrl(null);
+        })
+      }
 
       const getCaptainInfo = async () => {
         const q = query(collection(db, "users"), where("email", "==", captainEmail));
@@ -152,7 +166,7 @@ function Team(){
                 // Si hay una imagen seleccionada, muestra la imagen
                   <TouchableOpacity onLongPress={openImagePicker}>
                     <Image
-                      source={{ uri: selectedImage }}
+                      source={{ uri: teamImgUrl }}
                       style={styles.imagen}
                       resizeMode="contain"
                     />
