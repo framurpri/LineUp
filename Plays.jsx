@@ -4,7 +4,7 @@ import MyCard from './CustomCard';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, collection, query, getDocs, where } from "firebase/firestore"; 
+import { getFirestore, collection, query, getDocs, where, deleteDoc, doc } from "firebase/firestore"; 
 import { Text } from 'react-native-paper';
 
 
@@ -46,16 +46,26 @@ const Plays = () => {
 
 
   const handleExpand = (id) => {
+    console.log(datos)
     setExpandedCardId((prevId) => (prevId === id ? null : id));
   };
 
-  const onDelete = (idToDelete) => {
-    // Utilizamos la función `filter` para crear una nueva lista sin el elemento a eliminar
-    const newData = data.filter((item) => item.id !== idToDelete);
-    setData(newData);
-  }; 
-
-  const { width } = Dimensions.get('window');
+  const onDelete = async (idToDelete) => {
+    try {
+      await deleteDoc(doc(db, "plays", idToDelete));
+  
+      const updatedDatos = { ...datos };
+      delete updatedDatos[idToDelete];
+  
+      setDatos(updatedDatos);
+  
+      if (expandedCardId === idToDelete) {
+        setExpandedCardId(null);
+      }
+    } catch (error) {
+      console.error('Error al eliminar el documento:', error);
+    }
+  };
 
   return (
     isLoading ? (
@@ -64,15 +74,15 @@ const Plays = () => {
     <ScrollView contentContainerStyle={styles.container}>
         {Object.entries(datos).map(([clave, valor]) => (
           <>
-          <View style={styles.cardContainer}>
+          <View key={clave} style={styles.cardContainer}>
             <MyCard
               id={valor.name}
               clave={clave}
               diff={'plays'}
               descripcion={valor.descripcion}
               handleExpand={handleExpand}
-              deleted={onDelete}
-              isExpanded={expandedCardId === clave}
+              deleted={() => onDelete(clave)}
+              isExpanded={false}
             />      
           </View>
           </>
