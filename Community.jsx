@@ -23,10 +23,8 @@ function Community(){
       const [search, setSearch] = useState("");
       const [teamSearch, setTeamSearch] = useState(false);
       const [playerSearch, setPlayerSearch] = useState(false);
-
+      const [chooseSearch, setChooseSearch] = useState(false);
       
-
-
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
       const auth = getAuth(app);
@@ -52,6 +50,7 @@ function Community(){
         }else if(playerSearch){
           getPlayersByName()
         }else{
+          setChooseSearch(true)
           console.log("Por favor seleccione equipos o jugadores.")
         }
       }
@@ -104,118 +103,162 @@ function Community(){
       
     return(
       <View style={styles.container}>
-          <View style={{display: "flex", alignItems: "center"}}> 
-          <Link to={{pathname: '/community/newTeam'}}>
-            <IconButton
-              icon="magnify"
-              iconColor="#F29C46"
-              containerColor="#303747"
-              size={40}
-              />
-          </Link>
+          <View style={styles.topContainer}>
+              <View style={styles.topLeftContainer}>
+                  <TextInput
+                    placeholder="Yuji Nishida..."
+                    onChangeText={setSearch}
+                  />
+                  <IconButton
+                  icon="magnify"
+                  iconColor="#F29C46"
+                  containerColor="#303747"
+                  size={40}
+                  onPress={() => 
+                    checkSearchType()
+                  }
+                  />
+              </View>
+              <View style={styles.topRightContainer}>
+                  <Link to={{pathname: '/community/newTeam'}}>
+                    <IconButton
+                      icon="plus"
+                      iconColor="#F29C46"
+                      containerColor="#303747"
+                      size={40}
+                      />
+                  </Link>
+              </View>
           </View>
-          <View style={{display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: 'center', marginTop: 10}}>
-            <TextInput
-              placeholder="Yuji Nishida..."
-              onChangeText={setSearch}
-            />
-            <IconButton
-            icon="magnify"
-            iconColor="#F29C46"
-            containerColor="#303747"
-            size={40}
-            onPress={() => 
-              checkSearchType()
-            }
-            />
+          <View style={styles.middleContainer}>
+              <View style={styles.middleLeftContainer}>
+                  <IconButton
+                    icon="account"
+                    iconColor="#F29C46"
+                    containerColor="#303747"
+                    size={40}
+                    style={{opacity: playerSearch?1:0.7}}
+                    onPress={() => {          
+                      setPlayerSearch(true)
+                      setTeamsNotFound(false)
+                      setTeamSearch(false)
+                      setChooseSearch(false)
+                    }
+                    }
+                    />
+                  <Text>Jugador</Text>
+              </View>
+              <View style={styles.middleRightContainer}>
+                  <IconButton
+                      icon="account-group"
+                      iconColor="#F29C46"
+                      containerColor="#303747"
+                      size={40}
+                      style={{opacity: teamSearch?1:0.7}}
+                      onPress={() => {
+                        setTeamSearch(true)
+                        setPlayersNotFound(false)
+                        setPlayerSearch(false)
+                        setChooseSearch(false)
+                      }
+                      }
+                      />
+                      <Text>Equipo</Text>
+              </View>
           </View>
-          <View style={{display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: 'center', marginTop: 10}}>
-          <View style={{display: 'flex', flexDirection: "column"}}>
-          <IconButton
-            icon="account"
-            iconColor="#F29C46"
-            containerColor="#303747"
-            size={40}
-            style={{opacity: playerSearch?1:0.7}}
-            onPress={() => {          
-              setPlayerSearch(true)
-              setTeamSearch(false)
-            }
-            }
-            />
-            <Text>Jugador</Text>
-            </View>
-            <View style={{display: 'flex', flexDirection: "column"}}>
-            <IconButton
-            icon="account-group"
-            iconColor="#F29C46"
-            containerColor="#303747"
-            size={40}
-            style={{opacity: teamSearch?1:0.7}}
-            onPress={() => {
-              setTeamSearch(true)
-              setPlayerSearch(false)
-            }
-            }
-            />
-            <Text>Equipo</Text>
-            </View>
-          </View>  
-          <View>
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                {teamsNotFound && (
-                <Text style={{fontSize: 17}}>No existen equipos con el nombre que buscas.</Text>
-                )}
-            </View>
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                {playersNotFound && (
-                <Text style={{fontSize: 17}}>No existen jugadores con el nombre que buscas.</Text>
-                )}
-            </View>
+          <View style={styles.bottomContainer}>
+              <View style={styles.searchResultTexts}>
+                  <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                      {chooseSearch && (
+                      <Text style={{fontSize: 17}}>Por favor, seleccione si desea buscar equipos o jugadores.</Text>
+                      )}
+                  </View>
+                  <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                      {teamsNotFound && (
+                      <Text style={{fontSize: 17}}>No existen equipos con el nombre que buscas.</Text>
+                      )}
+                  </View>
+                  <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                      {playersNotFound && (
+                      <Text style={{fontSize: 17}}>No existen jugadores con el nombre que buscas.</Text>
+                      )}
+                  </View>
+              </View>
+              <View style={styles.teamList}>
+                  {teamsLoaded && (
+                    <List.Section>
+                          <ScrollView contentContainerStyle={styles.subview2}>
+                            {Object.entries(datos).map(([clave, valor]) => (            
+                            <View key={clave} style={styles.row}>
+                              <Link to={{pathname: `/profile/teams/${clave}`}}>
+                                <List.Item title={valor.team} left={() => <List.Icon icon="account-group" />}/>
+                              </Link>
+                            </View>
+                            ))}
+                          </ScrollView>
+                        </List.Section>
+                  )
+                  }
+              </View>
+              <View style={styles.playerList}>
+                  {playersLoaded && (
+                  <ScrollView contentContainerStyle={styles.subview2}>
+                        <List.Section>
+                            {Object.entries(datos).map(([clave, valor]) => (            
+                            <View key={clave} style={styles.row}>
+                              <Link to={{pathname: `/profile/${clave}`}}>
+                                <List.Item title={valor.username} left={() => <List.Icon icon="account" />}/>
+                              </Link>
+                            </View>
+                            ))}
+                        </List.Section>
+                  </ScrollView>
+                  )
+                  }     
+              </View>
           </View>
-
-          <View>
-            {teamsLoaded && (
-              <List.Section>
-                    <ScrollView contentContainerStyle={styles.subview2}>
-                      {Object.entries(datos).map(([clave, valor]) => (            
-                      <View key={clave} style={styles.row}>
-                        <Link to={{pathname: `/profile/teams/${clave}`}}>
-                          <List.Item title={valor.team} left={() => <List.Icon icon="account-group" />}/>
-                        </Link>
-                      </View>
-                      ))}
-                    </ScrollView>
-                  </List.Section>
-            )
-            }
-          </View>
-          <View>
-            {playersLoaded && (
-            <ScrollView contentContainerStyle={styles.subview2}>
-                  <List.Section>
-                      {Object.entries(datos).map(([clave, valor]) => (            
-                      <View key={clave} style={styles.row}>
-                        <Link to={{pathname: `/profile/${clave}`}}>
-                          <List.Item title={valor.username} left={() => <List.Icon icon="account" />}/>
-                        </Link>
-                      </View>
-                      ))}
-                  </List.Section>
-            </ScrollView>
-            )
-
-            }
-
-            
-          </View>
-  </View>
+      </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
       flex: 1,
+    },
+    topContainer: {
+      flex: 2,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    topLeftContainer: {
+      flex: 7,
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      alignItems: 'center'
+    },
+    topRightContainer: {
+      flex: 2.5,
+      alignItems: 'center'
+    },
+    middleContainer: {
+      flex: 1.5,
+      flexDirection: 'row',
+      justifyContent: 'flex',
+      alignItems: 'center'
+    },
+    middleLeftContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    middleRightContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    bottomContainer: {
+      flex: 7
     },
     row: {
     flexDirection: 'row',
@@ -227,26 +270,6 @@ const styles = StyleSheet.create({
     borderBottomColor: 'gray',
     
   },
-    staticContainer: {
-      height: 100
-    },
-    subview1: {
-      backgroundColor: 'red',
-    },
-    subview2: {
-      flex: 1,
-      width: 393,
-    },
-    item: {
-      height: 50,
-      borderBottomWidth: 1,
-      borderBottomColor: 'gray',
-      justifyContent: 'center',
-      paddingHorizontal: 16,
-    },
-    subview3: {
-      backgroundColor: 'blue',
-    },
     input: {
       height: 40,
       marginBottom: 10,
