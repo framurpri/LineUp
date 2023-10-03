@@ -6,6 +6,7 @@ import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, doc, getDoc, query, where, getDocs, updateDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { List } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -33,6 +34,8 @@ function Team(){
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
       const auth = getAuth(app);
+      const storage = getStorage(app);
+      const [teamImageRef, setTeamImageRef] = useState();
 
       const params = useParams();
       const { id } = params;
@@ -41,6 +44,10 @@ function Team(){
         retrieveDocument();
       }, [])
 
+      useEffect(() => {
+        setTeamImageRef(ref(storage, `teamImages/${teamName}.jpg`));
+      }, [teamName])
+      
       useEffect(() => {
         if(teamPlayers){
           setPlayersLoaded(true);
@@ -74,6 +81,7 @@ function Team(){
         }
         setTeamDoc(docSnap.ref);
         setTeamName(docSnap.data().team);
+        setTeamImageRef(ref(storage, `teamImages/${teamName}.jpg`));
         setCaptainEmail(docSnap.data().userEmail);
         setIsLoading(false);
         console.log(docSnap.data().players)
@@ -93,7 +101,16 @@ function Team(){
         });
       
         if (!result.canceled) {
+          debugger;
           setSelectedImage(result.assets[0].uri);
+          const response = await fetch(result.uri);
+          const blob = await response.blob();
+          try{
+            await uploadBytes(teamImageRef, blob);
+            console.log('Imagen subida con éxito.');
+          }catch (error){
+            console.error('Error al cargar la imagen: ', error)
+          }
         }
       };
 
