@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: height*0.15,
     width: width,
-    backgroundColor: 'grey',
+    backgroundColor: '#303747',
   },
 });
 

@@ -176,11 +176,11 @@ function visualizacion(){
 
   return(
     <View style={{flex:1}}>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center',}} >
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#303747'}} >
             <View style={styles.view}>
-                <Link to={{ pathname: '/profile'}}>
+                <Link style={styles.buttonTop} to={{ pathname: '/profile'}}>
                     <Text style={styles.text1}>
-                        Return
+                        RETURN
                     </Text>
                 </Link>
             </View>
@@ -302,17 +302,28 @@ const {width, height} = Dimensions.get('window')
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: 'blue',
-        borderRadius: 5,
+        backgroundColor: '#F29C46',
+        borderRadius: 15,
         marginBottom: 80,
         width: 120,
         height:60,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        alignContent: 'center'
     },
+    buttonTop: {
+      backgroundColor: '#F29C46',
+      borderRadius: 15,
+      width: 120,
+      height:40,
+      right: 160,
+      justifyContent: 'center',
+      alignItems: 'center',
+      alignContent: 'center'
+  },
     buttonSpeed: {
-      backgroundColor: 'blue',
-      borderRadius: 5,
+      backgroundColor: '#F29C46',
+      borderRadius: 15,
       marginBottom: 80,
       width: 120,
       height:60,
@@ -333,15 +344,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: height*0.2,
         width: width,
-        backgroundColor: 'grey',
+        backgroundColor: '#303747'
     },
     buttonText: {
-    color: 'white',
-    fontSize: 16,
+    color: 'black',
+    fontSize: 23,
+    textAlign:'center',
+    fontWeight: 'bold',
     },
     buttonTextSpeed: {
-      color: 'white',
-      fontSize: 36,
+      color: 'black',
+      fontSize: 30,
+      fontWeight: 'bold',
       },
     image: {
         width: '110%',
