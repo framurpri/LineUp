@@ -4,7 +4,7 @@ import MyCard from './CustomCard';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, collection, query, getDocs } from "firebase/firestore"; 
+import { getFirestore, collection, query, getDocs, where, deleteDoc, doc } from "firebase/firestore"; 
 import { Text } from 'react-native-paper';
 
 
@@ -19,29 +19,53 @@ const Teams = () => {
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    const q = query(collection(db, "teams"));
-    const asyncQuery = async () => {
-      const querySnapshot = await getDocs(q);
-    
-      querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots       
-        datos[doc.id] = doc.data();
-        setIsLoading(false); // Se actualiza el estado para indicar que los datos se han cargado
-      });
-    };    
-    asyncQuery()
+  const q = query(collection(db, "teams"), where("userEmail", "==", auth.currentUser.email));
+  const asyncQuery = async () => {
+      try {
+        const querySnapshot = await getDocs(q);
+        
+        if (!querySnapshot.empty) {
+          // La colección no está vacía
+          querySnapshot.forEach((doc) => {
+            datos[doc.id] = doc.data();
+          });
+          setIsLoading(false); // Se actualiza el estado para indicar que los datos se han cargado
+        } else {
+          // La colección está vacía
+          console.log('La colección está vacía');
+          setIsLoading(false); // Se actualiza el estado, pero puedes manejarlo de acuerdo a tus necesidades
+        }
+      } catch (error) {
+        console.error('Error al consultar la colección:', error);
+        setIsLoading(false); // Maneja el error según tus necesidades
+      }
+    };
+
+    // Llama a la función asyncQuery para realizar la consulta
+    asyncQuery();
+
 
   const handleExpand = (id) => {
+    console.log(datos)
     setExpandedCardId((prevId) => (prevId === id ? null : id));
   };
 
-  const onDelete = (idToDelete) => {
-    // Utilizamos la función `filter` para crear una nueva lista sin el elemento a eliminar
-    const newData = data.filter((item) => item.id !== idToDelete);
-    setData(newData);
-  }; 
-
-  const { width } = Dimensions.get('window');
+  const onDelete = async (idToDelete) => {
+    try {
+      await deleteDoc(doc(db, "teams", idToDelete));
+  
+      const updatedDatos = { ...datos };
+      delete updatedDatos[idToDelete];
+  
+      setDatos(updatedDatos);
+  
+      if (expandedCardId === idToDelete) {
+        setExpandedCardId(null);
+      }
+    } catch (error) {
+      console.error('Error al eliminar el documento:', error);
+    }
+  };
 
   return (
     isLoading ? (
@@ -50,14 +74,14 @@ const Teams = () => {
     <ScrollView contentContainerStyle={styles.container}>
         {Object.entries(datos).map(([clave, valor]) => (
           <>
-          <View style={styles.cardContainer}>
+          <View key={clave} style={styles.cardContainer}>
             <MyCard
               id={valor.team}
-              descripcion={valor.description}
               clave={clave}
               diff={'teams'}
+              descripcion={valor.description}
               handleExpand={handleExpand}
-              deleted={onDelete}
+              deleted={() => onDelete(clave)}
               isExpanded={expandedCardId === clave}
             />      
           </View>

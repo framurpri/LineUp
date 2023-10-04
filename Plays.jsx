@@ -52,6 +52,7 @@ const Plays = () => {
 
   const onDelete = async (idToDelete) => {
     try {
+      debugger;
       await deleteDoc(doc(db, "plays", idToDelete));
   
       const updatedDatos = { ...datos };
