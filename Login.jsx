@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
-import { Routes, Route, Link } from 'react-router-native'
-import Registro from './Registro';
 import { View,  StyleSheet, Text, Dimensions } from 'react-native';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import  Main  from './Main';
-import Basic from './BasicStructPage';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import PruebaDownbar from './PruebaDownbar';
 import { Button, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -74,6 +70,7 @@ export function Login() {
         <TextInput
               placeholder="Email"
               onChangeText={setEmail}
+              value={email}
               left={
                 <TextInput.Icon
                 icon={() => (

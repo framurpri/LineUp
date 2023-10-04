@@ -13,7 +13,8 @@ const MyCard = ({ id, clave, diff, descripcion, handleExpand, deleted, isExpande
   const [isParagraphModalVisible, setParagraphModalVisible] = useState(false);
   const [text, setText] = useState(paragraph);
   const [tempText, setTempText] = useState(paragraph); // Estado temporal para seguimiento de cambios
-  
+  const [isDeleteVisible, setIsDeleteVisible] = useState(false);
+
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
@@ -64,7 +65,7 @@ const MyCard = ({ id, clave, diff, descripcion, handleExpand, deleted, isExpande
         <IconButton
           icon="delete"
           iconColor='red'
-          onPress={handleDelete}
+          onPress={() => setIsDeleteVisible(true)}
           style={styles.editButton}
         />
       </Card.Actions>
@@ -90,6 +91,26 @@ const MyCard = ({ id, clave, diff, descripcion, handleExpand, deleted, isExpande
               setParagraphModalVisible(false)
               updateDescripcion()}}>
             <Text style={{justifyContent:'center', alignSelf: 'center'}}>Ok</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+      </Modal>
+      <Modal visible={isDeleteVisible} transparent={true} animationType="fade">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text
+              style={{height:'50%', width:250, fontSize: 50, fontWeight:'bold',marginLeft:10,fontStyle:'italic', textAlign:'center', justifyContent: 'center', alignSelf:'center', borderWidth:0, borderColor: 'transparent'}}
+            >
+              ARE YOU SURE ?
+            </Text>
+            <TouchableHighlight style={styles.button1} onPress={() => {
+              setIsDeleteVisible(false)}}>
+              <Text style={{justifyContent:'center', alignSelf: 'center'}}>Back</Text>
+            </TouchableHighlight>
+            <TouchableHighlight style={styles.button2} onPress={() => {
+              handleDelete()
+              setIsDeleteVisible(false)}}>
+            <Text style={{justifyContent:'center', alignSelf: 'center'}}>Delete</Text>
             </TouchableHighlight>
           </View>
         </View>
