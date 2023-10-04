@@ -1,8 +1,9 @@
 import React, { forwardRef, useEffect, useRef , useImperativeHandle} from 'react';
 import { Animated, View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+ 
 const EnlaceTransiciones = forwardRef((props, ref) => {
 
-    const {numEscenas, coordenadas, children} = props;
+    const {numEscenas, speed, coordenadas, children} = props;
 
     const position = useRef(new Animated.ValueXY()).current;
 
@@ -16,7 +17,7 @@ const EnlaceTransiciones = forwardRef((props, ref) => {
     
     position.setValue({ x: 0, y: 0 });
       
-    const duration = 2500; // Duración de cada animación en milisegundos
+    const duration = 2500 / speed; // Duración de cada animación en milisegundos
 
     const transiciones = {};
     console.log('Coordenadas: ' + coordenadas)

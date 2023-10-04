@@ -12,6 +12,7 @@ import { getFirestore, collection, addDoc, query, where, getDocs } from "firebas
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import ConfettiExplosion from 'react-confetti-explosion';
 import { Alert } from 'react-native';
+import HomeScreen from './Home.jsx';
 
 function EscenaBar({handlePlusScene, handleLessScene}){
     
@@ -246,10 +247,6 @@ function EscenaBar({handlePlusScene, handleLessScene}){
               <Pressable
                   style={[styles.button2]}
                   onPress={() => {setSecondModal(!secondModal)}}
-                  // onPress={() => {setFinish(!finish)
-                  // setCatch(!capturar)
-                  // addScene()
-                  // }}
                   >
                   <Text style={styles.textStyle1}>Finish</Text>
               </Pressable>

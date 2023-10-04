@@ -45,8 +45,10 @@ if(auth.currentUser == null){
 
   return(
         <View style={styles.container}>     
-          <Image source={require('./Resources/FotoVoley.png')} style={styles.image} />
+          
+          <Image source={require('./Resources/logoPrueba.png')} style={styles.image}/>
           <Text style={styles.title}>LineUp</Text>
+          
           <Link to={{ pathname: '/authentication/login'}}>
             <Button mode="contained" style={[styles.button, {width: adjustWidth()}]}>
               Login
@@ -91,11 +93,13 @@ const styles = StyleSheet.create({
     image: {
         width: 250,
         height: 250,
-        marginBottom: 10,
+        marginBottom: -55,
     },
     title: {
         marginBottom: 70,
         fontSize: 30,
+        fontStyle: 'italic',
+        fontWeight: 'bold'
     }
   });
 

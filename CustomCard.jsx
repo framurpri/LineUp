@@ -38,7 +38,7 @@ const MyCard = ({ id, clave, diff, descripcion, handleExpand, deleted, isExpande
       });
   }
 
-  const handleDelete = (clave) => {
+  const handleDelete = () => {
     deleted(clave);
   };
 
@@ -64,7 +64,7 @@ const MyCard = ({ id, clave, diff, descripcion, handleExpand, deleted, isExpande
         <IconButton
           icon="delete"
           iconColor='red'
-          onPress={() => handleDelete(clave)}
+          onPress={handleDelete}
           style={styles.editButton}
         />
       </Card.Actions>

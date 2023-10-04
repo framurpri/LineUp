@@ -9,7 +9,8 @@ export const firebaseConfig = {
   authDomain: "line-up-volleyball.firebaseapp.com",
   databaseURL: "https://line-up-volleyball-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "line-up-volleyball",
-  storageBucket: "line-up-volleyball.appspot.com",
+  //storageBucket: "line-up-volleyball.appspot.com",
+  storageBucket: 'gs://line-up-volleyball.appspot.com',
   messagingSenderId: "871165576687",
   appId: "1:871165576687:web:39184b4924753e380c221a",
   measurementId: "G-5GTN5H73H9"
