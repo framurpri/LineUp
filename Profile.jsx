@@ -10,6 +10,7 @@ import {SegmentedButtons, Avatar, Text} from 'react-native-paper';
 import Plays from './Plays';
 import Teams from './Card';
 import RealTimeChat from './RealTimeMessage';
+import BottomBar from './BottomBar';
 
 const AvatarExample = () => {
   const [imagenUri, setImagenUri] = useState(null);
@@ -194,6 +195,7 @@ const AvatarExample = () => {
         </View>
         
       </View>
+      <BottomBar focused={3}></BottomBar>
   </View>
 
   );

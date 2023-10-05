@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Link } from 'react-router-native';
+import BottomBar from './BottomBar';
 
 const HomeScreen = () => {
   return (
@@ -19,6 +20,7 @@ const HomeScreen = () => {
           </Link>
         </TouchableOpacity>
       </View>
+      <BottomBar focused={1}></BottomBar>
     </View>
   );
 };

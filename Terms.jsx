@@ -9,15 +9,14 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import TopBar from './TopBar.jsx'
 import DownBar from './DownBar';
 import Main from './Main';
+import BottomBar from './BottomBar';
 
 function Terms(){
 
     return(
       <View style={styles.container}>
-          <View>
-            <TopBar />
-          </View>
-        <View style={{ height: 650, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+
+        <View style={{ height: 650, justifyContent: 'center', alignItems: 'center', width: '100%', marginTop: 20 }}>
           <Text style={styles.title}>Términos y Condiciones Legales</Text>
           <ScrollView style={{paddingHorizontal: 16, paddingTop: 25, paddingBottom: 20}}>
             <Text style={{textAlign: 'justify'}}>
@@ -69,18 +68,7 @@ function Terms(){
                       </Text>
           </ScrollView>
         </View>
-        <View style={styles.staticContainer}>
-          <DownBar>
-            <Link to={{ pathname: '/escenas'}}>
-                <Icon name="film" size={25} color="#900"/>
-            </Link>
-            <Icon name="group" size={25} color="#900" />
-            <Icon name="user" size={25} color="#900" />
-            <Link to={{ pathname: '/settings'}}>
-                <Icon name="cog" size={25} color="#900" />
-            </Link>
-          </DownBar>
-        </View>
+        <BottomBar></BottomBar>
       </View>
     )
 }

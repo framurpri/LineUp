@@ -11,6 +11,7 @@ import PruebaDownbar from './PruebaDownbar';
 import { Button, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { NavigationContainer } from '@react-navigation/native';
+import Home from './Home.jsx';
 
 export function Login() {
   const [email, setEmail] = useState('');
@@ -59,7 +60,7 @@ export function Login() {
     console.log('Contraseña:', password);
     return <>
       <NavigationContainer>
-        <PruebaDownbar isLoggedIn={true}/>
+        <Home></Home>
       </NavigationContainer>
     </>
   }

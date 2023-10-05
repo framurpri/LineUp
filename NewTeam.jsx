@@ -8,6 +8,7 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, addDoc } from "firebase/firestore"; 
 import Teams from './Teams';
 import Profile from './Profile';
+import BottomBar from './BottomBar';
 
 export default function NewTeam() {
 
@@ -78,6 +79,7 @@ export default function NewTeam() {
               Crear equipo
         </Button>
 
+      <BottomBar></BottomBar>
     </View>
   );
 };

@@ -14,6 +14,7 @@ import TopBar from './TopBar.jsx'
 import DownBar from './DownBar';
 import Chat from './Chat.jsx';
 import Applications from './Applications.jsx';
+import BottomBar from './BottomBar';
 
 function Team(){
 
@@ -235,6 +236,7 @@ function Team(){
             )
           }
         </View>
+        <BottomBar></BottomBar>
       </View>
     )
 }

@@ -5,8 +5,9 @@ import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signOut } from 'firebase/auth';
 import { getFirestore } from "firebase/firestore"; 
-import { TextInput } from 'react-native-web';
+import { TextInput } from 'react-native-paper';
 import Main from './Main';
+import BottomBar from './BottomBar';
 
 const Settings = () => {
 
@@ -69,13 +70,13 @@ const Settings = () => {
 
     <Text style={styles.title}>LineUp</Text>
             <Link to={{ pathname: '/settings/changePassword'}} style = {styles.button}>
-                <Text >Cambiar Contraseña</Text>
+                <Text style={styles.buttonText}>Cambiar Contraseña</Text>
           </Link>
           <Link to={{ pathname: '/settings/terms'}} style = {styles.button}>
-                <Text >Términos y Condiciones</Text>
+                <Text style={styles.buttonText}>Términos y Condiciones</Text>
           </Link>
           <Link to={{ pathname: '/'}} onPress = {handleLogout} style = {styles.button}>
-                <Text >Salir</Text>
+                <Text style={styles.buttonText}>Salir</Text>
           </Link>
           <Pressable onPress = {() => {
             setShowDeletionInput(true)
@@ -85,8 +86,9 @@ const Settings = () => {
                 <Text>Eliminar Cuenta</Text>
           </Pressable>
 
-          <TextInput onChangeText = {setConfirmDeletion} placeholder = "Escriba CONFIRMAR" style = {{opacity: showDeletionInput ? 1 : 0}}/>
+          <TextInput onChangeText = {setConfirmDeletion} placeholder = "Escriba CONFIRMAR" style = {{opacity: showDeletionInput ? 1 : 0, marginTop: 10}}/>
         </View>
+        <BottomBar focused={4}></BottomBar>
 </View>
       
     );
@@ -96,6 +98,9 @@ const Settings = () => {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
+    },
+    title: {
+      fontSize: 30
     },
     row: {
     flexDirection: 'row',
@@ -108,7 +113,7 @@ const styles = StyleSheet.create({
     
   },
   button: {
-    backgroundColor: '#99CCFF',
+    backgroundColor: '#303747',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
@@ -134,27 +139,7 @@ buttonDelete: {
 buttonText: {
     color: 'white',
     fontSize: 16,
-},
-    staticContainer: {
-      height: 100
-    },
-    subview1: {
-      backgroundColor: 'red',
-    },
-    subview2: {
-      flex: 1,
-      width: 393,
-    },
-    item: {
-      height: 50,
-      borderBottomWidth: 1,
-      borderBottomColor: 'gray',
-      justifyContent: 'center',
-      paddingHorizontal: 16,
-    },
-    subview3: {
-      backgroundColor: 'blue',
-    },
+}
   });
 
   

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, TextInput, Button, Pressable, ScrollView } from 'react-native'
+import { View, StyleSheet, Text, Pressable, ScrollView } from 'react-native';
+import { Button, TextInput } from 'react-native-paper';
 import { Routes, Route, Link } from 'react-router-native';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
@@ -9,6 +10,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import TopBar from './TopBar.jsx'
 import DownBar from './DownBar';
 import Main from './Main';
+import BottomBar from './BottomBar';
 
 function  ChangePassword(){
 
@@ -53,10 +55,6 @@ function  ChangePassword(){
 
     return(
       <View style={styles.container}>
-          <View>
-            <TopBar />
-          </View>
-        <View style={{ height: 650, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
           <Text style={styles.text}>Cambiar contraseña</Text>
           
           <TextInput
@@ -73,67 +71,35 @@ function  ChangePassword(){
               onChangeText={setConfirmPassword}
               secureTextEntry
           />                        
-
-          <Button title="Cambiar Contraseña" onPress={handlePasswordChange}/>      
-        </View>
-        <View style={styles.staticContainer}>
-          <DownBar>
-            <Link to={{ pathname: '/escenas'}}>
-                <Icon name="film" size={25} color="#900"/>
-            </Link>
-            <Icon name="group" size={25} color="#900" />
-            <Icon name="user" size={25} color="#900" />
-            <Link to={{ pathname: '/settings'}}>
-                <Icon name="cog" size={25} color="#900" />
-            </Link>
-          </DownBar>
-        </View>
+          <Button mode="contained" onPress = {handlePasswordChange} style={{backgroundColor: '#F29C46', marginTop: '5%'}}>
+              Cambiar contraseña
+          </Button>  
+        <BottomBar></BottomBar>
       </View>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-    },
-    row: {
-    flexDirection: 'row',
+  container: {
+    flex: 1,
+    alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    width: '100%',
-    borderBottomColor: 'gray',
-    
+    padding: 20,
+    backgroundColor: '#303747',
+  },
+  text: {
+    fontSize: 30,
+    padding: 20,
+    color: 'white'
   },
   input: {
-    width: '100%',
+    width: '80%',
     height: 40,
-    marginBottom: 10,
+    marginBottom: '5%',
     paddingHorizontal: 10,
     borderWidth: 1,
     borderColor: '#ccc',
     backgroundColor: 'white',
-  },
-    staticContainer: {
-      height: 100
-    },
-    subview1: {
-      backgroundColor: 'red',
-    },
-    subview2: {
-      flex: 1,
-      width: 393,
-    },
-    item: {
-      height: 50,
-      borderBottomWidth: 1,
-      borderBottomColor: 'gray',
-      justifyContent: 'center',
-      paddingHorizontal: 16,
-    },
-    subview3: {
-      backgroundColor: 'blue',
     },
   });
 
