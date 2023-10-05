@@ -5,8 +5,9 @@ import { Link } from 'react-router-native';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, updateDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-const MyCard = ({ id, clave, diff, descripcion, handleExpand, deleted, isExpanded }) => {
+const MyCard = ({ id, clave, diff, descripcion, handleExpand, deleted, isExpanded, image }) => {
   const [title, setTitle] = useState(`${id}`);
   const [paragraph, setParagraph] = useState(descripcion !== '' ? descripcion : 'Añade una descripción');
 
@@ -16,6 +17,7 @@ const MyCard = ({ id, clave, diff, descripcion, handleExpand, deleted, isExpande
   
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+  const storage = getStorage(app);
 
   // Función para guardar los cambios
   const handleSave = () => {
@@ -45,7 +47,11 @@ const MyCard = ({ id, clave, diff, descripcion, handleExpand, deleted, isExpande
   return (
     <Card>
       <Link to={{pathname: `/profile/${diff}/${clave}`}}>
-        <Card.Cover style={styles.image} source={require('./Resources/cancha.png')} />
+        {image != null ?  (
+          <Card.Cover style={styles.image} source={{uri: image}} />
+        ) : (
+          <Card.Cover style={styles.image} source={require('./Resources/cancha.png')} />
+        )}
       </Link>
       <Card.Content>
         <Title>{title}</Title>

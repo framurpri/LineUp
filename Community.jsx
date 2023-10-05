@@ -9,13 +9,14 @@ import { getFirestore, collection, query, where, getDocs } from "firebase/firest
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import TopBar from './TopBar.jsx'
-import DownBar from './DownBar';
+import BottomBar from './BottomBar';
 
 
 function Community(){
 
       const [datos, setDatos] = useState({});
       const [teamImgsDicc, setTeamImgsDicc] = useState({});
+      const [playerImgsDicc, setPlayerImgsDicc] = useState({});
       const [textInputSearch, setTextInputSearch] = useState('');
       const [playerInputSearch, setPlayerInputSearch] = useState('');
       const [teamsLoaded, setTeamsLoaded] = useState(false);
@@ -66,7 +67,7 @@ function Community(){
                
         querySnapshot.forEach(async (doc) => {
           if (doc.data().team.toLowerCase().includes(search.toLowerCase())) {
-            await getImage(ref(storage, `teamImages/${doc.data().team}.jpg`), doc.data().team);
+            await getImage(ref(storage, `teamImages/${doc.data().team}.jpg`), doc.data().team, false);
             datos[doc.id] = doc.data();
           }
         });
@@ -87,9 +88,10 @@ function Community(){
         const q = query(collection(db, "users"));
         console.log("Au!")
         const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
+        querySnapshot.forEach(async (doc) => {
           console.log(doc.data())
-          if(doc.data().username.includes(search)){
+          if(doc.data().username.toLowerCase().includes(search.toLowerCase())){
+            await getImage(ref(storage, `playerImages/${doc.data().username}.jpg`), doc.data().username, true);
             datos[doc.id] = doc.data();
           }
         })
@@ -98,15 +100,15 @@ function Community(){
           setPlayersNotFound(true)
           console.log("Búsqueda sin resultados.")
         }else{
-          const players = Object.entries(datos).map(([clave, valor]) => {return `Player id es: ${clave} y el nombre es: ${valor.username}`});
+          const players = Object.entries(datos).map(([clave, valor]) => {return `Player id es: ${clave} y el nombre es: ${playerImgsDicc[valor.username]}`});
           console.log(players);
           setPlayersLoaded(true);
         }
       };
 
-      const getImage = async (teamImageRef, teamName) => {
-        await getDownloadURL(teamImageRef).then((url) => {
-          teamImgsDicc[teamName] = url
+      const getImage = async (imageRef, key, isPlayer) => {
+        await getDownloadURL(imageRef).then((url) => {
+          isPlayer ? playerImgsDicc[key] = url : teamImgsDicc[key] = url;
         }).catch((error) => {
           console.error('Error al obtener la URL de descarga:', error);
         })
@@ -223,7 +225,11 @@ function Community(){
                             {Object.entries(datos).map(([clave, valor]) => (            
                             <View key={clave} style={styles.row}>
                               <Link to={{pathname: `/profile/${clave}`}}>
-                                <List.Item title={valor.username} left={() => <List.Icon icon="account-group" />}/>
+                                <List.Item title={valor.username} left={() => <Image
+                                                                            source={{ uri: playerImgsDicc[valor.username] }}
+                                                                            style={styles.imagen}
+                                                                            resizeMode="contain"
+                                                                          />}/>
                                 </Link>
                             </View>
                             ))}
@@ -233,6 +239,7 @@ function Community(){
                   }     
               </View>
           </View>
+          <BottomBar focused={2}></BottomBar>
       </View>
     )
 }
