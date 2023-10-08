@@ -46,7 +46,7 @@ if(auth.currentUser == null){
   return(
         <View style={styles.container}>     
           
-          <Image source={require('./Resources/logoPrueba.png')} style={styles.image}/>
+          <Image source={require('./Resources/logoLineUpMigue.png')} style={styles.image}/>
           <Text style={styles.title}>LineUp</Text>
           
           <Link to={{ pathname: '/authentication/login'}}>
