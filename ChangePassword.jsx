@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, Pressable, ScrollView } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
-import { Routes, Route, Link } from 'react-router-native';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth, updatePassword } from 'firebase/auth';
 import { getFirestore, collection, query, where, getDocs, doc, updateDoc } from "firebase/firestore"; 
-import Icon from 'react-native-vector-icons/FontAwesome';
-import TopBar from './TopBar.jsx'
-import DownBar from './DownBar';
 import Main from './Main';
 import BottomBar from './BottomBar';
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable} from 'react-native';
-import { Link, Route } from 'react-router-native';
+import { Link } from 'react-router-native';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signOut } from 'firebase/auth';

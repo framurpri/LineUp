@@ -9,7 +9,6 @@ import * as ImagePicker from 'expo-image-picker';
 import {SegmentedButtons, Avatar, IconButton, Text} from 'react-native-paper';
 import Plays from './Plays';
 import Teams from './Card';
-import RealTimeChat from './RealTimeMessage';
 import BottomBar from './BottomBar';
 
 const AvatarExample = () => {
@@ -219,11 +218,11 @@ const AvatarExample = () => {
             buttons={[
             {
               value: 'plays',
-              label: 'My plays',
+              label: 'Mis jugadas',
             },
             {
               value: 'teams',
-              label: 'My teams',
+              label: 'Mis equipos',
             }
             ]}
           />
@@ -333,7 +332,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'gray',
   },
   container: {
-    width: '80%',
+    width: '90%',
     top: 10,
     display: 'flex',
     alignSelf:'center',

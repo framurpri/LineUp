@@ -1,8 +1,5 @@
 import { View, StyleSheet, Dimensions, Text } from "react-native"
 import { Link } from 'react-router-native';
-import Icon from 'react-native-vector-icons/FontAwesome'
-import { Children } from "react";
-import HomeScreen from "./Home";
 
 function Bar(props){
 
@@ -13,7 +10,7 @@ function Bar(props){
             <Link to={{ pathname: '/home'}}>
                 <View style={{left: 20}}>
                     <Text style={styles.text1}>
-                        RETURN
+                        Volver
                     </Text>
                 </View>
             </Link>

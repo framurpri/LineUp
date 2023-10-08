@@ -8,11 +8,10 @@ import Draggable from 'react-native-draggable';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, collection, addDoc, query, where, getDocs } from "firebase/firestore";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import ConfettiExplosion from 'react-confetti-explosion';
 import { Alert } from 'react-native';
-import HomeScreen from './Home.jsx';
 
 function EscenaBar({handlePlusScene, handleLessScene}){
     
@@ -238,17 +237,17 @@ function EscenaBar({handlePlusScene, handleLessScene}){
           }}>
           <View style={{top:200, alignItems: 'center', justifyContent: 'center'}}>
             <View style={styles.modalView5}>
-              <Text style={styles.text1}>ARE YOU SURE ?</Text>
+              <Text style={styles.text1}>¿Estás seguro?</Text>
               <Pressable
                   style={[styles.button1]}
                   onPress={() => setFinish(!finish)}>
-                  <Text style={styles.textStyle1}>Back</Text>
+                  <Text style={styles.textStyle1}>Atrás</Text>
               </Pressable>
               <Pressable
                   style={[styles.button2]}
                   onPress={() => {setSecondModal(!secondModal)}}
                   >
-                  <Text style={styles.textStyle1}>Finish</Text>
+                  <Text style={styles.textStyle1}>Finalizar</Text>
               </Pressable>
             </View>
           </View>
@@ -271,7 +270,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
                   onPress={() => {setFinish(!finish)
                   setSecondModal(!secondModal)
                   }}>
-                  <Text style={styles.textStyle1}>Back</Text>
+                  <Text style={styles.textStyle1}>Atrás</Text>
               </Pressable>
               <Pressable
                   style={[styles.button22]}
@@ -281,7 +280,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
                   addScene()
                   }}
                   >
-                  <Text style={styles.textStyle1}>Create Play</Text>
+                  <Text style={styles.textStyle1}>Crear jugada</Text>
               </Pressable>
             </View>
           </View>
@@ -420,7 +419,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
       <DownBar>
         <TouchableOpacity style={styles.button}
           onPress={() => setModalVisible(true)}>
-          <Text style={{fontSize:15, textAlign:'center', fontWeight: 'bold'}}>Add Player</Text>
+          <Text style={{fontSize:15, textAlign:'center', fontWeight: 'bold'}}>Crear jugador</Text>
         </TouchableOpacity>
           
         <Pressable style={styles.arrows} onPress={()=> { 
@@ -461,7 +460,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
         <TouchableOpacity style={styles.button} 
           onPress={() => {setFinish(!finish)
           }} >
-            <Text style={{fontSize:20, textAlign:'center', fontWeight: 'bold'}}>Finish</Text>
+            <Text style={{fontSize:20, textAlign:'center', fontWeight: 'bold'}}>Fin</Text>
         </TouchableOpacity>
       </DownBar>
   </View>

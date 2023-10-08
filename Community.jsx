@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Text, Image, ScrollView,  } from 'react-native'
-import { Routes, Route, Link } from 'react-router-native';
-import { Button, TextInput, IconButton, List } from 'react-native-paper';
+import { Link } from 'react-router-native';
+import { TextInput, IconButton, List } from 'react-native-paper';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, collection, query, where, getDocs } from "firebase/firestore"; 
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import TopBar from './TopBar.jsx'
+import { getFirestore, collection, query, getDocs } from "firebase/firestore"; 
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import BottomBar from './BottomBar';
 
 
@@ -157,6 +155,7 @@ function Community(){
                       setTeamsNotFound(false)
                       setTeamSearch(false)
                       setChooseSearch(false)
+                      setTeamsLoaded(false)
                     }
                     }
                     />
@@ -174,6 +173,7 @@ function Community(){
                         setPlayersNotFound(false)
                         setPlayerSearch(false)
                         setChooseSearch(false)
+                        setPlayersLoaded(false)
                       }
                       }
                       />
@@ -181,7 +181,7 @@ function Community(){
               </View>
           </View>
           <View style={styles.bottomContainer}>
-              <View style={styles.searchResultTexts}>
+              <View style={{height: '30%'}}>
                   <View style={{justifyContent: 'center', alignItems: 'center'}}>
                       {chooseSearch && (
                       <Text style={{fontSize: 17}}>Por favor, seleccione si desea buscar equipos o jugadores.</Text>
@@ -198,48 +198,48 @@ function Community(){
                       )}
                   </View>
               </View>
-              <View style={styles.teamList}>
-                  {teamsLoaded && (
-                    <List.Section>
-                          <ScrollView contentContainerStyle={styles.subview2}>
-                            {Object.entries(datos).map(([clave, valor]) => (            
-                            <View key={clave} style={styles.row}>
-                              <Link to={{pathname: `/profile/teams/${clave}`}}>
-                                <List.Item title={valor.team} left={() => <Image
-                                                                            source={{ uri: teamImgsDicc[valor.team] }}
-                                                                            style={styles.imagen}
-                                                                            resizeMode="contain"
-                                                                          />}/>
-                              </Link>
-                            </View>
-                            ))}
-                          </ScrollView>
-                        </List.Section>
-                  )
-                  }
-              </View>
-              <View style={styles.playerList}>
-                  {playersLoaded && (
-                  <ScrollView contentContainerStyle={styles.subview2}>
+              <View style={{height: '50%'}}>
+                <ScrollView>
+                  <View style={styles.teamList}>
+                      {teamsLoaded && (
                         <List.Section>
-                            {Object.entries(datos).map(([clave, valor]) => (            
-                            <View key={clave} style={styles.row}>
-                              <Link to={{pathname: `/profile/${clave}`}}>
-                                <List.Item title={valor.username} left={() => <Image
-                                                                            source={{ uri: playerImgsDicc[valor.username] }}
-                                                                            style={styles.imagen}
-                                                                            resizeMode="contain"
-                                                                          />}/>
-                                </Link>
-                            </View>
-                            ))}
-                        </List.Section>
-                  </ScrollView>
-                  )
-                  }     
+                                {Object.entries(datos).map(([clave, valor]) => (            
+                                <View key={clave} style={styles.row}>
+                                  <Link to={{pathname: `/profile/teams/${clave}`}}>
+                                    <List.Item title={valor.team} left={() => <Image
+                                                                                source={{ uri: teamImgsDicc[valor.team] }}
+                                                                                style={styles.imagen}
+                                                                                resizeMode="contain"
+                                                                              />}/>
+                                  </Link>
+                                </View>
+                                ))}
+                            </List.Section>
+                      )
+                      }
+                  </View>
+                  <View style={styles.playerList}>
+                      {playersLoaded && (
+                            <List.Section>
+                                {Object.entries(datos).map(([clave, valor]) => (            
+                                <View key={clave} style={styles.row}>
+                                    <List.Item title={valor.username} left={() => <Image
+                                                                                source={{ uri: playerImgsDicc[valor.username] }}
+                                                                                style={styles.imagen}
+                                                                                resizeMode="contain"
+                                                                              />}/>
+                                </View>
+                                ))}
+                            </List.Section>
+                      )
+                    }     
+                  </View>
+                </ScrollView>
+              </View>
+              <View style={{height: '20%'}}>
+                <BottomBar focused={2}></BottomBar>
               </View>
           </View>
-          <BottomBar focused={2}></BottomBar>
       </View>
     )
 }
@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
       alignItems: 'center'
     },
     bottomContainer: {
-      flex: 7
+      flex: 6.5
     },
     row: {
     flexDirection: 'row',
@@ -331,6 +331,12 @@ const styles = StyleSheet.create({
       height: 100,
       borderRadius: 30,
     },
+    playerList: {
+      flex: 1
+    },
+    teamList: {
+      flex: 1
+    }
   });
 
 export default Community;

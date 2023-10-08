@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react"
-import EnlaceTransiciones from "./Transiccion";
+import EnlaceTransiciones from "./Transicion";
 import { View, StyleSheet, TouchableOpacity, Text, Dimensions, Image } from 'react-native';
 import Circulo from "./Circulo";
-import { Routes, Route, Link, useParams } from 'react-router-native';
+import { Link, useParams } from 'react-router-native';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, collection, doc, getDoc, query, where, getDocs } from "firebase/firestore";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 import Draggable from "react-native-draggable";
 
 
@@ -180,7 +180,7 @@ function visualizacion(){
             <View style={styles.view}>
                 <Link style={styles.buttonTop} to={{ pathname: '/profile'}}>
                     <Text style={styles.text1}>
-                        RETURN
+                        Volver
                     </Text>
                 </Link>
             </View>

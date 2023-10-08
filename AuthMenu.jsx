@@ -1,12 +1,10 @@
 import React from 'react';
 import { View, Image, Text, StyleSheet, Dimensions} from 'react-native';
-import { NativeRouter, Link } from 'react-router-native';
+import { Link } from 'react-router-native';
 import { Button } from 'react-native-paper';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
-import { getAuth, signOut } from 'firebase/auth';
-import { getFirestore } from "firebase/firestore";
-import PruebaDownbar from './PruebaDownbar'; 
+import { getAuth } from 'firebase/auth';
 function AuthMenu() {
 
   

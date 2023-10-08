@@ -1,14 +1,5 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Text, TextInput, Button, Pressable, ScrollView } from 'react-native'
-import { Routes, Route, Link } from 'react-router-native';
-import { firebaseConfig } from './firebase-config';
-import { initializeApp } from 'firebase/app';
-import { getAuth, updatePassword } from 'firebase/auth';
-import { getFirestore, collection, query, where, getDocs, doc, updateDoc } from "firebase/firestore"; 
-import Icon from 'react-native-vector-icons/FontAwesome';
-import TopBar from './TopBar.jsx'
-import DownBar from './DownBar';
-import Main from './Main';
+import React from 'react';
+import { View, StyleSheet, Text, ScrollView } from 'react-native'
 import BottomBar from './BottomBar';
 
 function Terms(){

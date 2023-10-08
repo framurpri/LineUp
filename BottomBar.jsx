@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Dimensions, Touchable, Pressable, TouchableOpacity } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import { Link } from 'react-router-native';
 import { Text } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { CommonActions } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { TouchableHighlight } from 'react-native-web';
 
 export default function BottomBar({focused}) {
 
@@ -60,6 +57,7 @@ const {width, height} = Dimensions.get('window')
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     position: 'absolute',
     bottom: 0,
     left: 0,
@@ -67,7 +65,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    height: height*0.15,
+    height: height*0.13,
     width: width,
     backgroundColor: '#303747',
   },

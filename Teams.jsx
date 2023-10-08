@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, Pressable, ScrollView } from 'react-native'
-import { Routes, Route, Link } from 'react-router-native';
+import { View, StyleSheet, Text, ScrollView } from 'react-native'
+import { Link } from 'react-router-native';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, query, where, getDocs } from "firebase/firestore"; 
-import Icon from 'react-native-vector-icons/FontAwesome';
-import TopBar from './TopBar.jsx'
-import DownBar from './DownBar';
 
 function Teams(){
 

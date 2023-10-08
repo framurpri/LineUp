@@ -127,7 +127,7 @@ function createPlayer({ updateParentState, dictionary, confettiChange, modalVisi
             <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setModalVisible(!modalVisible)}>
-                <Text style={styles.textStyle}>Back</Text>
+                <Text style={styles.textStyle}>Atrás</Text>
             </Pressable>
             <Pressable
                 style={[styles.button2, styles.buttonClose]}
@@ -136,7 +136,7 @@ function createPlayer({ updateParentState, dictionary, confettiChange, modalVisi
                     confettiStateChange()}}
                 onPressIn={handleClick}
                 >
-                <Text style={styles.textStyle}>Create</Text>
+                <Text style={styles.textStyle}>Crear</Text>
             </Pressable>
         </View>
     )

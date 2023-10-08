@@ -4,7 +4,7 @@ import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore, collection, addDoc } from "firebase/firestore"; 
-import { NativeRouter, Routes, Route, Link } from 'react-router-native';
+import { Link } from 'react-router-native';
 import  Main  from './Main';
 import { Button, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';

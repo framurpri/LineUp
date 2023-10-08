@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Text, TextInput, Pressable, ScrollView } from 'react-native';
+import React from 'react';
+import { View, StyleSheet, Text, ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
 import { Link } from 'react-router-native';
 import Icon from 'react-native-vector-icons/FontAwesome';

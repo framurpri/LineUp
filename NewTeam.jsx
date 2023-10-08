@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { Routes, Route, Link } from 'react-router-native'
 import { View, StyleSheet, Text } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, addDoc } from "firebase/firestore"; 
-import Teams from './Teams';
 import Profile from './Profile';
 import BottomBar from './BottomBar';
 

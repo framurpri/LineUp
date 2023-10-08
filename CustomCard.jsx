@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Modal, TextInput, TouchableHighlight } from 'react-native';
 import { Card, Title, Paragraph, IconButton, Text } from 'react-native-paper';
 import { Link } from 'react-router-native';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, updateDoc } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage } from "firebase/storage";
 
 const MyCard = ({ id, clave, diff, descripcion, handleExpand, deleted, isExpanded, image }) => {
   const [title, setTitle] = useState(`${id}`);
@@ -90,7 +90,7 @@ const MyCard = ({ id, clave, diff, descripcion, handleExpand, deleted, isExpande
             <TouchableHighlight style={styles.button1} onPress={() => {
               handleCancel()
               setParagraphModalVisible(false)}}>
-              <Text style={{justifyContent:'center', alignSelf: 'center'}}>Back</Text>
+              <Text style={{justifyContent:'center', alignSelf: 'center'}}>Atrás</Text>
             </TouchableHighlight>
             <TouchableHighlight style={styles.button2} onPress={() => {
               handleSave()

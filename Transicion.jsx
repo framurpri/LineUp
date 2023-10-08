@@ -1,5 +1,5 @@
-import React, { forwardRef, useEffect, useRef , useImperativeHandle} from 'react';
-import { Animated, View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import React, { forwardRef, useRef , useImperativeHandle} from 'react';
+import { Animated, View, StyleSheet } from 'react-native';
  
 const EnlaceTransiciones = forwardRef((props, ref) => {
 

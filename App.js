@@ -1,21 +1,17 @@
 import  Main  from './Main';
-import { NativeRouter, Routes, Route, Link } from 'react-router-native';
-import  AuthMenu  from './AuthMenu';
+import { NativeRouter, Routes, Route } from 'react-router-native';
 import  { Login }  from './Login';
 import  { Registro }  from './Registro';
-import Basic from './BasicStructPage';
 import Escenas from './escenas';
 import Teams from './Teams';
 import Settings from './Settings';
 import Team from './Team';
 import  NewTeam  from './NewTeam';
 import ChangePassword from './ChangePassword';
-import Plays from './Plays'
 import Play from './Play';
 import Profile from './Profile';
 import Terms from './Terms';
 import Community from './Community';
-import Chat from './Chat';
 import Applications from './Applications';
 import TermsNoAuth from './TermsNoAuth';
 import { PaperProvider } from 'react-native-paper';

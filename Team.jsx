@@ -1,6 +1,6 @@
 import React, { useState , useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native'
-import { Routes, Route, Link, useParams } from 'react-router-native';
+import { Link, useParams } from 'react-router-native';
 import { Avatar, Text} from 'react-native-paper';
 import { firebaseConfig } from './firebase-config';
 import { initializeApp } from 'firebase/app';
@@ -10,10 +10,6 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { List } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import Icon from 'react-native-vector-icons/FontAwesome'
-import TopBar from './TopBar.jsx'
-import DownBar from './DownBar';
-import Chat from './Chat.jsx';
-import Applications from './Applications.jsx';
 import BottomBar from './BottomBar';
 
 function Team(){
