@@ -83,7 +83,7 @@ const Plays = () => {
               descripcion={valor.descripcion}
               handleExpand={handleExpand}
               deleted={() => onDelete(clave)}
-              isExpanded={false}
+              isExpanded={expandedCardId === clave}
             />      
           </View>
           </>

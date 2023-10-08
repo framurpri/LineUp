@@ -582,7 +582,7 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     justifyContent: 'center',
     alignItems: 'center',
-    bottom: 20,
+    bottom: 15,
     backgroundColor: 'transparent',
   },
   arrows:{
