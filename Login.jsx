@@ -36,7 +36,6 @@ export function Login() {
     .then((userCredential) => {
       console.log('Signed in!');
       const user = userCredential.user;
-      console.log(user.email);
       setLoginSuccess(true);
 
     })

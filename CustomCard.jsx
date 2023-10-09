@@ -32,7 +32,6 @@ const MyCard = ({ id, clave, diff, descripcion, handleExpand, deleted, isExpande
 
   const expandCard = () => {
     handleExpand(clave);
-    console.log(image)
   };
 
   const updateDescripcion = async () => {

@@ -12,7 +12,6 @@ import Teams from './Card';
 import BottomBar from './BottomBar';
 
 const AvatarExample = () => {
-  const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [username, setUsername] = useState('');
   const [value, setValue] = useState('plays');
@@ -87,56 +86,6 @@ const AvatarExample = () => {
         username: tempName,
       });
   };
-
-  const handleCameraLaunch = async () => {
-    const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 2],
-      quality: 1,
-    });
-  
-    if (!result.canceled) {
-      setSelectedImage(result.assets[0].uri);
-    }
-  };
-
-  const handleSeleccionarImagen = () => {
-    // Abre el modal para seleccionar una imagen
-    setModalVisible(true);
-  };
-
-  const handleCerrarModal = () => {
-    // Cierra el modal sin seleccionar ninguna imagen
-    setModalVisible(false);
-  };
-
-  // const handleTomarFoto = () => {
-  //   // Opciones de configuración para la cámara
-  //   const options = {
-  //     title: 'Selecciona una imagen',
-  //     storageOptions: {
-  //       skipBackup: true,
-  //       path: 'images',
-  //     },
-  //   };
-
-  //   // Abre la cámara o la galería para seleccionar una imagen
-  //   ImagePicker.showImagePicker(options, (response) => {
-  //     if (response.didCancel) {
-  //       // El usuario canceló la selección
-  //       console.log('Selección de imagen cancelada');
-  //     } else if (response.error) {
-  //       // Ocurrió un error al seleccionar la imagen
-  //       console.error('Error al seleccionar la imagen:', response.error);
-  //     } else {
-  //       // Seleccionar la imagen exitosamente
-  //       setImagenUri(response.uri);
-  //       setImagenSeleccionada(true);
-  //       setModalVisible(false); // Cierra el modal después de seleccionar la imagen
-  //     }
-  //   });
-  // };
 
   return (
     <View style={{flex:1, backgroundColor: '#eeeeee'}}>

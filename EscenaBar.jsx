@@ -96,7 +96,6 @@ function EscenaBar({handlePlusScene, handleLessScene}){
   };
 
   useEffect(() => { 
-    console.log(currentScene);
     coord.forEach((element) => {
       Object.keys(element).forEach((key) => {
         const refs = element[key].Refs;
@@ -129,9 +128,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
         });
       });
     });
-    console.log('Scenes: ', scenes);
-    console.log(currentScene);
-  }, [capturar, dictionary]);
+  }, [capturar]);
   
   useEffect(() => {
     // Desactivar el scroll del cuerpo de la página
@@ -143,14 +140,6 @@ function EscenaBar({handlePlusScene, handleLessScene}){
     };
   }, []);
   
-  // const getUserInfo = async () => {
-  //   const q = query(collection(db, "users"), where("email", "==", auth.currentUser.email));
-  //   const querySnapshot = await getDocs(q);
-  //   //console.log(querySnapshot.docs[0].data().username);
-  //   setUsername(querySnapshot.docs[0].data().username);
-  // }
-  // getUserInfo();
-
   const updateParentState = (newDictionary) => {
     setDictionary(newDictionary);
   };
@@ -428,7 +417,6 @@ function EscenaBar({handlePlusScene, handleLessScene}){
           setTimeout(() => {
             currentScene > 0 ? setCurrentScene(currentScene-1):null;
           }, 1); 
-          console.log(currentScene)                 
             }
           }>
           <Icon name="arrow-left" size={60} color="black"/>

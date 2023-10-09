@@ -33,20 +33,6 @@ function Community(){
       const auth = getAuth(app);
       const storage = getStorage(app);
 
-/*
-      const q = query(collection(db, "teams"), where("team", "==", textInputSearch));
-      const getTeamsByName = async () => {
-        console.log("Au!")
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-            
-          datos[doc.id] = doc.data();
-        })
-        const teams = Object.entries(datos).map(([clave, valor]) => {return `Team id es: ${clave} y el nombre es: ${valor.team}`});
-        console.log(teams);
-        setTeamsLoaded(true);
-      };
-*/
       const checkSearchType = () => {
         if(teamSearch){
           getTeamsByName()
@@ -62,7 +48,6 @@ function Community(){
         setPlayersLoaded(false);
         setTeamsLoaded(false);
         const q = query(collection(db, "teams"));
-        console.log("Au!")
         const querySnapshot = await getDocs(q);
                
         querySnapshot.forEach(async (doc) => {
@@ -79,7 +64,6 @@ function Community(){
           } else {
             setDatos(nuevosDatos)
             const teams = Object.entries(datos).map(([clave, valor]) => { return `Team id es: ${clave} y el nombre es: ${teamImgsDicc[valor.team]}` });
-            console.log(teams);
             setTeamsLoaded(true);
           }  
         }, 1000)
@@ -90,7 +74,6 @@ function Community(){
         setTeamsLoaded(false);
         setPlayersLoaded(false);
         const q = query(collection(db, "users"));
-        console.log("Au!")
         const querySnapshot = await getDocs(q);
         const nuevosDatos = {};
         querySnapshot.forEach(async (doc) => {
@@ -106,8 +89,6 @@ function Community(){
             console.log("Búsqueda sin resultados.")
           }else{
             setDatos1(nuevosDatos)
-            const players = Object.entries(datos1).map(([clave, valor]) => {return `Player id es: ${clave} y el nombre es: ${playerImgsDicc[valor.username]}`});
-            console.log(players);
             setPlayersLoaded(true);
           }
         }, 1000)

@@ -41,11 +41,9 @@ const Teams = () => {
 
             // Actualizar el estado de teamImgsDicc con todas las imágenes cargadas
 
-            setIsLoading(false);
-            console.log(allImagesLoaded) // Se actualiza el estado para indicar que los datos se han cargado
+            setIsLoading(false); // Se actualiza el estado para indicar que los datos se han cargado
         } else {
             // La colección está vacía
-            console.log('La colección está vacía');
             setIsLoading(false); // Se actualiza el estado, pero puedes manejarlo de acuerdo a tus necesidades
         }
     } catch (error) {
@@ -62,7 +60,6 @@ const Teams = () => {
     // Llama a la función asyncQuery para realizar la consulta
 
   const handleExpand = (id) => {
-    console.log(datos)
     setExpandedCardId((prevId) => (prevId === id ? null : id));
   };
 

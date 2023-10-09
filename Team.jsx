@@ -51,7 +51,6 @@ function Team(){
       useEffect(() => {
         if(teamPlayers){
           setPlayersLoaded(true);
-          console.log(teamPlayers)
         }
       }, [teamPlayers])
 
@@ -70,7 +69,6 @@ function Team(){
       }, [teamApplicants]);
 
       const retrieveDocument = async () => {
-        console.log(id)
         const docRef = doc(db, "teams", id);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
@@ -84,12 +82,8 @@ function Team(){
         setTeamImageRef(ref(storage, `teamImages/${teamName}.jpg`));
         setCaptainEmail(docSnap.data().userEmail);
         setIsLoading(false);
-        console.log(docSnap.data().players)
         setTeamPlayers(docSnap.data().players);
-        console.log(docSnap.data().applicants);
         setTeamApplicants(docSnap.data().applicants);
-        console.log(teamApplicants); //Esta línea no se printea , no entiendo por qué
-        //getCaptainInfo();
       }
 
       const openImagePicker = async () => {
@@ -128,7 +122,6 @@ function Team(){
       const getCaptainInfo = async () => {
         const q = query(collection(db, "users"), where("email", "==", captainEmail));
         const querySnapshot = await getDocs(q);
-        console.log(querySnapshot.docs[0].data().username);
         setCaptainName(querySnapshot.docs[0].data().username);
       }
 
@@ -141,7 +134,6 @@ function Team(){
             applicants : newApplicants
           })
           setTeamApplicants(newApplicants);
-          console.log(newApplicants);
           console.log("Update succesful!");
         }
       }

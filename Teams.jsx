@@ -31,8 +31,6 @@ function Teams(){
         datos[doc.id] = doc.data();
       });
       setIsLoading(false); // Se actualiza el estado para indicar que los datos se han cargado
-        const teams = Object.entries(datos).map(([clave, valor]) => {return `Team id es: ${clave} y el nombre es: ${valor.team}`});
-        console.log(teams);
       } 
       asyncQuery()
       

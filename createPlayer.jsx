@@ -26,12 +26,9 @@ function createPlayer({ updateParentState, dictionary, confettiChange, modalVisi
         }
         else if (value == 0) {
         setCount(count + 1);
-        console.log(value)
         }    
         else {
             setCount(count + 1);
-            console.log(value)
-
         }
     };
     

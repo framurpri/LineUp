@@ -43,7 +43,6 @@ function visualizacion(){
     
     const params = useParams();
       const {id} = params;
-      console.log(id)
       const docRef = doc(db, "plays", id);
 
     useEffect(() =>{
@@ -122,13 +121,11 @@ function visualizacion(){
     const sacarCoordenadas = (indicador, clave) =>{
             const coordenadas = [];
             const scenes = Object.entries(coord)
-            console.log(coord[0])
             const keys = Object.keys(coord[0].coordenada)
             scenes.forEach((scene) =>{
             keys.forEach((key)=>{
                 if(clave===key){
                     const c = `coordenada${indicador}`;
-                    console.log(scene[1])
                     const coordenada = scene[1].coordenada[clave][c];
                     coordenadas.push(coordenada)
                 }

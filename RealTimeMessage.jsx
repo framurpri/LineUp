@@ -24,7 +24,6 @@ export default function RealTimeChat() {
 
   useLayoutEffect(() => {
     const getUserInfo = async () => {
-      console.log(id);
       const q = query(collection(db, "users"), where("email", "==", auth.currentUser.email));
       const querySnapshot = await getDocs(q);
       setUsername(querySnapshot.docs[0].data().username);
