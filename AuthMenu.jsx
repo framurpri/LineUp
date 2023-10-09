@@ -49,7 +49,7 @@ if(auth.currentUser == null){
           
           <Link to={{ pathname: '/authentication/login'}}>
             <Button mode="contained" style={[styles.button, {width: adjustWidth()}]}>
-              Login
+              Inicia sesión
             </Button>
           </Link>
           <Link to={{ pathname: '/authentication/registro'}}>

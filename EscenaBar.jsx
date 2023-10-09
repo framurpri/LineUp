@@ -280,7 +280,7 @@ function EscenaBar({handlePlusScene, handleLessScene}){
                   addScene()
                   }}
                   >
-                  <Text style={styles.textStyle1}>Crear jugada</Text>
+                  <Text style={styles.textStyle1}>Crear</Text>
               </Pressable>
             </View>
           </View>
@@ -668,3 +668,4 @@ const styles = StyleSheet.create({
 
 
 export default EscenaBar;
+
