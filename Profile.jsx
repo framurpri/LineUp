@@ -12,14 +12,13 @@ import Teams from './Card';
 import BottomBar from './BottomBar';
 
 const AvatarExample = () => {
-  const [imagenUri, setImagenUri] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [username, setUsername] = useState('');
   const [value, setValue] = useState('plays');
   const [isLoading, setIsLoading] = useState(true)
   const [editing, setEditing] = useState(false)
-  const [tempName, setTempName] = useState(''); // Estado temporal para seguimiento de cambios
+  const [tempName, setTempName] = useState(''); 
   const [playerImageRef, setPlayerImageRef] = useState();
   const [playerImgUrl, setPlayerImgUrl] = useState('');
 
@@ -230,13 +229,13 @@ const AvatarExample = () => {
         <View style={{flex: 1}}>
           
           {value=='plays' && (  
-            <View style={{marginBottom:10, marginTop:20, flex:1}}>                
+            <View style={{marginBottom:80, marginTop:20, flex:1}}>                
               <Plays/>
             </View>
             )}
 
           {value=='teams' && (   
-            <View style={{marginBottom:10, marginTop:20, flex:1}}>                               
+            <View style={{marginBottom:80, marginTop:20, flex:1}}>                               
               <Teams/>
             </View>
             )}

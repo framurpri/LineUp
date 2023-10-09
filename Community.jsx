@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, Image, ScrollView,  } from 'react-native'
+import { View, StyleSheet, Text, Image, ScrollView, Dimensions,  } from 'react-native'
 import { Link } from 'react-router-native';
 import { TextInput, IconButton, List } from 'react-native-paper';
 import { firebaseConfig } from './firebase-config';
@@ -13,6 +13,7 @@ import BottomBar from './BottomBar';
 function Community(){
 
       const [datos, setDatos] = useState({});
+      const [datos1, setDatos1] = useState({});
       const [teamImgsDicc, setTeamImgsDicc] = useState({});
       const [playerImgsDicc, setPlayerImgsDicc] = useState({});
       const [textInputSearch, setTextInputSearch] = useState('');
@@ -57,6 +58,7 @@ function Community(){
         }
       }
       const getTeamsByName = async () => {
+        const nuevosDatos = {};
         setPlayersLoaded(false);
         setTeamsLoaded(false);
         const q = query(collection(db, "teams"));
@@ -64,44 +66,51 @@ function Community(){
         const querySnapshot = await getDocs(q);
                
         querySnapshot.forEach(async (doc) => {
-          if (doc.data().team.toLowerCase().includes(search.toLowerCase())) {
+          if (doc.data().team.toLowerCase().startsWith(search.toLowerCase())) {
             await getImage(ref(storage, `teamImages/${doc.data().team}.jpg`), doc.data().team, false);
-            datos[doc.id] = doc.data();
+            nuevosDatos[doc.id] = doc.data();
           }
         });
-     
-        if (Object.keys(datos).length === 0) {
-          setTeamsNotFound(true);
-          console.log("Búsqueda sin resultados.");
-        } else {
-          const teams = Object.entries(datos).map(([clave, valor]) => { return `Team id es: ${clave} y el nombre es: ${teamImgsDicc[valor.team]}` });
-          console.log(teams);
-          setTeamsLoaded(true);
-        }
+        
+        setTimeout(() => {
+          if (Object.keys(nuevosDatos).length === 0) {
+            setTeamsNotFound(true);
+            console.log("Búsqueda sin resultados.");
+          } else {
+            setDatos(nuevosDatos)
+            const teams = Object.entries(datos).map(([clave, valor]) => { return `Team id es: ${clave} y el nombre es: ${teamImgsDicc[valor.team]}` });
+            console.log(teams);
+            setTeamsLoaded(true);
+          }  
+        }, 1000)
+        
       };
 
       const getPlayersByName = async () => {
-        setPlayersLoaded(false);
         setTeamsLoaded(false);
+        setPlayersLoaded(false);
         const q = query(collection(db, "users"));
         console.log("Au!")
         const querySnapshot = await getDocs(q);
+        const nuevosDatos = {};
         querySnapshot.forEach(async (doc) => {
-          console.log(doc.data())
-          if(doc.data().username.toLowerCase().includes(search.toLowerCase())){
+          if(doc.data().username.toLowerCase().startsWith(search.toLowerCase())){
             await getImage(ref(storage, `playerImages/${doc.data().username}.jpg`), doc.data().username, true);
-            datos[doc.id] = doc.data();
+            nuevosDatos[doc.id] = doc.data();
           }
         })
         
-        if(Object.keys(datos).length === 0){
-          setPlayersNotFound(true)
-          console.log("Búsqueda sin resultados.")
-        }else{
-          const players = Object.entries(datos).map(([clave, valor]) => {return `Player id es: ${clave} y el nombre es: ${playerImgsDicc[valor.username]}`});
-          console.log(players);
-          setPlayersLoaded(true);
-        }
+        setTimeout(() => {
+          if(Object.keys(nuevosDatos).length === 0){
+            setPlayersNotFound(true)
+            console.log("Búsqueda sin resultados.")
+          }else{
+            setDatos1(nuevosDatos)
+            const players = Object.entries(datos1).map(([clave, valor]) => {return `Player id es: ${clave} y el nombre es: ${playerImgsDicc[valor.username]}`});
+            console.log(players);
+            setPlayersLoaded(true);
+          }
+        }, 1000)
       };
 
       const getImage = async (imageRef, key, isPlayer) => {
@@ -181,7 +190,7 @@ function Community(){
               </View>
           </View>
           <View style={styles.bottomContainer}>
-              <View style={{height: '30%'}}>
+              <View style={{height: '5%'}}>
                   <View style={{justifyContent: 'center', alignItems: 'center'}}>
                       {chooseSearch && (
                       <Text style={{fontSize: 17}}>Por favor, seleccione si desea buscar equipos o jugadores.</Text>
@@ -198,42 +207,46 @@ function Community(){
                       )}
                   </View>
               </View>
-              <View style={{height: '50%'}}>
-                <ScrollView>
-                  <View style={styles.teamList}>
+              <View style={{height: '50%', flex: 1}}>
+                <ScrollView style={styles.containerScrollView} contentContainerStyle={{ justifyContent: 'space-between' }}>
                       {teamsLoaded && (
-                        <List.Section>
+                        <View style={{flex:1}}>
+                        <List.Section style={{width:width}}>
                                 {Object.entries(datos).map(([clave, valor]) => (            
                                 <View key={clave} style={styles.row}>
                                   <Link to={{pathname: `/profile/teams/${clave}`}}>
-                                    <List.Item title={valor.team} left={() => <Image
-                                                                                source={{ uri: teamImgsDicc[valor.team] }}
-                                                                                style={styles.imagen}
-                                                                                resizeMode="contain"
-                                                                              />}/>
+                                    <List.Item 
+                                    title={valor.team} 
+                                    left={() => <Image
+                                      source={{ uri: teamImgsDicc[valor.team] }}
+                                      style={styles.imagen}
+                                      resizeMode="contain"
+                                    />}/>
                                   </Link>
                                 </View>
                                 ))}
-                            </List.Section>
+                          </List.Section>
+                          </View>
                       )
                       }
-                  </View>
-                  <View style={styles.playerList}>
                       {playersLoaded && (
-                            <List.Section>
-                                {Object.entries(datos).map(([clave, valor]) => (            
+                            <View style={{flex:1}}>
+                            <List.Section style={{width:width}}>
+                                {Object.entries(datos1).map(([clave, valor]) => (            
                                 <View key={clave} style={styles.row}>
-                                    <List.Item title={valor.username} left={() => <Image
-                                                                                source={{ uri: playerImgsDicc[valor.username] }}
-                                                                                style={styles.imagen}
-                                                                                resizeMode="contain"
-                                                                              />}/>
+                                    <List.Item 
+                                    title={valor.username} 
+                                    left={() => <Image
+                                      source={{ uri: playerImgsDicc[valor.username] }}
+                                      style={styles.imagen}
+                                      resizeMode="contain"
+                                    />}/>
                                 </View>
                                 ))}
                             </List.Section>
+                            </View>
                       )
                     }     
-                  </View>
                 </ScrollView>
               </View>
               <View style={{height: '20%'}}>
@@ -244,6 +257,8 @@ function Community(){
     )
 }
 
+const {width, height} = Dimensions.get('window')
+
 const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -253,6 +268,13 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center'
+    },
+    containerScrollView: {
+      flexGrow: 1,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      height: 200,
+      width: width
     },
     topLeftContainer: {
       flex: 7,
@@ -285,7 +307,6 @@ const styles = StyleSheet.create({
     },
     row: {
     flexDirection: 'row',
-    justifyContent: 'center',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderBottomWidth: 1,

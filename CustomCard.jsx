@@ -32,6 +32,7 @@ const MyCard = ({ id, clave, diff, descripcion, handleExpand, deleted, isExpande
 
   const expandCard = () => {
     handleExpand(clave);
+    console.log(image)
   };
 
   const updateDescripcion = async () => {
@@ -45,14 +46,17 @@ const MyCard = ({ id, clave, diff, descripcion, handleExpand, deleted, isExpande
     deleted(clave);
   };
 
+
   return (
     <Card>
       <Link to={{pathname: `/profile/${diff}/${clave}`}}>
-        {image != null ?  (
-          <Card.Cover style={styles.image} source={{uri: image}} />
-        ) : (
-          <Card.Cover style={styles.image} source={require('./Resources/cancha.png')} />
-        )}
+      {image === undefined && diff === 'plays' ? (
+        <Card.Cover style={styles.image} source={require('./Resources/cancha.png')} />
+      ) : image === undefined && diff === 'teams' ? (
+        <Card.Cover style={styles.image} />
+      ) : (
+        <Card.Cover style={styles.image} source={{ uri: image }} />
+      )}
       </Link>
       <Card.Content>
         <Title>{title}</Title>
@@ -107,16 +111,16 @@ const MyCard = ({ id, clave, diff, descripcion, handleExpand, deleted, isExpande
             <Text
               style={{height:'50%', width:250, fontSize: 50, fontWeight:'bold',marginLeft:10,fontStyle:'italic', textAlign:'center', justifyContent: 'center', alignSelf:'center', borderWidth:0, borderColor: 'transparent'}}
             >
-              ARE YOU SURE ?
+              Estás seguro ?
             </Text>
             <TouchableHighlight style={styles.button1} onPress={() => {
               setIsDeleteVisible(false)}}>
-              <Text style={{justifyContent:'center', alignSelf: 'center'}}>Back</Text>
+              <Text style={{justifyContent:'center', alignSelf: 'center'}}>Atrás</Text>
             </TouchableHighlight>
             <TouchableHighlight style={styles.button2} onPress={() => {
               handleDelete()
               setIsDeleteVisible(false)}}>
-            <Text style={{justifyContent:'center', alignSelf: 'center'}}>Delete</Text>
+            <Text style={{justifyContent:'center', alignSelf: 'center'}}>Borrar</Text>
             </TouchableHighlight>
           </View>
         </View>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import MyCard from './CustomCard';
 import { firebaseConfig } from './firebase-config';
@@ -29,40 +29,37 @@ const Teams = () => {
 
  
 
-  const asyncQuery = async () => {
-      try {
+ const asyncQuery = async () => {
+    try {
         const querySnapshot = await getDocs(q);
-        
         if (!querySnapshot.empty) {
-          // La colección no está vacía
-          querySnapshot.forEach( (doc) => {
-            getImage(ref(storage, `teamImages/${doc.data().team}.jpg`), doc.data().team);
-            datos[doc.id] = doc.data();
-          });
-          setIsLoading(false); // Se actualiza el estado para indicar que los datos se han cargado
+            // La colección no está vacía
+            querySnapshot.forEach(async(doc) => {
+                // Llamar a getImage para cargar la imagen
+                datos[doc.id] = doc.data();
+            });
+
+            // Actualizar el estado de teamImgsDicc con todas las imágenes cargadas
+
+            setIsLoading(false);
+            console.log(allImagesLoaded) // Se actualiza el estado para indicar que los datos se han cargado
         } else {
-          // La colección está vacía
-          console.log('La colección está vacía');
-          setIsLoading(false); // Se actualiza el estado, pero puedes manejarlo de acuerdo a tus necesidades
+            // La colección está vacía
+            console.log('La colección está vacía');
+            setIsLoading(false); // Se actualiza el estado, pero puedes manejarlo de acuerdo a tus necesidades
         }
-        if (Object.keys(datos).length === 0) {
-          console.log("Búsqueda sin resultados.");
-        } else {
-          const allImagesLoaded = Object.keys(datos).every((key) => !!teamImgsDicc[datos[key].team]);
-          console.log("ALLimages" + allImagesLoaded)
-          setAllImagesLoaded(allImagesLoaded);
-          const teams = Object.entries(datos).map(([clave, valor]) => { return `Team id es: ${clave} y el nombre es: ${teamImgsDicc[valor.team]}` });
-          console.log(teams);
-        }
-      } catch (error) {
+    } catch (error) {
         console.error('Error al consultar la colección:', error);
         setIsLoading(false); // Maneja el error según tus necesidades
-      }
-    };
+    }
+};
+
+  useEffect(()=> {
+    asyncQuery()
+  }, [allImagesLoaded])
+
 
     // Llama a la función asyncQuery para realizar la consulta
-    asyncQuery();
-
 
   const handleExpand = (id) => {
     console.log(datos)
@@ -86,14 +83,31 @@ const Teams = () => {
     }
   };
 
-  const getImage = async (teamImageRef, teamName) => {
-    await getDownloadURL(teamImageRef).then((url) => {
-      teamImgsDicc[teamName] = url
-    }).catch((error) => {
-      console.error('Error al obtener la URL de descarga:', error);
-      teamImgsDicc[teamName] = null;
-    })
+  const getImage = async () => {
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      // La colección no está vacía
+      querySnapshot.forEach(async(doc) => {
+        await getDownloadURL(ref(storage, `teamImages/${doc.data().team}.jpg`))
+        .then((url) => {
+            teamImgsDicc[doc.data().team] = url;
+            console.log(`URL de descarga para ${doc.data().team}: ${url}`);
+        })
+        .catch((error) => {
+            console.error('Error al obtener la URL de descarga:', error);
+            teamImgsDicc[doc.data().team] = undefined;
+        })
+        .finally(() => {
+            setAllImagesLoaded(Object.keys(teamImgsDicc).length == Object.keys(datos).length);
+        })      
+      });    
+      
+    };
   }
+
+    useEffect(() => {
+      getImage()
+    }, [])
 
   return (
     isLoading ? (
@@ -117,7 +131,9 @@ const Teams = () => {
           </>
         ))}
       </ScrollView>
-    ) : null
+    ) : ( 
+        null
+        )
   )
 };
 
