@@ -7,6 +7,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
 import { ScrollView, TouchableOpacity } from 'react-native-web';
+import BottomBar from './BottomBar.jsx';
 
 
 export default function Applications() {
@@ -88,6 +89,7 @@ export default function Applications() {
                     </View>
                 ))}
             </ScrollView>
+            <BottomBar></BottomBar>
         </View>
     )
   }

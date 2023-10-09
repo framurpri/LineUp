@@ -220,7 +220,7 @@ function Team(){
                     <View key={player} style={styles.row}>
                       <List.Item
                         title={player}
-                        description="Aquí podemos poner la posición"
+                        description=""
                         style={{width: '100%', flex: 1, justifyContent: 'center', marginLeft: 30}}
                         left={props => <List.Icon {...props} icon="account" style={{color: '#303747'}}/>}
                       />
